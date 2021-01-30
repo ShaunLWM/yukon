@@ -176,72 +176,6 @@
         },
         {
             "type": "Text",
-            "id": "ce42702b-eee2-4d27-93fd-ad4abd13fa72",
-            "label": "rememberUsernameText",
-            "components": [],
-            "x": 602,
-            "y": 384,
-            "originX": 0,
-            "text": "Remember my password",
-            "lineSpacing": 25,
-            "align": "right",
-            "fontFamily": "Arial Narrow",
-            "fontSize": "30px",
-            "color": "#000000ff"
-        },
-        {
-            "type": "Text",
-            "id": "10506aaa-25e4-4548-bc18-5792a4555f46",
-            "label": "rememberPasswordText",
-            "components": [],
-            "x": 602,
-            "y": 329,
-            "originX": 0,
-            "text": "Remember me on this computer",
-            "lineSpacing": 25,
-            "align": "right",
-            "fontFamily": "Arial Narrow",
-            "fontSize": "30px",
-            "color": "#000000ff"
-        },
-        {
-            "type": "Image",
-            "id": "930b1bfe-4d64-4250-957a-e2c5a9e3d6ef",
-            "label": "passwordCheckbox",
-            "scope": "CLASS",
-            "components": [
-                "SimpleButton"
-            ],
-            "SimpleButton.callback": "() => this.onRememberPasswordClick()",
-            "texture": {
-                "key": "login",
-                "frame": "checkbox"
-            },
-            "x": 568,
-            "y": 383,
-            "originX": 0.41509434,
-            "originY": 0.58490566
-        },
-        {
-            "type": "Image",
-            "id": "48754edf-6d54-4018-ad29-f90e50323404",
-            "label": "usernameCheckbox",
-            "scope": "CLASS",
-            "components": [
-                "SimpleButton"
-            ],
-            "SimpleButton.callback": "() => this.onRememberMeClick()",
-            "texture": {
-                "key": "login",
-                "frame": "checkbox"
-            },
-            "x": 568,
-            "y": 328,
-            "originX": 0.41509,
-            "originY": 0.5849
-        },
-        {
-            "type": "Text",
             "id": "6ff586b9-fbe0-49f6-9801-71f273c1df58",
             "label": "passwordText",
             "components": [],
@@ -293,6 +227,15 @@
             },
             "x": 815,
             "y": 200
+        },
+        {
+            "prefabId": "1a09293b-d8f0-454f-ad6c-dc0364729549",
+            "id": "759943e1-d192-45c9-8562-671e6d1d788a",
+            "label": "checks",
+            "scope": "CLASS",
+            "components": [],
+            "x": 568,
+            "y": 328
         },
         {
             "prefabId": "b1f49bb5-b7f5-4eb9-81d7-21aa125e487f",
