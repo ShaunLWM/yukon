@@ -21,6 +21,21 @@
             "components": [],
             "list": [
                 {
+                    "prefabId": "eebb7e39-e8a3-4ccc-b5b3-6241aca388da",
+                    "id": "ecd14e47-fbbf-4cfa-8a9b-988be08f4c61",
+                    "unlock": [
+                        "x",
+                        "y"
+                    ],
+                    "label": "cards",
+                    "scope": "CLASS",
+                    "components": [],
+                    "x": 18,
+                    "y": -322,
+                    "nestedPrefabs": [],
+                    "list": []
+                },
+                {
                     "type": "Image",
                     "id": "2d5f8b75-0c0b-4a5e-90a4-6abe9db5cc71",
                     "label": "sep",
