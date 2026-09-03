@@ -90,10 +90,27 @@ export default class PathEngine {
             distance--
         }
 
-        safe.x = Math.round(safe.x)
-        safe.y = Math.round(safe.y)
+        safe.x = this.getRoundedPos(penguin, safe.x, safe.y, 'x')
+        safe.y = this.getRoundedPos(penguin, safe.x, safe.y, 'y')
 
         return safe
+    }
+
+    static getRoundedPos(penguin, x, y, axis) {
+        const val = axis === 'x' ? x : y
+        const rounded = Math.round(val)
+        const testX = axis === 'x' ? rounded : x
+        const testY = axis === 'y' ? rounded : y
+
+        if (!this.isBlocked(penguin, testX, testY)) return rounded
+
+        const floored = Math.floor(val)
+        const floorX = axis === 'x' ? floored : x
+        const floorY = axis === 'y' ? floored : y
+
+        if (!this.isBlocked(penguin, floorX, floorY)) return floored
+
+        return Math.ceil(val)
     }
 
     static getFrameBasedDuration(distance, speed, fps = 24)  {
