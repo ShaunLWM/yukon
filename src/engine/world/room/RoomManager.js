@@ -45,7 +45,8 @@ export default class RoomManager {
     }
 
     addRoom(key, scene, data) {
-        this.room = this.scene.scene.add(key, scene, true, data)
+        this.room = this.scene.scene.add(key, scene, false)
+        this.scene.scene.launch(this.room.key, data)
     }
 
     addFlashGame(path, music) {
