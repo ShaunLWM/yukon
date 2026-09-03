@@ -51,8 +51,8 @@ export default class Network {
             this.send('game_auth', response)
             this.worldName = world
 
-        }, () => {
-            this.onConnectionLost()
+        }, (reason) => {
+            this.onConnectionLost(reason)
         })
     }
 
@@ -93,11 +93,20 @@ export default class Network {
         this.handler.handle(message)
     }
 
-    onConnectionLost() {
+    onConnectionLost(reason) {
         this.disconnect()
 
+        const codes = {
+            'io server disconnect': 'e101',
+            'io client disconnect': 'e102',
+            'ping timeout': 'e103',
+            'transport close': 'e104',
+            'transport error': 'e105'
+        }
+        const code = codes[reason] || 'e100'
+
         let prompt = this.game.scene.getScene('InterfaceController').prompt
-        prompt.showError('Connection was lost.\nPlease click to learn more', 'Learn More', () => { })
+        prompt.showError(`Connection was lost (${code}).\nPlease reload to reconnect`, 'Reload', () => location.reload())
     }
 
     // Saved penguins
