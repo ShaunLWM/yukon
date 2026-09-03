@@ -21,6 +21,7 @@ export default class Network {
         this.lastLoginScene = null
 
         this.worldName
+        this.lostConnection = false
     }
 
     connectLogin(saveUsername, savePassword, onConnect) {
@@ -53,20 +54,37 @@ export default class Network {
 
         }, (reason) => {
             this.onConnectionLost(reason)
-        })
+        }, true)
     }
 
-    connect(world, onConnect, onDisconnect) {
+    connect(world, onConnect, onDisconnect, reconnect = false) {
         this.disconnect()
+        this.lostConnection = false
 
         let config = this.game.crumbs.worlds[world]
 
-        this.client = io.connect(config.host, { path: config.path })
+        let opts = { path: config.path }
+        if (reconnect) {
+            opts.reconnectionAttempts = 5
+            opts.reconnectionDelayMax = 1000
+        } else {
+            opts.reconnection = false
+        }
+
+        this.client = io.connect(config.host, opts)
 
         this.client.once('connect', onConnect)
-        this.client.once('disconnect', onDisconnect)
-        this.client.on('connect_error', () => this.onConnectionLost())
+        this.client.on('disconnect', onDisconnect)
+        this.client.on('connect_error', () => {
+            if (!this.lostConnection) this.onConnectionLost()
+        })
         this.client.on('message', (message) => this.onMessage(message))
+
+        if (reconnect) {
+            this.client.io.on('reconnect_failed', () => {
+                this.onConnectionLost('reconnect_failed')
+            })
+        }
     }
 
     disconnect() {
@@ -94,6 +112,7 @@ export default class Network {
     }
 
     onConnectionLost(reason) {
+        this.lostConnection = true
         this.disconnect()
 
         const codes = {
