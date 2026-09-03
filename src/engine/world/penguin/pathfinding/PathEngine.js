@@ -16,8 +16,10 @@ export default class PathEngine {
      * @param {object} penguin - Penguin object
      */
     static setStartPos(penguin) {
-        penguin.x = this.clampX(penguin.x)
-        penguin.y = this.clampY(penguin.y)
+        if (penguin.room && !penguin.room.cameraRoom) {
+            penguin.x = this.clampX(penguin.x)
+            penguin.y = this.clampY(penguin.y)
+        }
 
         if (!this.isBlocked(penguin)) return
 
@@ -73,7 +75,9 @@ export default class PathEngine {
      * @returns {object} Safe target
      */
     static getSafeTarget(penguin, pos, target) {
-        target = this.clampPos(target)
+        if (!penguin.room?.cameraRoom) {
+            target = this.clampPos(target)
+        }
 
         let distance = Math.round(Phaser.Math.Distance.BetweenPoints(pos, target))
         let moveX = (target.x - pos.x) / distance
