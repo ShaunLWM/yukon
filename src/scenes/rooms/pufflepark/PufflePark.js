@@ -335,8 +335,8 @@ export default class PufflePark extends RoomScene {
     }
 
     stop() {
-        super.stop();
         this.work&&this.work.removeListeners();
+        super.stop();
     }
 
     update() {
