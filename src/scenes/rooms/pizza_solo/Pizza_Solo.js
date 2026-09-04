@@ -18,7 +18,7 @@ export default class Pizza_Solo extends RoomScene {
     }
 
     _create() {
-        const bg = this.add.image(0, 0, "pizza_tutorial", "bg")
+        const bg = this.add.image(0, 0, "pizza_solo", "bg")
         bg.setOrigin(0, 0)
 
         this.events.emit("scene-awake")

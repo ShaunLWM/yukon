@@ -1,6 +1,6 @@
 import RoomScene from '../RoomScene'
 
-import { Button, MoveTo } from '@components/components'
+import { Animation, Button, HoverAnimation, MoveTo } from '@components/components'
 
 
 /* START OF COMPILED CODE */
@@ -10,126 +10,634 @@ export default class Shack extends RoomScene {
     constructor() {
         super("Shack");
 
-        /** @type {Phaser.GameObjects.Image[]} */
-        this.sort;
-
-
         /* START-USER-CTR-CODE */
 
-        this.roomTriggers = {
-            'forest': () => this.triggerRoom(809, 1234, 410),
-            'eco': null,
-            'mine': null
-        }
+        this.l2_bucketback0001;
+        this.l3_flowend;
+        this.l3_pipewater;
+        this.l4_bucketfront0001;
+        this.l5_shutdown;
+        this.l5_flowingdown;
+        this.l5_operating;
+        this.l5_park;
+        this.harvest;
+        this.plant0_0;
+        this.plant0_1;
+        this.plant0_2;
+        this.plant0_3;
+        this.plant_1_0;
+        this.plant_1_1;
+        this.plant_1_2;
+        this.plant_1_3;
+        this.plant_2_0;
+        this.plant_2_1;
+        this.plant_2_2;
+        this.plant_2_3;
+        this.plant_3_0;
+        this.plant_3_1;
+        this.plant_3_2;
+        this.plant_3_3;
+        this.plant_4_0;
+        this.plant_4_1;
+        this.plant_4_2;
+        this.plant_4_3;
+        this.rectangle_invalid;
+        this.spray1_end;
+        this.spray1_operating;
+        this.spray1_start;
+        this.spray2_operating;
+        this.spray2_end;
+        this.spray2_start;
+        this.plantbad_0_0;
+        this.plantbad_0_1;
+        this.plantbad_0_2;
+        this.plantbad_0_3;
+        this.plantbad_1_0;
+        this.plantbad_1_1;
+        this.plantbad_1_2;
+        this.plantbad_1_3;
+        this.plantbad_2_0;
+        this.plantbad_2_1;
+        this.plantbad_2_2;
+        this.plantbad_2_3;
+        this.plantbad_3_0;
+        this.plantbad_3_1;
+        this.plantbad_3_2;
+        this.plantbad_3_3;
+        this.plantbad_4_0;
+        this.plantbad_4_1;
+        this.plantbad_4_2;
+        this.plantbad_4_3;
+        this.sort;
+        this.roomTriggers={'forest':()=>this.triggerRoom(809,1234,410),'eco':()=>this.triggerRoom(122,253,590),'mine':()=>this.triggerRoom(808,0,0)};
 
         /* END-USER-CTR-CODE */
     }
 
     /** @returns {void} */
     _preload() {
-
-        this.load.pack("shack-pack", "assets/media/rooms/shack/shack-pack.json");
+        this.load.pack('shack-pack','assets/media/rooms/shack/shack-pack.json');
     }
 
     /** @returns {void} */
     _create() {
 
-        // bg
-        const bg = this.add.image(-22, 1, "shack", "bg");
-        bg.setOrigin(0, 0);
-
-        // plant
-        const plant = this.add.image(-28, 122, "shack", "plant");
-        plant.setOrigin(0, 0);
-
-        // trees_1
-        const trees_1 = this.add.image(196, 645, "shack", "trees_1");
-        trees_1.setOrigin(0.8208955223880597, 0.36511156186612576);
-
-        // plant_doors
-        const plant_doors = this.add.image(6, 355, "shack", "plant_doors");
-        plant_doors.setOrigin(0, 0);
-
-        // flowers
-        const flowers = this.add.image(206, 464, "shack", "flowers");
-        flowers.setOrigin(0.5352112676056338, 0.7903225806451613);
-
-        // tree
-        const tree = this.add.image(290, 365, "shack", "tree");
-        tree.setOrigin(0.15776699029126215, 0.8953488372093024);
-
-        // cart_2
-        const cart_2 = this.add.image(625, 526, "shack", "cart_2");
-        cart_2.setOrigin(0.5206611570247934, 0.7475728155339806);
-
-        // cart_1
-        const cart_1 = this.add.image(519, 568, "shack", "cart_1");
-        cart_1.setOrigin(0.4928571428571429, 0.7401574803149606);
-
-        // fence
-        const fence = this.add.image(718, 584, "shack", "fence");
-        fence.setOrigin(0.5180722891566265, 0.5562130177514792);
-
-        // shovel
-        const shovel = this.add.image(1143, 470, "shack", "shovel");
-        shovel.setOrigin(0.17543859649122806, 0.856);
-
-        // barrel_2
-        const barrel_2 = this.add.image(1252, 492, "shack", "barrel_2");
-        barrel_2.setOrigin(0.759493670886076, 0.8953488372093024);
-
-        // bag
-        const bag = this.add.image(1164, 503, "shack", "bag");
-        bag.setOrigin(0.09859154929577464, 0.7682926829268293);
-
-        // bear
-        const bear = this.add.image(1142, 482, "shack", "bear");
-        bear.setOrigin(0.71, 0.7178423236514523);
-
-        // flowers_1
-        const flowers_1 = this.add.image(1003, 537, "shack", "flowers");
-        flowers_1.setOrigin(0.5352112676056338, 0.7903225806451613);
-
-        // house_back
-        const house_back = this.add.image(1298, 332, "shack", "house_back");
-        house_back.setOrigin(0, 0);
-
-        // barrel
-        const barrel = this.add.image(1367, 398, "shack", "barrel");
-        barrel.setOrigin(0, 0);
-
-        // house
-        const house = this.add.image(1291, 500, "shack", "house");
-        house.setOrigin(0.08679245283018867, 0.8169014084507042);
-
-        // pipe_1
-        const pipe_1 = this.add.image(1004, 588, "shack", "pipe_10001");
-        pipe_1.setOrigin(0.44106463878326996, 0.40707964601769914);
-
-        // pipe_2
-        const pipe_2 = this.add.image(1268, 681, "shack", "pipe_20001");
-        pipe_2.setOrigin(0.054945054945054944, 0.3333333333333333);
-
-        // trees_2
-        const trees_2 = this.add.image(1204, 968, "shack", "trees_2");
-        trees_2.setOrigin(0, 1);
-
-        // lists
-        const sort = [house, pipe_1, pipe_2, trees_2, barrel, flowers_1, bear, bag, barrel_2, shovel, fence, cart_1, cart_2, tree, flowers, trees_1];
-
-        // plant_doors (components)
-        const plant_doorsButton = new Button(plant_doors);
-        plant_doorsButton.spriteName = "plant_doors";
-        plant_doorsButton.activeFrame = false;
-        const plant_doorsMoveTo = new MoveTo(plant_doors);
-        plant_doorsMoveTo.x = 70;
-        plant_doorsMoveTo.y = 450;
-
-        this.sort = sort;
-
-        this.events.emit("scene-awake");
+        this.add.image(762,481,'shack-bg','bg');
+        let L2_bucketback=this.add.sprite(673,205,'shack-bg','L2-bucketback0001');
+        let L3_flowend=this.add.sprite(733,140,'shack-flowend','L3-flowend0001');
+        L3_flowend.visible=false;
+        let L3_pipewater=this.add.sprite(733,140,'shack-bg','L3-pipewater0001');
+        let L4_bucketfront=this.add.sprite(672,249,'shack-bg','L4-bucketfront0001');
+        this.add.image(787,325,'shack-bg','bg2');
+        let L5_shutdown=this.add.sprite(950,314,'shack-bg','L5-shutdown0001');
+        L5_shutdown.visible=false;
+        let L5_flowingdown=this.add.sprite(942,314,'shack-bg','L5-flowingdown0001');
+        L5_flowingdown.visible=false;
+        let L5_operating=this.add.sprite(942,314,'shack-bg','L5-operating0001');
+        L5_operating.visible=false;
+        let L5_park=this.add.sprite(942,314,'shack-bg','L5-park');
+        this.add.image(169,408,'shack-bg','bush');
+        this.add.image(-28.4744803397528,123.04314989376635,'shack-bg','recycle').setOrigin(0,0);
+        let trees_1=this.add.image(196,645,'shack','trees_1');
+        trees_1.setOrigin(0.8208955223880597,0.36511156186612576);
+        let plant_doors=this.add.image(6,355,'shack','plant_doors');
+        plant_doors.setOrigin(0,0);
+        let shovel=this.add.image(1143,470,'shack','shovel');
+        shovel.setOrigin(0.17543859649122806,0.856);
+        let flowercart=this.add.image(1083,489.31549980908807,'shack-bg','flowercart');
+        flowercart.setOrigin(0.5,0.6692958317424006);
+        let flowers=this.add.image(206,464,'shack','flowers');
+        flowers.setOrigin(0.5352112676056338,0.7903225806451613);
+        let cart_2=this.add.image(625,526,'shack','cart_2');
+        cart_2.setOrigin(0.5206611570247934,0.7475728155339806);
+        let cart_1=this.add.image(519,568,'shack','cart_1');
+        cart_1.setOrigin(0.4928571428571429,0.7401574803149606);
+        let fence=this.add.image(718,584,'shack','fence');
+        fence.setOrigin(0.5180722891566265,0.5562130177514792);
+        let barrel_2=this.add.image(1252,492,'shack','barrel_2');
+        barrel_2.setOrigin(0.759493670886076,0.8953488372093024);
+        let bag=this.add.image(1154,507,'shack','bag');
+        bag.setOrigin(0.09859154929577464,0.7682926829268293);
+        let bear=this.add.image(1142,482,'shack','bear');
+        bear.setOrigin(0.71,0.7178423236514523);
+        bear.visible=false;
+        this.add.image(1298,332,'shack','house_back').setOrigin(0,0);
+        let harvest=this.add.sprite(1413,427,'shack-harvest','harvest0001');
+        let house=this.add.image(1291,500,'shack','house');
+        house.setOrigin(0.08679245283018867,0.8169014084507042);
+        let pipe=this.add.image(1004,588,'shack','pipe_10001');
+        pipe.setOrigin(0.44106463878326996,0.40707964601769914);
+        let pipe_2=this.add.image(1268,681,'shack','pipe_20001');
+        pipe_2.setOrigin(0.054945054945054944,0.3333333333333333);
+        let trees_2=this.add.image(1204,968,'shack','trees_2');
+        trees_2.setOrigin(0,1);
+        let plant=this.add.sprite(762.7197899098514,711.4709243145564,'shack-plants','plant00001');
+        plant.setOrigin(0.6573975199587457,0.8836124306416646);
+        let plant_2=this.add.sprite(821,664,'shack-plants','plant00001');
+        plant_2.setOrigin(0.6573975199587457,0.8836124306416646);
+        let plant_3=this.add.sprite(866,638,'shack-plants','plant00001');
+        plant_3.setOrigin(0.6573975199587457,0.8836124306416646);
+        let plant_4=this.add.sprite(906,604,'shack-plants','plant00001');
+        plant_4.setOrigin(0.6573975199587457,0.8836124306416646);
+        let plant_5=this.add.sprite(840.5557088713826,754.9425663255628,'shack-plants','plant10001');
+        plant_5.setOrigin(0.5960233187338186,0.9754061124155748);
+        let plant_6=this.add.sprite(892,711,'shack-plants','plant10001');
+        plant_6.setOrigin(0.5960233187338186,0.9754061124155748);
+        let plant_7=this.add.sprite(938,671,'shack-plants','plant10001');
+        plant_7.setOrigin(0.5960233187338186,0.9754061124155748);
+        let plant_8=this.add.sprite(981,633,'shack-plants','plant10001');
+        plant_8.setOrigin(0.5960233187338186,0.9754061124155748);
+        let plant_9=this.add.sprite(934,795,'shack-plants','plant20001');
+        plant_9.setOrigin(0.2269815866164309,0.9662820977897065);
+        let plant_10=this.add.sprite(977,746,'shack-plants','plant20001');
+        plant_10.setOrigin(0.2269815866164309,0.9662820977897065);
+        let plant_11=this.add.sprite(1025,700,'shack-plants','plant20001');
+        plant_11.setOrigin(0.2269815866164309,0.9662820977897065);
+        let plant_12=this.add.sprite(1058,657,'shack-plants','plant20001');
+        plant_12.setOrigin(0.2269815866164309,0.9662820977897065);
+        let plant_13=this.add.sprite(1051,828,'shack-plants','plant30001');
+        plant_13.setOrigin(0.2269815866164309,0.9662820977897065);
+        let plant_14=this.add.sprite(1099,784,'shack-plants','plant30001');
+        plant_14.setOrigin(0.2269815866164309,0.9662820977897065);
+        let plant_15=this.add.sprite(1140,743,'shack-plants','plant30001');
+        plant_15.setOrigin(0.2269815866164309,0.9662820977897065);
+        let plant_16=this.add.sprite(1182,700,'shack-plants','plant30001');
+        plant_16.setOrigin(0.2269815866164309,0.9662820977897065);
+        let plant_17=this.add.sprite(1138.4814194829776,857.6214783839525,'shack-plants','plant40001');
+        plant_17.setOrigin(0.05571316080727203,0.9752441335318609);
+        let plant_18=this.add.sprite(1193,802,'shack-plants','plant40001');
+        plant_18.setOrigin(0.05571316080727203,0.9752441335318609);
+        let plant_19=this.add.sprite(1247,765,'shack-plants','plant40001');
+        plant_19.setOrigin(0.05571316080727203,0.9752441335318609);
+        let plant_20=this.add.sprite(1297,722,'shack-plants','plant40001');
+        plant_20.setOrigin(0.05571316080727203,0.9752441335318609);
+        let rect=this.add.rectangle(-215,53,128,128);
+        rect.isFilled=true;
+        let spray1_end=this.add.sprite(1024.5791692421303,631.6059018406636,'shack-waterspray','spray1-end0001');
+        spray1_end.setOrigin(0.5121087757846494,1.0237091743562106);
+        spray1_end.visible=false;
+        let spray1_end_2=this.add.sprite(1021.484166151574,632.1217356890896,'shack-waterspray','spray1-end0001');
+        spray1_end_2.setOrigin(0.4975782448430702,1.0276468373212948);
+        spray1_end_2.visible=false;
+        let spray1_start=this.add.sprite(1017.5698435050567,623.9783614516042,'shack-waterspray','spray1-start0012');
+        spray1_start.setOrigin(0.873418101199076,1.0073732993965063);
+        spray1_start.visible=false;
+        let spray2_operating=this.add.sprite(1349,700.6581336753925,'shack-waterspray','spray2-operating0015');
+        spray2_operating.setOrigin(0.5,0.9690567932906712);
+        spray2_operating.visible=false;
+        let spray2_end=this.add.sprite(1342.7644357640147,696.951440967437,'shack-waterspray','spray2-end0001');
+        spray2_end.setOrigin(0.48970363136678924,0.9558392326935626);
+        spray2_end.visible=false;
+        let spray2_start=this.add.sprite(1390.0198206105906,706.2988693894229,'shack-waterspray','spray2-start0001');
+        spray2_start.setOrigin(0.9700977373347014,0.9977849861841444);
+        spray2_start.visible=false;
+        let plant_21=this.add.sprite(725,635,'shack-plantsbad','plant00001');
+        plant_21.setOrigin(0.6573975199587457,0.8836124306416646);
+        plant_21.visible=false;
+        let plant_22=this.add.sprite(783,587,'shack-plantsbad','plant00001');
+        plant_22.setOrigin(0.6573975199587457,0.8836124306416646);
+        plant_22.visible=false;
+        let plant_23=this.add.sprite(828,561,'shack-plantsbad','plant00001');
+        plant_23.setOrigin(0.6573975199587457,0.8836124306416646);
+        plant_23.visible=false;
+        let plant_24=this.add.sprite(868,527,'shack-plantsbad','plant00001');
+        plant_24.setOrigin(0.6573975199587457,0.8836124306416646);
+        plant_24.visible=false;
+        let plant_25=this.add.sprite(861,679,'shack-plantsbad','plant10001');
+        plant_25.setOrigin(0.6573975199587457,0.8836124306416646);
+        plant_25.visible=false;
+        let plant_26=this.add.sprite(912,635,'shack-plantsbad','plant10001');
+        plant_26.setOrigin(0.6573975199587457,0.8836124306416646);
+        plant_26.visible=false;
+        let plant_27=this.add.sprite(958,595,'shack-plantsbad','plant10001');
+        plant_27.setOrigin(0.6573975199587457,0.8836124306416646);
+        plant_27.visible=false;
+        let plant_28=this.add.sprite(1002,557,'shack-plantsbad','plant10001');
+        plant_28.setOrigin(0.6573975199587457,0.8836124306416646);
+        plant_28.visible=false;
+        let plant_29=this.add.sprite(1012,714,'shack-plantsbad','plant20001');
+        plant_29.setOrigin(0.6573975199587457,0.8836124306416646);
+        plant_29.visible=false;
+        let plant_30=this.add.sprite(1056,664,'shack-plantsbad','plant20001');
+        plant_30.setOrigin(0.6573975199587457,0.8836124306416646);
+        plant_30.visible=false;
+        let plant_31=this.add.sprite(1104,619,'shack-plantsbad','plant20001');
+        plant_31.setOrigin(0.6573975199587457,0.8836124306416646);
+        plant_31.visible=false;
+        let plant_32=this.add.sprite(1136,576,'shack-plantsbad','plant20001');
+        plant_32.setOrigin(0.6573975199587457,0.8836124306416646);
+        plant_32.visible=false;
+        let plant_33=this.add.sprite(1189,750,'shack-plantsbad','plant30001');
+        plant_33.setOrigin(0.6573975199587457,0.8836124306416646);
+        plant_33.visible=false;
+        let plant_34=this.add.sprite(1237,706,'shack-plantsbad','plant30001');
+        plant_34.setOrigin(0.6573975199587457,0.8836124306416646);
+        plant_34.visible=false;
+        let plant_35=this.add.sprite(1279,665,'shack-plantsbad','plant30001');
+        plant_35.setOrigin(0.6573975199587457,0.8836124306416646);
+        plant_35.visible=false;
+        let plant_36=this.add.sprite(1321,622,'shack-plantsbad','plant30001');
+        plant_36.setOrigin(0.6573975199587457,0.8836124306416646);
+        plant_36.visible=false;
+        let plant_37=this.add.sprite(1336,769,'shack-plantsbad','plant40001');
+        plant_37.setOrigin(0.6573975199587457,0.8836124306416646);
+        plant_37.visible=false;
+        let plant_38=this.add.sprite(1390,713,'shack-plantsbad','plant40001');
+        plant_38.setOrigin(0.6573975199587457,0.8836124306416646);
+        plant_38.visible=false;
+        let plant_39=this.add.sprite(1444,676,'shack-plantsbad','plant40001');
+        plant_39.setOrigin(0.6573975199587457,0.8836124306416646);
+        plant_39.visible=false;
+        let plant_40=this.add.sprite(1495,633,'shack-plantsbad','plant40001');
+        plant_40.setOrigin(0.6573975199587457,0.8836124306416646);
+        plant_40.visible=false;
+        let flowers_2=this.add.image(1092,527,'shack','flowers');
+        flowers_2.setOrigin(0.5352112676056338,0.7903225806451613);
+        let sort=[house,pipe,pipe_2,trees_2,bear,bag,barrel_2,shovel,fence,cart_1,cart_2,flowers,trees_1,plant_8,plant_7,plant_6,plant_5,plant_4,plant_3,plant_2,plant,plant_12,plant_11,plant_10,plant_9,plant_13,plant_16,plant_15,plant_14,plant_17,plant_20,plant_19,plant_18,spray1_end,spray1_end_2,spray1_start,spray2_end,spray2_operating,plant_21,plant_40,plant_39,plant_38,plant_37,plant_36,plant_35,plant_34,plant_33,plant_32,plant_31,plant_30,plant_29,plant_28,plant_27,plant_26,plant_25,plant_24,plant_23,plant_22,spray2_start,flowercart,flowers_2];
+        let animation=new Animation(L2_bucketback);
+        animation.key='L2-bucketback';
+        animation.end=10;
+        animation.repeat=0;
+        animation.autoPlay=false;
+        let animation_2=new Animation(L3_flowend);
+        animation_2.key='L3-flowend';
+        animation_2.end=24;
+        animation_2.repeat=0;
+        animation_2.autoPlay=false;
+        let animation_3=new Animation(L3_pipewater);
+        animation_3.key='L3-flowanimation';
+        animation_3.end=13;
+        animation_3.repeat=0;
+        animation_3.autoPlay=false;
+        let animation_4=new Animation(L4_bucketfront);
+        animation_4.key='L4-bucketfront';
+        animation_4.end=10;
+        animation_4.repeat=0;
+        animation_4.autoPlay=false;
+        let animation_5=new Animation(L5_shutdown);
+        animation_5.key='L5-shutdown';
+        animation_5.end=36;
+        animation_5.repeat=0;
+        animation_5.autoPlay=false;
+        let animation_6=new Animation(L5_flowingdown);
+        animation_6.key='L5-flowingdown';
+        animation_6.end=82;
+        animation_6.repeat=0;
+        animation_6.autoPlay=false;
+        let animation_7=new Animation(L5_operating);
+        animation_7.key='L5-operating';
+        animation_7.end=12;
+        new Button(plant_doors).spriteName='plant_doors';
+        let moveTo=new MoveTo(plant_doors);
+        moveTo.x=96;
+        moveTo.y=478;
+        let hoverAnimation=new HoverAnimation(harvest);
+        hoverAnimation.key='harvest';
+        hoverAnimation.checkpoints='11,21,31';
+        hoverAnimation.end=37;
+        hoverAnimation.hoverZone=rect;
+        hoverAnimation.loop=false;
+        let hoverAnimation_2=new HoverAnimation(plant);
+        hoverAnimation_2.key='plant0';
+        hoverAnimation_2.checkpoints='1,9,16,23';
+        hoverAnimation_2.end=31;
+        hoverAnimation_2.hoverZone=rect;
+        let hoverAnimation_3=new HoverAnimation(plant_2);
+        hoverAnimation_3.key='plant0';
+        hoverAnimation_3.checkpoints='1,9,16,23';
+        hoverAnimation_3.end=31;
+        hoverAnimation_3.hoverZone=rect;
+        let hoverAnimation_4=new HoverAnimation(plant_3);
+        hoverAnimation_4.key='plant0';
+        hoverAnimation_4.checkpoints='1,9,16,23';
+        hoverAnimation_4.end=31;
+        hoverAnimation_4.hoverZone=rect;
+        let hoverAnimation_5=new HoverAnimation(plant_4);
+        hoverAnimation_5.key='plant0';
+        hoverAnimation_5.checkpoints='1,9,16,23';
+        hoverAnimation_5.end=31;
+        hoverAnimation_5.hoverZone=rect;
+        let hoverAnimation_6=new HoverAnimation(plant_5);
+        hoverAnimation_6.key='plant1';
+        hoverAnimation_6.checkpoints='1,7,15,25';
+        hoverAnimation_6.end=33;
+        hoverAnimation_6.hoverZone=rect;
+        let hoverAnimation_7=new HoverAnimation(plant_6);
+        hoverAnimation_7.key='plant1';
+        hoverAnimation_7.checkpoints='1,7,15,25';
+        hoverAnimation_7.end=33;
+        hoverAnimation_7.hoverZone=rect;
+        let hoverAnimation_8=new HoverAnimation(plant_7);
+        hoverAnimation_8.key='plant1';
+        hoverAnimation_8.checkpoints='1,7,15,25';
+        hoverAnimation_8.end=33;
+        hoverAnimation_8.hoverZone=rect;
+        let hoverAnimation_9=new HoverAnimation(plant_8);
+        hoverAnimation_9.key='plant1';
+        hoverAnimation_9.checkpoints='1,7,15,25';
+        hoverAnimation_9.end=33;
+        hoverAnimation_9.hoverZone=rect;
+        let hoverAnimation_10=new HoverAnimation(plant_9);
+        hoverAnimation_10.key='plant2';
+        hoverAnimation_10.checkpoints='1,7,15,25';
+        hoverAnimation_10.end=33;
+        hoverAnimation_10.hoverZone=rect;
+        let hoverAnimation_11=new HoverAnimation(plant_10);
+        hoverAnimation_11.key='plant2';
+        hoverAnimation_11.checkpoints='1,7,15,25';
+        hoverAnimation_11.end=33;
+        hoverAnimation_11.hoverZone=rect;
+        let hoverAnimation_12=new HoverAnimation(plant_11);
+        hoverAnimation_12.key='plant2';
+        hoverAnimation_12.checkpoints='1,7,15,25';
+        hoverAnimation_12.end=33;
+        hoverAnimation_12.hoverZone=rect;
+        let hoverAnimation_13=new HoverAnimation(plant_12);
+        hoverAnimation_13.key='plant2';
+        hoverAnimation_13.checkpoints='1,7,15,25';
+        hoverAnimation_13.end=33;
+        hoverAnimation_13.hoverZone=rect;
+        let hoverAnimation_14=new HoverAnimation(plant_13);
+        hoverAnimation_14.key='plant3';
+        hoverAnimation_14.checkpoints='1,8,16,26';
+        hoverAnimation_14.end=34;
+        hoverAnimation_14.hoverZone=rect;
+        let hoverAnimation_15=new HoverAnimation(plant_14);
+        hoverAnimation_15.key='plant3';
+        hoverAnimation_15.checkpoints='1,8,16,26';
+        hoverAnimation_15.end=34;
+        hoverAnimation_15.hoverZone=rect;
+        let hoverAnimation_16=new HoverAnimation(plant_15);
+        hoverAnimation_16.key='plant3';
+        hoverAnimation_16.checkpoints='1,8,16,26';
+        hoverAnimation_16.end=34;
+        hoverAnimation_16.hoverZone=rect;
+        let hoverAnimation_17=new HoverAnimation(plant_16);
+        hoverAnimation_17.key='plant3';
+        hoverAnimation_17.checkpoints='1,8,16,26';
+        hoverAnimation_17.end=34;
+        hoverAnimation_17.hoverZone=rect;
+        let hoverAnimation_18=new HoverAnimation(plant_17);
+        hoverAnimation_18.key='plant4';
+        hoverAnimation_18.checkpoints='1,6,15,27';
+        hoverAnimation_18.end=33;
+        hoverAnimation_18.hoverZone=rect;
+        let hoverAnimation_19=new HoverAnimation(plant_18);
+        hoverAnimation_19.key='plant4';
+        hoverAnimation_19.checkpoints='1,6,15,27';
+        hoverAnimation_19.end=33;
+        hoverAnimation_19.hoverZone=rect;
+        let hoverAnimation_20=new HoverAnimation(plant_19);
+        hoverAnimation_20.key='plant4';
+        hoverAnimation_20.checkpoints='1,6,15,27';
+        hoverAnimation_20.end=33;
+        hoverAnimation_20.hoverZone=rect;
+        let hoverAnimation_21=new HoverAnimation(plant_20);
+        hoverAnimation_21.key='plant4';
+        hoverAnimation_21.checkpoints='1,6,15,27';
+        hoverAnimation_21.end=33;
+        hoverAnimation_21.hoverZone=rect;
+        let animation_8=new Animation(spray1_end);
+        animation_8.key='spray1-end';
+        animation_8.end=21;
+        animation_8.repeat=0;
+        animation_8.autoPlay=false;
+        let animation_9=new Animation(spray1_end_2);
+        animation_9.key='spray1-operating';
+        animation_9.start=6;
+        animation_9.end=16;
+        let animation_10=new Animation(spray1_start);
+        animation_10.key='spray1-start';
+        animation_10.end=12;
+        animation_10.repeat=0;
+        animation_10.autoPlay=false;
+        let animation_11=new Animation(spray2_operating);
+        animation_11.key='spray2-operating';
+        animation_11.start=5;
+        animation_11.end=16;
+        let animation_12=new Animation(spray2_end);
+        animation_12.key='spray2-end';
+        animation_12.end=6;
+        animation_12.repeat=0;
+        animation_12.autoPlay=false;
+        let animation_13=new Animation(spray2_start);
+        animation_13.key='spray2-start';
+        animation_13.end=24;
+        animation_13.repeat=0;
+        animation_13.autoPlay=false;
+        let hoverAnimation_22=new HoverAnimation(plant_21);
+        hoverAnimation_22.key='plant0';
+        hoverAnimation_22.checkpoints='30,31,60,61';
+        hoverAnimation_22.end=90;
+        hoverAnimation_22.hoverZone=rect;
+        let hoverAnimation_23=new HoverAnimation(plant_22);
+        hoverAnimation_23.key='plant0';
+        hoverAnimation_23.checkpoints='30,31,60,61';
+        hoverAnimation_23.end=90;
+        hoverAnimation_23.hoverZone=rect;
+        let hoverAnimation_24=new HoverAnimation(plant_23);
+        hoverAnimation_24.key='plant0';
+        hoverAnimation_24.checkpoints='30,31,60,61';
+        hoverAnimation_24.end=90;
+        hoverAnimation_24.hoverZone=rect;
+        let hoverAnimation_25=new HoverAnimation(plant_24);
+        hoverAnimation_25.key='plant0';
+        hoverAnimation_25.checkpoints='30,31,60,61';
+        hoverAnimation_25.end=90;
+        hoverAnimation_25.hoverZone=rect;
+        let hoverAnimation_26=new HoverAnimation(plant_25);
+        hoverAnimation_26.key='plant1';
+        hoverAnimation_26.checkpoints='30,31,60,61';
+        hoverAnimation_26.end=90;
+        hoverAnimation_26.hoverZone=rect;
+        let hoverAnimation_27=new HoverAnimation(plant_26);
+        hoverAnimation_27.key='plant1';
+        hoverAnimation_27.checkpoints='30,31,60,61';
+        hoverAnimation_27.end=90;
+        hoverAnimation_27.hoverZone=rect;
+        let hoverAnimation_28=new HoverAnimation(plant_27);
+        hoverAnimation_28.key='plant1';
+        hoverAnimation_28.checkpoints='30,31,60,61';
+        hoverAnimation_28.end=90;
+        hoverAnimation_28.hoverZone=rect;
+        let hoverAnimation_29=new HoverAnimation(plant_28);
+        hoverAnimation_29.key='plant1';
+        hoverAnimation_29.checkpoints='30,31,60,61';
+        hoverAnimation_29.end=90;
+        hoverAnimation_29.hoverZone=rect;
+        let hoverAnimation_30=new HoverAnimation(plant_29);
+        hoverAnimation_30.key='plant2';
+        hoverAnimation_30.checkpoints='30,31,60,61';
+        hoverAnimation_30.end=90;
+        hoverAnimation_30.hoverZone=rect;
+        let hoverAnimation_31=new HoverAnimation(plant_30);
+        hoverAnimation_31.key='plant2';
+        hoverAnimation_31.checkpoints='30,31,60,61';
+        hoverAnimation_31.end=90;
+        hoverAnimation_31.hoverZone=rect;
+        let hoverAnimation_32=new HoverAnimation(plant_31);
+        hoverAnimation_32.key='plant2';
+        hoverAnimation_32.checkpoints='30,31,60,61';
+        hoverAnimation_32.end=90;
+        hoverAnimation_32.hoverZone=rect;
+        let hoverAnimation_33=new HoverAnimation(plant_32);
+        hoverAnimation_33.key='plant2';
+        hoverAnimation_33.checkpoints='30,31,60,61';
+        hoverAnimation_33.end=90;
+        hoverAnimation_33.hoverZone=rect;
+        let hoverAnimation_34=new HoverAnimation(plant_33);
+        hoverAnimation_34.key='plant3';
+        hoverAnimation_34.checkpoints='30,31,60,61';
+        hoverAnimation_34.end=90;
+        hoverAnimation_34.hoverZone=rect;
+        let hoverAnimation_35=new HoverAnimation(plant_34);
+        hoverAnimation_35.key='plant3';
+        hoverAnimation_35.checkpoints='30,31,60,61';
+        hoverAnimation_35.end=90;
+        hoverAnimation_35.hoverZone=rect;
+        let hoverAnimation_36=new HoverAnimation(plant_35);
+        hoverAnimation_36.key='plant3';
+        hoverAnimation_36.checkpoints='30,31,60,61';
+        hoverAnimation_36.end=90;
+        hoverAnimation_36.hoverZone=rect;
+        let hoverAnimation_37=new HoverAnimation(plant_36);
+        hoverAnimation_37.key='plant3';
+        hoverAnimation_37.checkpoints='30,31,60,61';
+        hoverAnimation_37.end=90;
+        hoverAnimation_37.hoverZone=rect;
+        let hoverAnimation_38=new HoverAnimation(plant_37);
+        hoverAnimation_38.key='plant4';
+        hoverAnimation_38.checkpoints='30,31,60,61';
+        hoverAnimation_38.end=90;
+        hoverAnimation_38.hoverZone=rect;
+        let hoverAnimation_39=new HoverAnimation(plant_38);
+        hoverAnimation_39.key='plant4';
+        hoverAnimation_39.checkpoints='30,31,60,61';
+        hoverAnimation_39.end=90;
+        hoverAnimation_39.hoverZone=rect;
+        let hoverAnimation_40=new HoverAnimation(plant_39);
+        hoverAnimation_40.key='plant4';
+        hoverAnimation_40.checkpoints='30,31,60,61';
+        hoverAnimation_40.end=90;
+        hoverAnimation_40.hoverZone=rect;
+        let hoverAnimation_41=new HoverAnimation(plant_40);
+        hoverAnimation_41.key='plant4';
+        hoverAnimation_41.checkpoints='30,31,60,61';
+        hoverAnimation_41.end=90;
+        hoverAnimation_41.hoverZone=rect;
+        this.l2_bucketback0001=L2_bucketback;
+        this.l3_flowend=L3_flowend;
+        this.l3_pipewater=L3_pipewater;
+        this.l4_bucketfront0001=L4_bucketfront;
+        this.l5_shutdown=L5_shutdown;
+        this.l5_flowingdown=L5_flowingdown;
+        this.l5_operating=L5_operating;
+        this.l5_park=L5_park;
+        this.harvest=harvest;
+        this.plant0_0=plant;
+        this.plant0_1=plant_2;
+        this.plant0_2=plant_3;
+        this.plant0_3=plant_4;
+        this.plant_1_0=plant_5;
+        this.plant_1_1=plant_6;
+        this.plant_1_2=plant_7;
+        this.plant_1_3=plant_8;
+        this.plant_2_0=plant_9;
+        this.plant_2_1=plant_10;
+        this.plant_2_2=plant_11;
+        this.plant_2_3=plant_12;
+        this.plant_3_0=plant_13;
+        this.plant_3_1=plant_14;
+        this.plant_3_2=plant_15;
+        this.plant_3_3=plant_16;
+        this.plant_4_0=plant_17;
+        this.plant_4_1=plant_18;
+        this.plant_4_2=plant_19;
+        this.plant_4_3=plant_20;
+        this.rectangle_invalid=rect;
+        this.spray1_end=spray1_end;
+        this.spray1_operating=spray1_end_2;
+        this.spray1_start=spray1_start;
+        this.spray2_operating=spray2_operating;
+        this.spray2_end=spray2_end;
+        this.spray2_start=spray2_start;
+        this.plantbad_0_0=plant_21;
+        this.plantbad_0_1=plant_22;
+        this.plantbad_0_2=plant_23;
+        this.plantbad_0_3=plant_24;
+        this.plantbad_1_0=plant_25;
+        this.plantbad_1_1=plant_26;
+        this.plantbad_1_2=plant_27;
+        this.plantbad_1_3=plant_28;
+        this.plantbad_2_0=plant_29;
+        this.plantbad_2_1=plant_30;
+        this.plantbad_2_2=plant_31;
+        this.plantbad_2_3=plant_32;
+        this.plantbad_3_0=plant_33;
+        this.plantbad_3_1=plant_34;
+        this.plantbad_3_2=plant_35;
+        this.plantbad_3_3=plant_36;
+        this.plantbad_4_0=plant_37;
+        this.plantbad_4_1=plant_38;
+        this.plantbad_4_2=plant_39;
+        this.plantbad_4_3=plant_40;
+        this.sort=sort;
+        this.events.emit('scene-awake');
     }
 
+    create() {
+        super.create();
+        this.plants=[this.plant0_0,this.plant0_1,this.plant0_2,this.plant0_3,this.plant_1_0,this.plant_1_1,this.plant_1_2,this.plant_1_3,this.plant_2_0,this.plant_2_1,this.plant_2_2,this.plant_2_3,this.plant_3_0,this.plant_3_1,this.plant_3_2,this.plant_3_3,this.plant_4_0,this.plant_4_1,this.plant_4_2,this.plant_4_3];
+        this.badPlants=[this.plantbad_0_0,this.plantbad_0_1,this.plantbad_0_2,this.plantbad_0_3,this.plantbad_1_0,this.plantbad_1_1,this.plantbad_1_2,this.plantbad_1_3,this.plantbad_2_0,this.plantbad_2_1,this.plantbad_2_2,this.plantbad_2_3,this.plantbad_3_0,this.plantbad_3_1,this.plantbad_3_2,this.plantbad_3_3,this.plantbad_4_0,this.plantbad_4_1,this.plantbad_4_2,this.plantbad_4_3];
+        this.waterLevel=1;
+        this.l3_pipewater.on('animationcomplete',()=>{this.l5_park.visible=false,this.l5_flowingdown.visible=true,this.l5_flowingdown.__Animation.play();});
+        this.l5_flowingdown.on('animationcomplete',()=>{this.l5_flowingdown.visible=false,this.l5_operating.visible=true,this.spray1_start.visible=true,this.spray1_start.__Animation.play(),this.spray2_start.visible=true,this.spray2_start.__Animation.play();});
+        this.spray1_start.on('animationcomplete',()=>{this.spray1_start.visible=false,this.spray1_operating.visible=true;});
+        this.spray2_start.on('animationcomplete',()=>{this.spray2_start.visible=false,this.spray2_operating.visible=true;});
+        this.time.addEvent({'delay':10000,'callback':()=>this.decreaseWater(),'loop':true});
+        this.time.addEvent({'delay':2000,'callback':()=>this.decreaseWaterSmall(),'loop':true});
+        this.l3_flowend.on('animationcomplete',()=>{this.updateWater(),this.l3_flowend.visible=false,this.l3_pipewater.visible=true,this.l5_operating.visible=false,this.l5_shutdown.visible=true,this.l5_shutdown.__Animation.play();});
+        this.l5_shutdown.on('animationcomplete',()=>{this.l5_shutdown.visible=false,this.l5_park.visible=true,this.spray1_operating.visible=false,this.spray1_end.__Animation.play(),this.spray1_end.visible=true,this.spray2_operating.visible=false,this.spray2_end.__Animation.play(),this.spray2_end.visible=true;});
+        this.spray1_end.on('animationcomplete',()=>{this.spray1_end.visible=false;});
+        this.spray2_end.on('animationcomplete',()=>{this.spray2_end.visible=false;});
+        this.checkScheduled=false;
+        this.skipDecrease=false;
+    }
+
+    scheduleCheck() {
+        this.checkScheduled||(this.checkScheduled=true,this.time.addEvent({'delay':10000,'callback':()=>this.waterPlants(),'loop':true}),this.time.addEvent({'delay':10000,'callback':()=>this.unwaterPlants(),'loop':true}));
+    }
+
+    waterPlants() {
+        this.spray1_operating.visible&&(this.increaseGrowth(),this.plantsWatered=true);
+    }
+
+    increaseWater() {
+        this.l4_bucketfront0001.__Animation.play();
+        this.l2_bucketback0001.__Animation.play();
+        this.waterLevel>6||(this.waterLevel+=1,this.skipDecrease=true,this.updateWater(),this.scheduleCheck());
+    }
+
+    updateWater() {
+        this.waterLevel<=5&&this.l3_pipewater.setTexture('shack-bg',"L3-pipewater000"+this.waterLevel);
+        6==this.waterLevel&&this.l3_pipewater.__Animation.play();
+    }
+
+    decreaseWaterSmall() {
+        this.waterLevel<=1||this.waterLevel>5||(this.waterLevel-=1,this.updateWater());
+    }
+
+    decreaseWater() {
+        if(!this.l5_flowingdown.visible&&!this.spray1_start.visible&&!this.spray2_start.visible){if(this.skipDecrease){this.skipDecrease=false;return;}this.waterLevel<=1||(this.waterLevel-=1,5==this.waterLevel&&(this.waterLevel=1,this.l3_flowend.__Animation.play(),this.l3_flowend.visible=true,this.l3_pipewater.visible=false));};
+    }
+
+    increaseGrowth() {
+        0==this.plant0_0.__HoverAnimation.currentAnimation&&this.increaseHarvest();
+    }
+
+    increaseHarvest() {
+        this.harvest.__HoverAnimation.play();
+    }
 
     /* START-USER-CODE */
     /* END-USER-CODE */
