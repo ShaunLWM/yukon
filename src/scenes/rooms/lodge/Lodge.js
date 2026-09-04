@@ -1,6 +1,9 @@
 import RoomScene from '../RoomScene'
 
 import { Animation, Button, MoveTo, SimpleButton, Zone } from '@components/components'
+import FourTable1 from '@scenes/shared_prefabs/tables/four/FourTable1'
+import FourTable2 from '@scenes/shared_prefabs/tables/four/FourTable2'
+import FourTable3 from '@scenes/shared_prefabs/tables/four/FourTable3'
 
 
 /* START OF COMPILED CODE */
@@ -71,7 +74,10 @@ export default class Lodge extends RoomScene {
         rect.alpha=0.01;
         rect.isFilled=true;
         rect.fillColor=65280;
-        let sort=[door,footrest,chair];
+        let table205=this.add.existing(new FourTable3(this,600,513));
+        let table206=this.add.existing(new FourTable1(this,620,794));
+        let table207=this.add.existing(new FourTable2(this,1020,814));
+        let sort=[door,table206,footrest,chair,table207,table205];
         let animation=new Animation(fred);
         animation.key='fred';
         animation.end=25;
@@ -115,6 +121,9 @@ export default class Lodge extends RoomScene {
         this.hourHand=clockHour;
         this.minuteHand=clockMinute;
         this.fred=fred;
+        this.table205=table205;
+        this.table206=table206;
+        this.table207=table207;
         this.flame=flame;
         this.flame_out=flame_out;
         this.fish=fish;

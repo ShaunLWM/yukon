@@ -1,6 +1,10 @@
 import RoomScene from '../RoomScene'
 
 import { Animation, Button, MoveTo, SimpleButton, Zone } from '@components/components'
+import Waddle200 from './waddle/Waddle200'
+import Waddle201 from './waddle/Waddle201'
+import Waddle202 from './waddle/Waddle202'
+import Waddle203 from './waddle/Waddle203'
 
 
 /* START OF COMPILED CODE */
@@ -82,6 +86,22 @@ export default class Dojo extends RoomScene {
         button_4.spriteName='cards';
         button_4.callback=()=>this.interface.loadWidget('NinjaProgress');
         button_4.pixelPerfect=true;
+        let waddle200=this.add.existing(new Waddle200(this,616,706));
+        waddle200.moveToX=620;
+        waddle200.moveToY=650;
+        let waddle201=this.add.existing(new Waddle201(this,930,706));
+        waddle201.moveToX=920;
+        waddle201.moveToY=650;
+        let waddle202=this.add.existing(new Waddle202(this,358,813));
+        waddle202.moveToX=380;
+        waddle202.moveToY=750;
+        let waddle203=this.add.existing(new Waddle203(this,1188,813));
+        waddle203.moveToX=1160;
+        waddle203.moveToY=750;
+        this.waddle200=waddle200;
+        this.waddle201=waddle201;
+        this.waddle202=waddle202;
+        this.waddle203=waddle203;
         this.sensei=sensei_sensei;
         this.cards=cards;
         this.cauldronSmoke=cauldron_smoke_smoke;

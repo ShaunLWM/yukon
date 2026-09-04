@@ -1,6 +1,7 @@
 import RoomScene from '../RoomScene'
 
 import { Button, MoveTo } from '@components/components'
+import MancalaTable from '@scenes/shared_prefabs/tables/mancala/MancalaTable'
 
 
 /* START OF COMPILED CODE */
@@ -46,7 +47,12 @@ export default class Book extends RoomScene {
         let poster=this.add.image(720,97,'book','poster');
         poster.setOrigin(0,0);
         let bookbtn=this.add.image(1435.0000261607795,872.000002672045,'book-btn','bookbtn');
-        let sort=[chair_table,chair_front,chair_back];
+        let table100=this.add.existing(new MancalaTable(this,651,450));
+        let table101=this.add.existing(new MancalaTable(this,951,453));
+        let table102=this.add.existing(new MancalaTable(this,426,652));
+        let table103=this.add.existing(new MancalaTable(this,806,690));
+        let table104=this.add.existing(new MancalaTable(this,1208,755));
+        let sort=[chair_table,chair_front,chair_back,table100,table101,table102,table103,table104];
         new Button(books).spriteName='books';
         let moveTo=new MoveTo(books);
         moveTo.x=360;
@@ -58,6 +64,11 @@ export default class Book extends RoomScene {
         let button_2=new Button(bookbtn);
         button_2.spriteName='bookbtn';
         button_2.callback=()=>this.onLibrary();
+        this.table100=table100;
+        this.table101=table101;
+        this.table102=table102;
+        this.table103=table103;
+        this.table104=table104;
         this.interfaceIcons=bookbtn;
         this.sort=sort;
         this.events.emit('scene-awake');

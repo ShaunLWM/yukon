@@ -1,6 +1,7 @@
 import RoomScene from '../RoomScene'
 
 import { Animation, Button, MoveTo, SimpleButton, Zone } from '@components/components'
+import DojoHideWaddle from './waddle/DojoHideWaddle'
 
 
 /* START OF COMPILED CODE */
@@ -292,6 +293,22 @@ export default class DojoHide extends RoomScene {
         this.tabletGlow=tabletFire_glow;
         this.tablet=container_3;
         this.fireBeam=tabletFire_beam;
+        let waddle200=this.add.existing(new DojoHideWaddle(this,450,612,'mat/mat_2'));
+        waddle200.moveToX=450;
+        waddle200.moveToY=650;
+        let waddle201=this.add.existing(new DojoHideWaddle(this,1063,614,'mat/mat_2'));
+        waddle201.moveToX=1063;
+        waddle201.moveToY=650;
+        let waddle202=this.add.existing(new DojoHideWaddle(this,340,810,'mat/mat_1'));
+        waddle202.moveToX=340;
+        waddle202.moveToY=750;
+        let waddle203=this.add.existing(new DojoHideWaddle(this,1166,810,'mat/mat_1'));
+        waddle203.moveToX=1166;
+        waddle203.moveToY=750;
+        this.waddle200=waddle200;
+        this.waddle201=waddle201;
+        this.waddle202=waddle202;
+        this.waddle203=waddle203;
         this.catalog=catalog;
         this.cards=cards;
         this.gong1Zone=rect;
