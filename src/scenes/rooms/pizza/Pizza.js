@@ -185,13 +185,13 @@ export default class Pizza extends RoomScene {
     }
 
     stop() {
-        this.work.removeListeners();
+        this.work?.removeListeners();
         super.stop();
     }
 
     update() {
         super.update();
-        this.work.update();
+        this.work?.update();
         this.world.client.penguin&&(this.cooldown_timer.x=this.world.client.penguin.x,this.cooldown_timer.y=this.world.client.penguin.y-110);
     }
 
