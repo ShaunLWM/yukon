@@ -7,7 +7,7 @@ import BaseImage from "../../../base/BaseImage";
 export default class HockeyPuck extends BaseImage {
 
     constructor(scene, x, y, texture, frame) {
-        super(scene, x ?? 0, y ?? 0, texture || "rink", frame ?? "ball");
+        super(scene, x ?? 0, y ?? 0, texture || "rink_ice", frame ?? "puck");
 
         this.setOrigin(0.5, 0.7037037);
 
