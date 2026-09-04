@@ -122,6 +122,9 @@ def parse_cpj_chunks(cpj_dir):
 
         # Extract music key: look for string assignment to music property
         # Pattern: this.music = 'key' or ].music = 'key'
+        # Works for readable code; obfuscated chunks use bracket notation
+        # which this regex misses — those are caught by scanning yukon scene
+        # files below.
         music_matches = re.findall(
             r"\.music\s*=\s*'([^']+)'", chunk
         )
@@ -401,6 +404,14 @@ def main():
     for data in cpj_rooms.values():
         if data.get("music"):
             music_keys.add(data["music"])
+
+    # Also scan yukon scene files for music keys (catches obfuscated chunks
+    # where the CPJ regex missed the music assignment)
+    for scene_file in sorted(glob.glob(os.path.join(scenes_dir, "*", "*.js"))):
+        with open(scene_file) as f:
+            scene_src = f.read()
+        for m in re.finditer(r"this\.music\s*=\s*['\"]([^'\"]+)['\"]", scene_src):
+            music_keys.add(m.group(1))
 
     music_dir = os.path.join(yukon_root, "assets/media/music")
     for key in sorted(music_keys):
