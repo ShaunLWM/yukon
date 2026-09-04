@@ -256,8 +256,8 @@ export default class Pet extends RoomScene {
     }
 
     stop() {
-        super.stop();
         this.work&&this.work.removeListeners();
+        super.stop();
     }
 
     update() {

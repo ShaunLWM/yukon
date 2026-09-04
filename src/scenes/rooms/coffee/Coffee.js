@@ -176,9 +176,9 @@ export default class Coffee extends RoomScene {
     }
 
     stop() {
-        super.stop();
         this.ctStg=0;
         this.work.removeListeners();
+        super.stop();
     }
 
     update() {

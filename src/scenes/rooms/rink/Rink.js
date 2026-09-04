@@ -94,8 +94,8 @@ export default class Rink extends RoomScene {
     }
 
     stop() {
-        super.stop();
         this.hockeyGame.removeListeners();
+        super.stop();
     }
 
     update() {

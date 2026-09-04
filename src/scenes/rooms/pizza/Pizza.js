@@ -185,8 +185,8 @@ export default class Pizza extends RoomScene {
     }
 
     stop() {
-        super.stop();
         this.work.removeListeners();
+        super.stop();
     }
 
     update() {
