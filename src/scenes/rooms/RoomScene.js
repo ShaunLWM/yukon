@@ -38,7 +38,12 @@ export default class RoomScene extends BaseUnloadableScene {
     }
 
     create() {
-        this._create()
+        try {
+            this._create()
+        } catch (error) {
+            console.error(`[RoomScene] Error in ${this.key}._create():`, error)
+        }
+
         this.sortChildren()
 
         if (this.roomPhysics) this.addPhysics()

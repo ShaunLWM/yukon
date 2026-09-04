@@ -92,7 +92,6 @@ export default class Forts extends RoomScene {
         animation.autoPlay=false;
         let button=new Button(sign);
         button.spriteName='sign';
-        button.callback=()=>{this.interface.loadWidget('ClocktowerUI');};
         let animation_2=new Animation(blue_flag);
         animation_2.key='blue_flag';
         animation_2.end=16;
