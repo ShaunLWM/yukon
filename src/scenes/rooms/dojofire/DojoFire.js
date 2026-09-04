@@ -218,8 +218,9 @@ export default class DojoFire extends RoomScene {
         this.playSound('sensei_flare');
     }
 
-    triggerMat(arg1) {
-        if(!this.userHasDeck)return void this.interface.prompt.showWindow(this.getString('fire_deck_prompt'));
+    triggerMat(id) {
+        if(!this.userHasDeck())return void this.interface.prompt.showWindow(this.getString('fire_deck_prompt'));
+        this.triggerWaddle(id);
     }
 
     onLegendClick() {

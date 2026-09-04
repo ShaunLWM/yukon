@@ -371,8 +371,9 @@ export default class DojoHide extends RoomScene {
         this.firePathStairs.visible&&this.triggerRoom(812,1480,400);
     }
 
-    triggerMat(arg1) {
+    triggerMat(id) {
         if(!this.userHasDeck())return void this.interface.prompt.showWindow(this.getString('starter_deck_prompt'));
+        this.triggerWaddle(id);
     }
 
     checkFireRank() {

@@ -287,6 +287,10 @@ export default class RoomScene extends BaseUnloadableScene {
         this.world.client.stampEarned?.(id, silent)
     }
 
+    triggerWaddle(id) {
+        this.network.send('join_waddle', { waddle: id })
+    }
+
     triggerTable(name, id, prompt = true) {
         if (!prompt) {
             this.world.client.sendJoinTable(id)

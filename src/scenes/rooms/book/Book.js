@@ -20,6 +20,7 @@ export default class Book extends RoomScene {
         this.interfaceIcons;
         this.sort;
         this.roomTriggers={'coffee':()=>this.triggerRoom(110,1120,800),'library':()=>this.interface.loadWidget('Library'),'table100':()=>this.triggerTable('mancala',100),'table101':()=>this.triggerTable('mancala',101),'table102':()=>this.triggerTable('mancala',102),'table103':()=>this.triggerTable('mancala',103),'table104':()=>this.triggerTable('mancala',104)};
+        this.tables={};
         this.music='1';
 
         /* END-USER-CTR-CODE */

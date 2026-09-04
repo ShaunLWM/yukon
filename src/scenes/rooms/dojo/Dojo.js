@@ -111,8 +111,9 @@ export default class Dojo extends RoomScene {
         this.sensei.play('sensei_out');
     }
 
-    triggerMat(arg1) {
-        if(!this.userHasDeck)return void this.interface.prompt.showWindow(this.getString('starter_deck_prompt'));
+    triggerMat(id) {
+        if(!this.userHasDeck())return void this.interface.prompt.showWindow(this.getString('starter_deck_prompt'));
+        this.triggerWaddle(id);
     }
 
     /* START-USER-CODE */
