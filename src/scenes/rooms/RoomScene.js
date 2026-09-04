@@ -57,7 +57,8 @@ export default class RoomScene extends BaseUnloadableScene {
         this.events.once('create', () => this.isReady = true)
 
         if (this.music && !this.cache.audio.exists(this.music)) {
-            this.load.audio(this.music, `assets/media/music/${this.music}.mp3`)
+            let ext = this.crumbs.music?.ogg_files?.includes(this.music.toString()) ? 'ogg' : 'mp3'
+            this.load.audio(this.music, `assets/media/music/${this.music}.${ext}`)
         }
 
         this._preload()
@@ -263,6 +264,22 @@ export default class RoomScene extends BaseUnloadableScene {
 
             this.interface.prompt.window.visible = false
         })
+    }
+
+    changeLayerMutes(mutes) {
+        this.soundManager.changeLayerMutes?.(mutes)
+    }
+
+    rewindLayers() {
+        this.soundManager.rewindLayers?.()
+    }
+
+    playSound(key, config) {
+        this.soundManager.playSfx?.(key, config)
+    }
+
+    stampEarned(id, silent = false) {
+        this.world.client.stampEarned?.(id, silent)
     }
 
     triggerTable(name, id, prompt = true) {
