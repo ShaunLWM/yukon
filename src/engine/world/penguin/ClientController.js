@@ -85,6 +85,10 @@ export default class ClientController {
         return this.inventory.award.includes(800)
     }
 
+    hasItem(id) {
+        return this.slots.some(slot => this.inventory[slot]?.includes(id))
+    }
+
     get daysOld() {
         const oneDay = 1000 * 60 * 60 * 24
         const timeDiff = Date.now() - Date.parse(this.joinTime)

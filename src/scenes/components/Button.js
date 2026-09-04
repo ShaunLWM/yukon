@@ -50,9 +50,14 @@ export default class Button extends SimpleButton {
         this.gameObject.on('pointerdown', (pointer) => this.onDown(pointer))
     }
 
+    hasFrame(name) {
+        return this.gameObject.texture.has(name)
+    }
+
     onOver() {
         if (!this.lockFrame) {
-            this.gameObject.setFrame(`${this.spriteName}-hover`)
+            let frame = `${this.spriteName}-hover`
+            if (this.hasFrame(frame)) this.gameObject.setFrame(frame)
         }
 
         super.onOver()
@@ -60,7 +65,7 @@ export default class Button extends SimpleButton {
 
     onOut() {
         if (!this.lockFrame) {
-            this.gameObject.setFrame(this.spriteName)
+            if (this.hasFrame(this.spriteName)) this.gameObject.setFrame(this.spriteName)
         }
 
         super.onOut()
@@ -72,9 +77,11 @@ export default class Button extends SimpleButton {
         }
 
         if (this.activeFrame) {
-            this.gameObject.setFrame(`${this.spriteName}-active`)
+            let frame = `${this.spriteName}-active`
+            if (this.hasFrame(frame)) this.gameObject.setFrame(frame)
         } else {
-            this.gameObject.setFrame(`${this.spriteName}-hover`)
+            let frame = `${this.spriteName}-hover`
+            if (this.hasFrame(frame)) this.gameObject.setFrame(frame)
         }
     }
 
@@ -84,9 +91,10 @@ export default class Button extends SimpleButton {
         }
 
         if (this.activeFrame) {
-            this.gameObject.setFrame(this.spriteName)
+            if (this.hasFrame(this.spriteName)) this.gameObject.setFrame(this.spriteName)
         } else {
-            this.gameObject.setFrame(`${this.spriteName}-hover`)
+            let frame = `${this.spriteName}-hover`
+            if (this.hasFrame(frame)) this.gameObject.setFrame(frame)
         }
 
         super.onUp(pointer)
