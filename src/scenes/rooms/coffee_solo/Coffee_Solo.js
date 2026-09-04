@@ -18,7 +18,7 @@ export default class Coffee_Solo extends RoomScene {
     }
 
     _create() {
-        const bg = this.add.image(0, 0, "coffee_tutorial", "bg")
+        const bg = this.add.image(0, 0, "coffee_solo", "bg")
         bg.setOrigin(0, 0)
 
         this.events.emit("scene-awake")

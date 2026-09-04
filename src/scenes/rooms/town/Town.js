@@ -10,190 +10,146 @@ export default class Town extends RoomScene {
     constructor() {
         super("Town");
 
-        /** @type {Phaser.GameObjects.Sprite} */
-        this.canopy_lights;
-        /** @type {Phaser.GameObjects.Sprite} */
-        this.disco_lights;
-        /** @type {Phaser.GameObjects.Image} */
-        this.disco;
-        /** @type {Array<Phaser.GameObjects.Image|Phaser.GameObjects.Sprite>} */
-        this.sort;
-
-
         /* START-USER-CTR-CODE */
 
-        this.roomTriggers = {
-            'dock': () => this.triggerRoom(800, 1200, 400),
-            'forts': () => this.triggerRoom(801, 360, 520),
-            'coffee': () => this.triggerRoom(110, 700, 450),
-            'dance': () => this.triggerRoom(120, 300, 560),
-            'gift': () => this.triggerRoom(130, 1036, 520),
-        }
+        this.canopystarglow;
+        this.discostarglow;
+        this.disco;
+        this.sort;
+        this.roomTriggers={'dock':()=>this.triggerRoom(800,1200,400),'forts':()=>this.triggerRoom(801,360,520),'coffee':()=>this.checkCoffeeTutorial(),'dance':()=>this.triggerRoom(120,300,560),'gift':()=>this.triggerRoom(130,1036,520),'welcome':()=>this.triggerRoom(1,570,570)};
+        this.music='950';
 
         /* END-USER-CTR-CODE */
     }
 
     /** @returns {void} */
     _preload() {
-
-        this.load.pack("town-pack", "assets/media/rooms/town/town-pack.json");
+        this.load.pack('town-pack','assets/media/rooms/town/town-pack.json');
     }
 
     /** @returns {void} */
     _create() {
 
-        // bg
-        const bg = this.add.image(-10, 0, "town", "bg");
-        bg.setOrigin(0, 0);
-
-        // fg
-        const fg = this.add.image(-63, 976, "town", "fg");
-        fg.setOrigin(0, 1);
-
-        // left_sign
-        const left_sign = this.add.image(179, 450, "town", "left_sign");
-        left_sign.setOrigin(0, 0);
-
-        // right_sign
-        const right_sign = this.add.image(1286, 465, "town", "right_sign");
-        right_sign.setOrigin(0, 0);
-
-        // coffee_door
-        const coffee_door = this.add.image(449, 305, "town", "coffee_door");
-        coffee_door.setOrigin(0, 0);
-
-        // gift_door
-        const gift_door = this.add.image(995, 294, "town", "gift_door");
-        gift_door.setOrigin(0, 0);
-
-        // canopy
-        const canopy = this.add.image(692, 464, "town", "canopy");
-        canopy.setOrigin(0.49606299212598426, 0.9403669724770642);
-
-        // canopy_lights
-        const canopy_lights = this.add.sprite(648, 548, "town", "canopy_lights0001");
-        canopy_lights.setOrigin(0, 7.142857142857143);
-        canopy_lights.visible = false;
-
-        // canopy_stars
-        const canopy_stars = this.add.image(647, 548, "town", "canopy_stars");
-        canopy_stars.setOrigin(0, 7.142857142857143);
-
-        // disco_lights
-        const disco_lights = this.add.sprite(766, 332, "town", "disco_lights0007");
-        disco_lights.setOrigin(0, 0);
-        disco_lights.visible = false;
-
-        // disco
-        const disco = this.add.image(648, 229, "town", "disco");
-        disco.setOrigin(0, 0);
-
-        // lights
-        const lights = this.add.sprite(518, -75, "town", "lights0001");
-        lights.setOrigin(0, 0);
-
-        // box_1
-        const box_1 = this.add.image(973, 432, "town", "box_1");
-        box_1.setOrigin(0.49382716049382713, 0.6268656716417911);
-
-        // box_2
-        const box_2 = this.add.image(954, 483, "town", "box_2");
-        box_2.setOrigin(0.49504950495049505, 0.6736842105263158);
-
-        // box_3
-        const box_3 = this.add.image(1148, 581, "town", "box_3");
-        box_3.setOrigin(0.4943820224719101, 0.5569620253164557);
-
-        // chair_2
-        const chair_2 = this.add.image(436, 462, "town", "chair_2");
-        chair_2.setOrigin(0.49382716049382713, 0.27358490566037735);
-
-        // table_2
-        const table_2 = this.add.image(485, 523, "town", "table_2");
-        table_2.setOrigin(0.5, 0.7864077669902912);
-
-        // chair_1
-        const chair_1 = this.add.image(402, 511, "town", "chair_1");
-        chair_1.setOrigin(0.49411764705882355, 0.2857142857142857);
-
-        // table_1
-        const table_1 = this.add.image(455, 575, "town", "table_1");
-        table_1.setOrigin(0.49572649572649574, 0.7830188679245284);
-
-        // lists
-        const sort = [fg, box_2, box_1, box_3, chair_2, chair_1, table_1, table_2, canopy, canopy_stars, canopy_lights];
-
-        // coffee_door (components)
-        const coffee_doorButton = new Button(coffee_door);
-        coffee_doorButton.spriteName = "coffee_door";
-        coffee_doorButton.activeFrame = false;
-        coffee_doorButton.pixelPerfect = true;
-        const coffee_doorMoveTo = new MoveTo(coffee_door);
-        coffee_doorMoveTo.x = 550;
-        coffee_doorMoveTo.y = 450;
-
-        // gift_door (components)
-        const gift_doorButton = new Button(gift_door);
-        gift_doorButton.spriteName = "gift_door";
-        gift_doorButton.activeFrame = false;
-        gift_doorButton.pixelPerfect = true;
-        const gift_doorMoveTo = new MoveTo(gift_door);
-        gift_doorMoveTo.x = 1010;
-        gift_doorMoveTo.y = 466;
-
-        // canopy (components)
-        const canopySimpleButton = new SimpleButton(canopy);
-        canopySimpleButton.hoverCallback = () => this.onCanopyOver();
-        canopySimpleButton.hoverOutCallback = () => this.onCanopyOut();
-        const canopyMoveTo = new MoveTo(canopy);
-        canopyMoveTo.x = 684;
-        canopyMoveTo.y = 410;
-
-        // canopy_lights (components)
-        const canopy_lightsAnimation = new Animation(canopy_lights);
-        canopy_lightsAnimation.key = "canopy_lights";
-        canopy_lightsAnimation.end = 57;
-        canopy_lightsAnimation.autoPlay = false;
-        canopy_lightsAnimation.showOnStart = true;
-        canopy_lightsAnimation.hideOnComplete = true;
-
-        // disco_lights (components)
-        const disco_lightsAnimation = new Animation(disco_lights);
-        disco_lightsAnimation.key = "disco_lights";
-        disco_lightsAnimation.end = 57;
-        disco_lightsAnimation.autoPlay = false;
-        disco_lightsAnimation.showOnStart = true;
-        disco_lightsAnimation.hideOnComplete = true;
-
-        // lights (components)
-        const lightsAnimation = new Animation(lights);
-        lightsAnimation.key = "lights";
-        lightsAnimation.end = 69;
-        lightsAnimation.repeatDelay = 1;
-
-        this.canopy_lights = canopy_lights;
-        this.disco_lights = disco_lights;
-        this.disco = disco;
-        this.sort = sort;
-
-        this.events.emit("scene-awake");
+        let rect=this.add.rectangle(219,442,128,128);
+        rect.scaleX=0.4350917778131066;
+        rect.scaleY=0.3619050654191108;
+        rect.isFilled=true;
+        rect.fillColor=11908533;
+        this.add.image(0,0,'town','town-background').setOrigin(0,0);
+        let container=this.add.container(1392,375.5);
+        let baseball=this.add.image(0,0,'town','baseball');
+        container.add(baseball);
+        let icerink=this.add.image(0,0,'town','icerink');
+        icerink.visible=false;
+        container.add(icerink);
+        let stadium=this.add.image(0,0,'town','stadium');
+        stadium.visible=false;
+        container.add(stadium);
+        this.add.image(1172,317.5,'town','giftshop');
+        this.add.image(215.5,490.5,'town','docksign');
+        this.add.image(1327.5,510.5,'town','fortsign');
+        let coffeedoor=this.add.image(530.1674027925643,421.3347170224173,'town','coffeedoor0001');
+        coffeedoor.setOrigin(0.6512103380676733,0.681171452368846);
+        let giftdoor=this.add.image(1053.522536666485,438.5338070020616,'town','giftdoor0001');
+        giftdoor.setOrigin(0.3654217602975836,0.6633603333479547);
+        let container_2=this.add.container(660.1982622688851,463);
+        let canopy=this.add.image(31.80173773111494,0,'town','canopy');
+        canopy.setOrigin(0.49606299212598426,0.9403669724770642);
+        container_2.add(canopy);
+        let canopystarglow=this.add.sprite(-12.198262214660645,-115.52019604926795,'town','canopystarglow0001');
+        canopystarglow.setOrigin(0,-0.000721386445617002);
+        canopystarglow.visible=false;
+        container_2.add(canopystarglow);
+        let canopystars=this.add.image(-12.698262214660645,-115.01702767714494,'town','canopystars');
+        canopystars.setOrigin(0,-0.000608212017527064);
+        container_2.add(canopystars);
+        let discostarglow=this.add.sprite(766,331,'town','discostarglow0007');
+        discostarglow.setOrigin(0,0);
+        discostarglow.visible=false;
+        let disco=this.add.image(755.5,228.5,'town','disco0001');
+        disco.setOrigin(0,0);
+        let clublights=this.add.sprite(518,-74,'town','clublights0001');
+        clublights.setOrigin(0,0);
+        let box1=this.add.image(973,432,'town','box1');
+        box1.setOrigin(0.49382716049382713,0.6268656716417911);
+        let box2=this.add.image(956.5,481.5,'town','box2');
+        box2.setOrigin(0.49504950495049505,0.6736842105263158);
+        let box3=this.add.image(1148,582,'town','box3');
+        box3.setOrigin(0.4943820224719101,0.5569620253164557);
+        let chair2=this.add.image(438,464,'town','chair2');
+        chair2.setOrigin(0.49382716049382713,0.27358490566037735);
+        let table2=this.add.image(483,518,'town','table2');
+        table2.setOrigin(0.5,0.7864077669902912);
+        let chair1=this.add.image(401.5,510.5,'town','chair1');
+        chair1.setOrigin(0.49411764705882355,0.2857142857142857);
+        let table1=this.add.image(454,573,'town','table1');
+        table1.setOrigin(0.49572649572649574,0.7830188679245284);
+        let fg_right=this.add.image(1307.029287385085,756.224778245596,'town','fg_right');
+        fg_right.setOrigin(0.8598877039311051,0.7877341532290171);
+        this.add.image(1121.581662268657,871.3362913861341,'town','fg_mid').setOrigin(0.7378826725451691,0.9076419701938897);
+        let fg_left=this.add.image(301.5004468464132,883.3963092599906,'town','fg_left');
+        fg_left.setOrigin(0.19835555713579814,0.9202044888124903);
+        let sort=[box2,box1,box3,chair2,chair1,table1,table2,container_2,fg_left,fg_right];
+        let button=new Button(coffeedoor);
+        button.spriteName='coffeedoor';
+        button.pixelPerfect=true;
+        button.lazyName=true;
+        new MoveTo(coffeedoor);
+        let button_2=new Button(giftdoor);
+        button_2.spriteName='giftdoor';
+        button_2.pixelPerfect=true;
+        button_2.lazyName=true;
+        new MoveTo(giftdoor);
+        let simpleButton=new SimpleButton(canopy);
+        simpleButton.hoverCallback=()=>this.onCanopyOver();
+        simpleButton.hoverOutCallback=()=>this.onCanopyOut();
+        let moveTo=new MoveTo(canopy);
+        moveTo.x=684;
+        moveTo.y=410;
+        let animation=new Animation(canopystarglow);
+        animation.key='canopystarglow';
+        animation.end=57;
+        animation.autoPlay=false;
+        animation.showOnStart=true;
+        animation.hideOnComplete=true;
+        let animation_2=new Animation(discostarglow);
+        animation_2.key='discostarglow';
+        animation_2.end=57;
+        animation_2.autoPlay=false;
+        animation_2.showOnStart=true;
+        animation_2.hideOnComplete=true;
+        let animation_3=new Animation(clublights);
+        animation_3.key='clublights';
+        animation_3.end=69;
+        animation_3.repeatDelay=1;
+        this.canopystarglow=canopystarglow;
+        this.discostarglow=discostarglow;
+        this.disco=disco;
+        this.sort=sort;
+        this.events.emit('scene-awake');
     }
 
-
-    /* START-USER-CODE */
+    create() {
+        super.create();
+    }
 
     onCanopyOver() {
-        this.disco.setFrame('disco-hover')
-        this.canopy_lights.__Animation.play()
-        this.disco_lights.__Animation.play()
+        this.disco.setFrame('disco0002');
+        this.canopystarglow.__Animation.play();
+        this.discostarglow.__Animation.play();
     }
 
     onCanopyOut() {
-        this.disco.setFrame('disco')
-        this.canopy_lights.__Animation.stop()
-        this.disco_lights.__Animation.stop()
+        this.disco.setFrame('disco0001');
+        this.canopystarglow.__Animation.stop();
+        this.discostarglow.__Animation.stop();
     }
 
+    checkCoffeeTutorial() {
+        return this.triggerRoom(110,700,450);
+    }
+
+    /* START-USER-CODE */
     /* END-USER-CODE */
 }
 

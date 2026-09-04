@@ -1,6 +1,6 @@
 import RoomScene from '../RoomScene'
 
-import { Animation, Button, MoveTo, ShowHint, SimpleButton, Zone } from '@components/components'
+import { Animation, Button, MoveTo, SimpleButton, Zone } from '@components/components'
 
 
 /* START OF COMPILED CODE */
@@ -10,453 +10,336 @@ export default class Pet extends RoomScene {
     constructor() {
         super("Pet");
 
-        /** @type {Phaser.GameObjects.Sprite} */
-        this.black;
-        /** @type {Phaser.GameObjects.Sprite} */
-        this.puffles;
-        /** @type {Phaser.GameObjects.Sprite} */
-        this.jump;
-        /** @type {Phaser.GameObjects.Sprite} */
-        this.red;
-        /** @type {Phaser.GameObjects.Sprite} */
-        this.yellow;
-        /** @type {Phaser.GameObjects.Sprite} */
-        this.eyesYellow;
-        /** @type {Phaser.GameObjects.Sprite} */
-        this.fish;
-        /** @type {Phaser.GameObjects.Sprite} */
-        this.fishIdle;
-        /** @type {Phaser.GameObjects.Sprite} */
-        this.eyesRed;
-        /** @type {Phaser.GameObjects.Image} */
-        this.adoptCatalog;
-        /** @type {Phaser.GameObjects.Image} */
-        this.petCatalog;
-        /** @type {Phaser.GameObjects.Sprite[]} */
-        this.penEyes;
-        /** @type {Array<Phaser.GameObjects.Image|Phaser.GameObjects.Sprite>} */
-        this.sort;
-
-
         /* START-USER-CTR-CODE */
 
-        this.roomTriggers = {
-            'plaza': () => this.triggerRoom(300, 384, 620),
-            'adopt': null,
-            'roundup': () => this.triggerGame(902),
-        }
+        this.black;
+        this.brownpuffle;
+        this.pufflepark;
+        this.puffles;
+        this.jump;
+        this.jumpLoop;
+        this.red;
+        this.yellow;
+        this.eyesYellow;
+        this.fish;
+        this.fishIdle;
+        this.orangepufflejump;
+        this.orangepuffle;
+        this.eyesRed;
+        this.pets_catalog;
+        this.interfaceIcons;
+        this.penEyes;
+        this.sort;
+        this.roomTriggers={'plaza':()=>this.triggerRoom(300,384,620),'adopt':()=>this.openAdoptCatalog(),'roundup':()=>this.triggerRoom(890,260,480)};
 
         /* END-USER-CTR-CODE */
     }
 
     /** @returns {void} */
     _preload() {
-
-        this.load.pack("pet-pack", "assets/media/rooms/pet/pet-pack.json");
+        this.load.pack('pet-pack','assets/media/rooms/pet/pet-pack.json');
     }
 
     /** @returns {void} */
     _create() {
 
-        // bg
-        const bg = this.add.image(-4, 0, "pet", "bg");
-        bg.setOrigin(0, 0);
-
-        // black
-        const black = this.add.sprite(92, 375, "pet", "black/black0001");
-        black.setOrigin(0.56875, 0.9064039408866995);
-
-        // post
-        const post = this.add.image(1084, 439, "pet", "post");
-        post.setOrigin(0.5220125786163522, 0.8860103626943006);
-
-        // bowls
-        const bowls = this.add.image(1104, 499, "pet", "bowls");
-        bowls.setOrigin(0.5116279069767442, 0.7614678899082569);
-
-        // sack
-        const sack = this.add.image(1427, 602, "pet", "sack");
-        sack.setOrigin(0.4557823129251701, 0.660377358490566);
-
-        // os
-        const os = this.add.sprite(1423, 688, "pet", "os/os0001");
-        os.setOrigin(0.395, 0.6936619718309859);
-
-        // employees
-        const employees = this.add.image(1423, 352, "pet", "employees");
-        employees.setOrigin(0.5, 0.5015479876160991);
-
-        // door
-        const door = this.add.image(639, 58, "pet", "door");
-        door.setOrigin(0, 0);
-
-        // puffles
-        const puffles = this.add.sprite(369, 325, "pet", "puffles");
-        puffles.setOrigin(0, 0);
-
-        // jump
-        const jump = this.add.sprite(432, 288, "pet", "jump/jump0001");
-        jump.setOrigin(0, 0);
-        jump.visible = false;
-
-        // red
-        const red = this.add.sprite(-243, -280, "pet", "red/red0001");
-        red.setOrigin(0, 0);
-
-        // yellow
-        const yellow = this.add.sprite(554, 172, "pet", "yellow/yellow");
-        yellow.setOrigin(0, 0);
-
-        // eyesBlack
-        const eyesBlack = this.add.sprite(600, 383, "pet", "eyes/black/black0001");
-        eyesBlack.setOrigin(0, 0);
-
-        // eyesPink
-        const eyesPink = this.add.sprite(503, 408, "pet", "eyes/pink/pink0001");
-        eyesPink.setOrigin(0, 0);
-
-        // eyesBlue
-        const eyesBlue = this.add.sprite(438, 390, "pet", "eyes/blue/blue0001");
-        eyesBlue.setOrigin(0, 0);
-
-        // eyesGreen
-        const eyesGreen = this.add.sprite(528, 365, "pet", "eyes/green/green0001");
-        eyesGreen.setOrigin(0, 0);
-
-        // eyesPurple
-        const eyesPurple = this.add.sprite(481, 354, "pet", "eyes/purple/purple0001");
-        eyesPurple.setOrigin(0, 0);
-
-        // eyesYellow
-        const eyesYellow = this.add.sprite(570, 241, "pet", "eyes/green/green0001");
-        eyesYellow.setOrigin(0, 0);
-
-        // pen
-        const pen = this.add.image(370, 323, "pet", "pen_front");
-        pen.setOrigin(0, 0);
-
-        // fish
-        const fish = this.add.sprite(363, 473, "pet", "fish/fish0001");
-        fish.setOrigin(0.8174807197943444, 0.8061420345489443);
-
-        // fishIdle
-        const fishIdle = this.add.sprite(316, 380, "pet", "fish/idle/idle0001");
-        fishIdle.setOrigin(0, 0);
-
-        // house3
-        const house3 = this.add.image(178, 581, "pet", "house_3");
-        house3.setOrigin(0.4897959183673469, 0.7444933920704846);
-
-        // house2
-        const house2 = this.add.image(280, 652, "pet", "house_2");
-        house2.setOrigin(0.4724137931034483, 0.6473029045643154);
-
-        // house1
-        const house1 = this.add.image(170, 710, "pet", "house_1");
-        house1.setOrigin(0.5288135593220339, 0.6590038314176245);
-
-        // bedBack
-        const bedBack = this.add.image(182, 781, "pet", "bed_back");
-        bedBack.setOrigin(0.5020080321285141, 0.5);
-
-        // bedFront
-        const bedFront = this.add.image(182, 860, "pet", "bed_front");
-        bedFront.setOrigin(0.5020242914979757, 0.6495726495726496);
-
-        // eyesRed
-        const eyesRed = this.add.sprite(293, 112, "pet", "eyes/green/green0001");
-        eyesRed.setOrigin(0, 0);
-
-        // yellowZone
-        const yellowZone = this.add.rectangle(585, 248, 60, 50);
-        yellowZone.alpha = 0.5;
-        yellowZone.isFilled = true;
-        yellowZone.fillColor = 65280;
-
-        // blackZone
-        const blackZone = this.add.rectangle(92, 356, 150, 120);
-        blackZone.alpha = 0.5;
-        blackZone.isFilled = true;
-        blackZone.fillColor = 65280;
-
-        // adoptCatalog
-        const adoptCatalog = this.add.image(1331, 927, "pet", "adopt_catalog");
-        adoptCatalog.setOrigin(0, 1);
-
-        // petCatalog
-        const petCatalog = this.add.image(1331, 808, "pet", "pets_catalog");
-        petCatalog.setOrigin(0, 1);
-
-        // lists
-        const penEyes = [eyesPink, eyesBlue, eyesPurple, eyesGreen, eyesBlack];
-        const sort = [bedFront, bedBack, house1, house2, house3, bowls, post, sack, os];
-
-        // os (components)
-        const osSimpleButton = new SimpleButton(os);
-        osSimpleButton.pixelPerfect = true;
-        const osAnimation = new Animation(os);
-        osAnimation.key = "os/os";
-        osAnimation.end = 74;
-        osAnimation.repeat = 0;
-        osAnimation.autoPlay = false;
-        osAnimation.onHover = true;
-        osAnimation.stopOnOut = false;
-
-        // employees (components)
-        const employeesButton = new Button(employees);
-        employeesButton.spriteName = "employees";
-        employeesButton.activeFrame = false;
-        const employeesMoveTo = new MoveTo(employees);
-        employeesMoveTo.x = 1328;
-        employeesMoveTo.y = 572;
-        const employeesShowHint = new ShowHint(employees);
-        employeesShowHint.text = "roundup_hint";
-
-        // door (components)
-        const doorButton = new Button(door);
-        doorButton.spriteName = "door";
-        doorButton.activeFrame = false;
-        const doorMoveTo = new MoveTo(door);
-        doorMoveTo.x = 808;
-        doorMoveTo.y = 380;
-
-        // jump (components)
-        const jumpAnimation = new Animation(jump);
-        jumpAnimation.key = "jump/jump";
-        jumpAnimation.end = 89;
-
-        // red (components)
-        const redSimpleButton = new SimpleButton(red);
-        redSimpleButton.hoverCallback = () => this.onRedOver();
-
-        // yellow (components)
-        const yellowAnimation = new Animation(yellow);
-        yellowAnimation.key = "yellow/yellow";
-        yellowAnimation.end = 11;
-        yellowAnimation.autoPlay = false;
-
-        // eyesBlack (components)
-        const eyesBlackAnimation = new Animation(eyesBlack);
-        eyesBlackAnimation.key = "eyes/black/black";
-        eyesBlackAnimation.end = 54;
-
-        // eyesPink (components)
-        const eyesPinkAnimation = new Animation(eyesPink);
-        eyesPinkAnimation.key = "eyes/pink/pink";
-        eyesPinkAnimation.end = 50;
-
-        // eyesBlue (components)
-        const eyesBlueAnimation = new Animation(eyesBlue);
-        eyesBlueAnimation.key = "eyes/blue/blue";
-        eyesBlueAnimation.end = 54;
-
-        // eyesGreen (components)
-        const eyesGreenAnimation = new Animation(eyesGreen);
-        eyesGreenAnimation.key = "eyes/green/green";
-        eyesGreenAnimation.end = 56;
-
-        // eyesPurple (components)
-        const eyesPurpleAnimation = new Animation(eyesPurple);
-        eyesPurpleAnimation.key = "eyes/purple/purple";
-        eyesPurpleAnimation.end = 62;
-
-        // eyesYellow (components)
-        const eyesYellowAnimation = new Animation(eyesYellow);
-        eyesYellowAnimation.key = "eyes/green/green";
-        eyesYellowAnimation.end = 56;
-
-        // pen (components)
-        const penSimpleButton = new SimpleButton(pen);
-        penSimpleButton.hoverCallback = () => this.onPenOver();
-        penSimpleButton.hoverOutCallback = () => this.onPenOut();
-        const penMoveTo = new MoveTo(pen);
-        penMoveTo.x = 590;
-        penMoveTo.y = 490;
-
-        // fish (components)
-        const fishSimpleButton = new SimpleButton(fish);
-        fishSimpleButton.hoverCallback = () => this.onFishOver();
-        fishSimpleButton.pixelPerfect = true;
-        const fishAnimation = new Animation(fish);
-        fishAnimation.key = "fish/fish";
-        fishAnimation.start = 2;
-        fishAnimation.end = 32;
-        fishAnimation.repeat = 0;
-        fishAnimation.autoPlay = false;
-
-        // fishIdle (components)
-        const fishIdleAnimation = new Animation(fishIdle);
-        fishIdleAnimation.key = "fish/idle/idle";
-        fishIdleAnimation.end = 95;
-
-        // eyesRed (components)
-        const eyesRedAnimation = new Animation(eyesRed);
-        eyesRedAnimation.key = "eyes/green/green";
-        eyesRedAnimation.end = 56;
-
-        // yellowZone (components)
-        const yellowZoneZone = new Zone(yellowZone);
-        yellowZoneZone.hoverCallback = () => this.onYellowOver();
-        yellowZoneZone.hoverOutCallback = () => this.onYellowOut();
-
-        // blackZone (components)
-        const blackZoneZone = new Zone(blackZone);
-        blackZoneZone.hoverCallback = () => this.onBlackOver();
-
-        // adoptCatalog (components)
-        const adoptCatalogButton = new Button(adoptCatalog);
-        adoptCatalogButton.spriteName = "adopt_catalog";
-        adoptCatalogButton.callback = () => this.onAdoptCatalogClick();
-        adoptCatalogButton.activeFrame = false;
-        adoptCatalogButton.pixelPerfect = true;
-
-        // petCatalog (components)
-        const petCatalogButton = new Button(petCatalog);
-        petCatalogButton.spriteName = "pets_catalog";
-        petCatalogButton.callback = () => this.onPetCatalogClick();
-        petCatalogButton.activeFrame = false;
-        petCatalogButton.pixelPerfect = true;
-
-        this.black = black;
-        this.puffles = puffles;
-        this.jump = jump;
-        this.red = red;
-        this.yellow = yellow;
-        this.eyesYellow = eyesYellow;
-        this.fish = fish;
-        this.fishIdle = fishIdle;
-        this.eyesRed = eyesRed;
-        this.adoptCatalog = adoptCatalog;
-        this.petCatalog = petCatalog;
-        this.penEyes = penEyes;
-        this.sort = sort;
-
-        this.events.emit("scene-awake");
+        this.add.image(-4,0,'newbg').setOrigin(0,0);
+        let black_black=this.add.sprite(92,375,'pet','black/black0001');
+        black_black.setOrigin(0.56875,0.9064039408866995);
+        let container=this.add.container(1078.4557005243134,442.7941714429035);
+        let post=this.add.image(5.544299475686557,-3.7941714429035187,'pet','post');
+        post.setOrigin(0.5220125786163522,0.8860103626943006);
+        container.add(post);
+        let brownpuffle=this.add.sprite(23.544299475686557,-169.79417144290352,'pet-additions','brownpuffle0001');
+        container.add(brownpuffle);
+        let bowls=this.add.image(1104,481,'pet','bowls');
+        bowls.setOrigin(0.5116279069767442,0.5962260406974493);
+        let sack=this.add.image(1427,602,'pet','sack');
+        sack.setOrigin(0.4557823129251701,0.660377358490566);
+        let os_os=this.add.sprite(1423,688,'pet','os/os0001');
+        os_os.setOrigin(0.395,0.6936619718309859);
+        let pufflepark=this.add.image(1411,370,'pet','pufflepark');
+        pufflepark.setOrigin(0.5,0.5015479876160991);
+        pufflepark.visible=false;
+        let door=this.add.image(639,58,'pet','door');
+        door.setOrigin(0,0);
+        let puffles=this.add.sprite(390,339,'pet','puffles');
+        puffles.setOrigin(0,0);
+        let jump_jump=this.add.sprite(383.5,287.5,'pet','jump/jump0001');
+        jump_jump.setOrigin(0,0);
+        jump_jump.visible=false;
+        let jump_jump_2=this.add.sprite(383.5,287.5,'pet','jump/jump0001');
+        jump_jump_2.setOrigin(0,0);
+        jump_jump_2.visible=false;
+        let red_red=this.add.sprite(-243,-280,'pet','red/red0001');
+        red_red.setOrigin(0,0);
+        let yellow_yellow=this.add.sprite(554,172,'pet','yellow/yellow');
+        yellow_yellow.setOrigin(0,0);
+        let eyes_black_black=this.add.sprite(600,383,'pet','eyes/black/black0001');
+        eyes_black_black.setOrigin(0,0);
+        let eyes_pink_pink=this.add.sprite(503,408,'pet','eyes/pink/pink0001');
+        eyes_pink_pink.setOrigin(0,0);
+        let eyes_blue_blue=this.add.sprite(438,390,'pet','eyes/blue/blue0001');
+        eyes_blue_blue.setOrigin(0,0);
+        let eyes_white_white=this.add.sprite(401.5,390.5,'pet','eyes/white/white0001');
+        let eyes_green_green=this.add.sprite(528,365,'pet','eyes/green/green0001');
+        eyes_green_green.setOrigin(0,0);
+        let eyes_purple_purple=this.add.sprite(481,354,'pet','eyes/purple/purple0001');
+        eyes_purple_purple.setOrigin(0,0);
+        let eyes_green_green_2=this.add.sprite(570,241,'pet','eyes/green/green0001');
+        eyes_green_green_2.setOrigin(0,0);
+        let pen_front=this.add.image(370,323,'pet','pen_front');
+        pen_front.setOrigin(0,0);
+        let fish_fish=this.add.sprite(363,473,'pet','fish/fish0001');
+        fish_fish.setOrigin(0.8174807197943444,0.8061420345489443);
+        let fish_idle_idle=this.add.sprite(316,380,'pet','fish/idle/idle0001');
+        fish_idle_idle.setOrigin(0,0);
+        let house_3=this.add.image(178,581,'pet','house_3');
+        house_3.setOrigin(0.4897959183673469,0.7444933920704846);
+        let house_2=this.add.image(280,652,'pet','house_2');
+        house_2.setOrigin(0.4724137931034483,0.6473029045643154);
+        let container_2=this.add.container(170.59613073144698,711.0893557089855);
+        let house_1=this.add.image(-0.5961302509759889,-1.0893820301139385,'pet','house_1');
+        house_1.setOrigin(0.5288135593220339,0.6590038314176245);
+        container_2.add(house_1);
+        let orangepufflejump=this.add.sprite(21.40386974902401,-171.08938203011394,'pet-additions','orangepufflejump0001');
+        orangepufflejump.visible=false;
+        container_2.add(orangepufflejump);
+        let orangepuffle=this.add.sprite(21.40386974902401,-143.08938203011394,'pet-additions','orangepuffle0001');
+        container_2.add(orangepuffle);
+        let bed_back=this.add.image(182,781,'pet','bed_back');
+        bed_back.setOrigin(0.5020080321285141,0.5);
+        let bed_front=this.add.image(182,860,'pet','bed_front');
+        bed_front.setOrigin(0.5020242914979757,0.6495726495726496);
+        let eyes_green_green_3=this.add.sprite(293,112,'pet','eyes/green/green0001');
+        eyes_green_green_3.setOrigin(0,0);
+        let rect=this.add.rectangle(585,248,60,50);
+        rect.alpha=0.01;
+        rect.isFilled=true;
+        rect.fillColor=65280;
+        let rect_2=this.add.rectangle(92,356,150,120);
+        rect_2.alpha=0.01;
+        rect_2.isFilled=true;
+        rect_2.fillColor=65280;
+        let container_3=this.add.container(1325,682);
+        let adopt_catalog=this.add.sprite(0,127,'pet','adopt_catalog');
+        adopt_catalog.setOrigin(0,0);
+        container_3.add(adopt_catalog);
+        let pets_catalog=this.add.sprite(0,0,'pet','pets_catalog');
+        pets_catalog.setOrigin(0,0);
+        container_3.add(pets_catalog);
+        let rect_3=this.add.rectangle(1395.6419784220122,486.273238809966,100,256);
+        rect_3.angle=11;
+        rect_3.setOrigin(0.49583559765112567,1.010761924583857);
+        let rect_4=this.add.rectangle(192,568,65,65);
+        let penEyes=[eyes_pink_pink,eyes_blue_blue,eyes_purple_purple,eyes_green_green,eyes_black_black,eyes_white_white];
+        let sort=[bed_front,bed_back,house_2,house_3,bowls,sack,os_os,container,container_2];
+        new SimpleButton(os_os).pixelPerfect=true;
+        let animation=new Animation(os_os);
+        animation.key='os/os';
+        animation.end=74;
+        animation.repeat=0;
+        animation.autoPlay=false;
+        animation.onHover=true;
+        animation.stopOnOut=false;
+        new Button(door).spriteName='door';
+        let moveTo=new MoveTo(door);
+        moveTo.x=808;
+        moveTo.y=380;
+        let animation_2=new Animation(jump_jump);
+        animation_2.key='jump/jump';
+        animation_2.end=89;
+        animation_2.repeat=0;
+        animation_2.onCompleteCallback=()=>this.onPetLoop();
+        let animation_3=new Animation(jump_jump_2);
+        animation_3.key='jump/jump';
+        animation_3.start=79;
+        animation_3.end=89;
+        new SimpleButton(red_red).hoverCallback=()=>this.onRedOver();
+        let animation_4=new Animation(yellow_yellow);
+        animation_4.key='yellow/yellow';
+        animation_4.end=11;
+        animation_4.autoPlay=false;
+        let animation_5=new Animation(eyes_black_black);
+        animation_5.key='eyes/black/black';
+        animation_5.end=54;
+        let animation_6=new Animation(eyes_pink_pink);
+        animation_6.key='eyes/pink/pink';
+        animation_6.end=50;
+        let animation_7=new Animation(eyes_blue_blue);
+        animation_7.key='eyes/blue/blue';
+        animation_7.end=54;
+        let animation_8=new Animation(eyes_white_white);
+        animation_8.key='eyes/white/white';
+        animation_8.end=54;
+        let animation_9=new Animation(eyes_green_green);
+        animation_9.key='eyes/green/green';
+        animation_9.end=56;
+        let animation_10=new Animation(eyes_purple_purple);
+        animation_10.key='eyes/purple/purple';
+        animation_10.end=62;
+        let animation_11=new Animation(eyes_green_green_2);
+        animation_11.key='eyes/green/green';
+        animation_11.end=56;
+        let simpleButton=new SimpleButton(pen_front);
+        simpleButton.hoverCallback=()=>this.onPenOver();
+        simpleButton.hoverOutCallback=()=>this.onPenOut();
+        let moveTo_2=new MoveTo(pen_front);
+        moveTo_2.x=590;
+        moveTo_2.y=490;
+        let simpleButton_2=new SimpleButton(fish_fish);
+        simpleButton_2.hoverCallback=()=>this.onFishOver();
+        simpleButton_2.pixelPerfect=true;
+        let animation_12=new Animation(fish_fish);
+        animation_12.key='fish/fish';
+        animation_12.start=2;
+        animation_12.end=32;
+        animation_12.repeat=0;
+        animation_12.autoPlay=false;
+        animation_12.stopOnOut=false;
+        let animation_13=new Animation(fish_idle_idle);
+        animation_13.key='fish/idle/idle';
+        animation_13.end=95;
+        let animation_14=new Animation(eyes_green_green_3);
+        animation_14.key='eyes/green/green';
+        animation_14.end=56;
+        let zone=new Zone(rect);
+        zone.hoverCallback=()=>this.onYellowOver();
+        zone.hoverOutCallback=()=>this.onYellowOut();
+        new Zone(rect_2).hoverCallback=()=>this.onBlackOver();
+        let button=new Button(adopt_catalog);
+        button.spriteName='adopt_catalog';
+        button.callback=()=>this.openAdoptCatalog();
+        let button_2=new Button(pets_catalog);
+        button_2.spriteName='pets_catalog';
+        button_2.callback=()=>this.openPetFurnitureCatalog();
+        new MoveTo(rect_3);
+        let simpleButton_3=new SimpleButton(rect_3);
+        simpleButton_3.hoverCallback=()=>this.pufflepark.visible=true;
+        simpleButton_3.hoverOutCallback=()=>this.pufflepark.visible=false;
+        let simpleButton_4=new SimpleButton(rect_4);
+        simpleButton_4.hoverCallback=()=>this.onOrangeHover();
+        simpleButton_4.hoverOutCallback=()=>this.onOrangeOut();
+        this.black=black_black;
+        this.brownpuffle=brownpuffle;
+        this.pufflepark=pufflepark;
+        this.puffles=puffles;
+        this.jump=jump_jump;
+        this.jumpLoop=jump_jump_2;
+        this.red=red_red;
+        this.yellow=yellow_yellow;
+        this.eyesYellow=eyes_green_green_2;
+        this.fish=fish_fish;
+        this.fishIdle=fish_idle_idle;
+        this.orangepufflejump=orangepufflejump;
+        this.orangepuffle=orangepuffle;
+        this.eyesRed=eyes_green_green_3;
+        this.pets_catalog=pets_catalog;
+        this.interfaceIcons=container_3;
+        this.penEyes=penEyes;
+        this.sort=sort;
+        this.events.emit('scene-awake');
     }
-
-
-    /* START-USER-CODE */
 
     create() {
-        super.create()
-
-        this.fish.on('animationcomplete', this.onFishAnimComplete, this)
-        this.black.on('animationcomplete', this.onBlackAnimComplete, this)
-        this.red.on('animationcomplete', this.onRedAnimComplete, this)
-        this.red.on('animationupdate', this.onRedAnimUpdate, this)
-
-        this.black.play('black_sleep')
-
-        this.petCatalog.depth = 1000
-        this.adoptCatalog.depth = 1000
+        super.create();
+        this.fish.on('animationcomplete',this.onFishAnimComplete,this);
+        this.black.on('animationcomplete',this.onBlackAnimComplete,this);
+        this.red.on('animationcomplete',this.onRedAnimComplete,this);
+        this.red.on('animationupdate',this.onRedAnimUpdate,this);
+        this.black.play('black_sleep');
+        this.pets_catalog.depth=1000;
+        this.brownpuffle.play('brownpuffle');
+        this.orangepuffle.play('orangepuffle');
+        this.orangepuffle.visible=true;
+        this.orangepufflejump.visible=false;
     }
 
-    onPetCatalogClick() {
-        this.interface.loadWidget('PetsCatalog')
+    stop() {
+        super.stop();
+        this.work&&this.work.removeListeners();
     }
 
-    onAdoptCatalogClick() {
-        this.interface.loadWidget('AdoptCatalog')
+    update() {
+        super.update();
+        this.work&&this.work.update();
     }
 
     onPenOver() {
-        this.penEyes.map(sprite => sprite.visible = false)
-        this.puffles.visible = false
+        this.puffles.visible=false;
+        this.jump.visible=true;
+        this.jump.anims.restart();
+    }
 
-        this.jump.visible = true
-        this.jump.anims.restart()
+    onPetLoop() {
+        this.jumpLoop.visible=this.jump.visible;
+        this.jumpLoop.anims.restart();
+        this.jump.visible=false;
     }
 
     onPenOut() {
-        this.penEyes.map(sprite => {
-            sprite.visible = true
-            sprite.anims.restart()
-        })
-        this.puffles.visible = true
-
-        this.jump.visible = false
+        this.puffles.visible=true;
+        this.jump.visible=false;
+        this.jumpLoop.visible=false;
     }
 
     onFishOver() {
-        this.fishIdle.visible = false
-        this.fish.__Animation.play()
+        this.fishIdle.visible=false;
+        this.fish.__Animation.play();
     }
 
     onFishAnimComplete() {
-        this.fishIdle.visible = true
-        this.fishIdle.anims.restart()
-
-        this.fish.setFrame('fish/fish0001')
+        this.fishIdle.visible=true;
+        this.fishIdle.anims.restart();
+        this.fish.setFrame('fish/fish0001');
     }
 
     onYellowOver() {
-        this.eyesYellow.visible = false
-        this.yellow.__Animation.play()
+        this.eyesYellow.visible=false;
+        this.yellow.__Animation.play();
     }
 
     onYellowOut() {
-        this.eyesYellow.visible = true
-        this.yellow.__Animation.stop()
+        this.eyesYellow.visible=true;
+        this.yellow.__Animation.stop();
     }
 
     onBlackOver() {
-        this.black.play('black_wake')
+        this.black.play('black_wake');
     }
 
     onBlackAnimComplete() {
-        this.black.play('black_sleep')
+        this.black.play('black_sleep');
     }
 
-    onRedOver() {
-        let frame = this.red.frame.name
-        frame = frame.substr(frame.length - 4)
-
-        switch (frame) {
-            case '0001':
-                this.eyesRed.visible = false
-                this.red.play('red_walk')
-                break
-            case '0050':
-                this.eyesRed.visible = false
-                this.red.play('red_down')
-                break
-            default:
-                break
-        }
+    resetEyesRed(arg1, arg2) {
+        this.eyesRed.visible=true;
+        this.eyesRed.anims.restart();
     }
 
-    onRedAnimComplete(animation) {
-        switch (animation.key) {
-            case 'red_walk':
-                this.red.play('red_up')
-                break
-            default:
-                break
-        }
+    onOrangeHover() {
+        this.orangepuffle.visible=false;
+        this.orangepufflejump.visible=true;
+        this.orangepufflejump.play('orangepufflejump');
     }
 
-    onRedAnimUpdate() {
-        let frame = this.red.frame.name
-        frame = frame.substr(frame.length - 4)
-
-        switch (frame) {
-            case '0001':
-                this.resetEyesRed(293, 112)
-                break
-            case '0050':
-                this.resetEyesRed(140, 63)
-                break
-            default:
-                break
-        }
+    onOrangeOut() {
+        this.orangepuffle.visible=true;
+        this.orangepufflejump.visible=false;
+        this.orangepufflejump.setFrame('orangepufflejump0001');
     }
 
-    resetEyesRed(x, y) {
-        this.eyesRed.setPosition(x, y)
-        this.eyesRed.visible = true
-        this.eyesRed.anims.restart()
+    openAdoptCatalog() {
+        this.network.send('open_sprite',{'sprite':'1_8'});
+        this.interface.loadWidget('AdoptCatalog');
     }
 
+    openPetFurnitureCatalog() {
+        this.network.send('open_sprite',{'sprite':'1_7'});
+        this.interface.loadWidget('PetFurnitureCatalog');
+    }
+
+    /* START-USER-CODE */
     /* END-USER-CODE */
 }
 
