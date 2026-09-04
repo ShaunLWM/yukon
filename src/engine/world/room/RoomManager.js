@@ -39,8 +39,12 @@ export default class RoomManager {
 
         const sceneClass = await this.loadSceneClass(path)
 
-        if (sceneClass && loadId === this.loadId) {
+        if (loadId !== this.loadId) return
+
+        if (sceneClass) {
             this.addRoom(key, sceneClass, data)
+        } else {
+            this.scene.scene.get('InterfaceController').showInterface()
         }
     }
 
