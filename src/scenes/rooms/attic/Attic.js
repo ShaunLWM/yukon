@@ -19,6 +19,7 @@ export default class Attic extends RoomScene {
         this.table200;
         this.sort;
         this.roomTriggers={'lodge':()=>this.triggerRoom(220,1146,562),'table200':()=>this.triggerTable('four',200),'table201':()=>this.triggerTable('four',201),'table202':()=>this.triggerTable('four',202),'table203':()=>this.triggerTable('four',203),'table204':()=>this.triggerTable('four',204)};
+        this.tables={};
         this.music=1215;
 
         /* END-USER-CTR-CODE */
