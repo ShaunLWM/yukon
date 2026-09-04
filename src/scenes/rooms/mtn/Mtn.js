@@ -1,6 +1,10 @@
 import RoomScene from '../RoomScene'
 
 import { Animation, Button, SimpleButton } from '@components/components'
+import Waddle100 from './waddle/Waddle100'
+import Waddle101 from './waddle/Waddle101'
+import Waddle102 from './waddle/Waddle102'
+import Waddle103 from './waddle/Waddle103'
 
 
 /* START OF COMPILED CODE */
@@ -67,6 +71,14 @@ export default class Mtn extends RoomScene {
         simpleButton.hoverCallback=()=>this.onPaperHover();
         simpleButton.hoverOutCallback=()=>this.onPaperOut();
         simpleButton.callback=()=>this.showSledCatalog();
+        let waddle100=this.add.existing(new Waddle100(this,259,510));
+        let waddle101=this.add.existing(new Waddle101(this,561,658));
+        let waddle102=this.add.existing(new Waddle102(this,852,737));
+        let waddle103=this.add.existing(new Waddle103(this,1062,623));
+        this.waddle100=waddle100;
+        this.waddle101=waddle101;
+        this.waddle102=waddle102;
+        this.waddle103=waddle103;
         this.ridgerun=ridgerun_en;
         this.catalogpaper=catalogpaper;
         this.liftpost=liftpost_en;

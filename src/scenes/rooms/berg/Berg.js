@@ -67,6 +67,12 @@ export default class Berg extends RoomScene {
         this.coin.visible=false;
     }
 
+    onAquaOver() {
+    }
+
+    onAquaClick() {
+    }
+
     showCoinRewardToPlayer(arg1, arg2) {
         this.coin.visible=true;
         this.tweens.add({'targets':[this.coin],'y':{'from':this.coin.y,'to':this.coin.y-70},'ease':'Linear','duration':1000,'onComplete':()=>this.coin.visible=false});
