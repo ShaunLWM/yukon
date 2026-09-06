@@ -32,6 +32,9 @@ let config = {
         devMiddleware: {
             writeToDisk: true
         },
+        headers: {
+            'Cache-Control': 'no-store'
+        },
         proxy: [
             {
                 context: '/world/login',
