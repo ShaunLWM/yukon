@@ -1,84 +1,107 @@
-# Yukon
+# Yukon — CPJourney Edition
 
-Visit the Discord server for more support.
-
-[![Yukon Discord members](https://badgen.net/discord/members/NtYtpzyxBu)](https://discord.gg/NtYtpzyxBu)
+An offline Club Penguin clone built on [yukon](https://github.com/wizguin/yukon) (client) and [yukon-server](https://github.com/wizguin/yukon-server), enhanced with features ported from CPJourney's deobfuscated client.
 
 ## Built With
 
-* [Node.js](https://nodejs.org/en/)
-* [Socket.IO](https://socket.io/)
-* [Phaser 3](https://phaser.io/)
-* [Phaser Editor](https://phasereditor2d.com/)
-* [Texture Packer](https://www.codeandweb.com/texturepacker)
+* [Phaser 3](https://phaser.io/) — game engine
+* [Socket.IO](https://socket.io/) — real-time networking
+* [Node.js](https://nodejs.org/en/) — server runtime
+* [Sequelize](https://sequelize.org/) — database ORM
+* [MySQL 8](https://www.mysql.com/) — database
+* [Docker Compose](https://docs.docker.com/compose/) — container orchestration
 
-## Local Installation
+## Quick Start (Docker)
 
-These instructions will get you a copy of the project up and running on your local machine for development purposes.
+The easiest way to run everything is with Docker Compose from the parent directory:
+
+```console
+docker compose up -d --build
+```
+
+This starts three containers:
+- **mysql** — database on port 3306
+- **server** — game server (login on 6111, world on 6112)
+- **client** — webpack dev server on port 3000
+
+Open `http://localhost:3000` in your browser. Create an account or log in with saved credentials.
+
+### Prerequisites
+
+- [Docker](https://docs.docker.com/get-docker/) with Compose
+- Game assets placed in `assets/media/` (not included in repo)
+
+### Database Credentials
+
+| Field    | Value       |
+|----------|-------------|
+| User     | yukon       |
+| Password | yukon_pass  |
+| Database | yukon       |
+
+### Rebuilding
+
+```console
+docker compose up -d --build client   # rebuild client only
+docker compose up -d --build server   # rebuild server only
+```
+
+## Local Installation (without Docker)
 
 ### Prerequisites
 
 * [Node.js](https://nodejs.org/en/)
 * [yukon-server](https://github.com/wizguin/yukon-server)
-* assets
+* Game assets
 
-### Installation
+### Setup
 
-1. Clone this repository.
-
+1. Clone and install dependencies:
 ```console
-git clone https://github.com/wizguin/yukon
-```
-
-2. Install node dependencies.
-
-```console
+git clone <repo-url> yukon
+cd yukon
 npm install
 ```
 
-3. Merge contents of assets into the assets folder.
+2. Merge game assets into the `assets/` folder.
 
-### Usage
-
-* Running the dev server.
-
+3. Run the dev server:
 ```console
 npm run dev
 ```
 
-* Building the client for production. Production files can be found in "/dist".
-
+4. Build for production (output in `/dist`):
 ```console
 npm run build
 ```
 
-* Building crumbs. This will merge files in "/assets/media/crumbs/en" into a single json file, you only need to run this when modifying crumbs.
-
+5. Rebuild crumbs (only needed when modifying crumb data):
 ```console
 npm run build-crumbs
 ```
 
-### Scene Editing
+## Added Features (CPJourney Ports)
 
-Editing .scene files requires a copy of [Phaser Editor](https://phasereditor2d.com/).
+### Rooms
+49 room scenes ported from CPJourney with animations, interactive objects, and navigation triggers. Includes room-specific widgets (catalogs, posters, game UIs).
 
-### Account creation
+### Stamps
+Full stamp system — collection tracking, stampbook widget with browsable pages, cover customization (colour, clasp, highlight, pattern), drag-and-drop stamps/pins on cover with persistent save. Stamp earned notification with slide-in animation.
 
-If you'd like to use the included PHP account registration locally, you must host it on a PHP supported web server running on port 80 at the path "/create/scripts/php". Webpack dev server will proxy requests accordingly.
+### Games
+Table and waddle game wiring from rooms. Card-Jitsu, Sled Racing, Mancala, Find Four.
 
-```console
-'/create/scripts/php': 'http://localhost:80'
-```
-
-See [here](https://github.com/wizguin/yukon-server#account-creation) for a simpler way to create accounts locally.
+### Engine Improvements
+- Socket.IO reconnection support
+- Pathfinding fixes (collision rounding, camera rooms)
+- Ice sliding physics
+- Ruffle Flash game integration hooks (stamp earning from minigames)
 
 ## Production Usage
 
-The following is required when running the project in production.
+Set up WebSocket proxy routes on your web server:
 
-* Routes for proxying game worlds must be set up on your web server, the following is an example of an [Apache](https://www.apache.org/) configuration.
-
-```console
+```apache
 RewriteEngine on
 
 RewriteCond %{REQUEST_URI} ^/world/login [NC]
@@ -94,12 +117,16 @@ RewriteRule /(.*) ws://localhost:6112/$1 [P,L]
 ProxyPass /world/blizzard http://localhost:6112
 ```
 
-* Make sure to use the minified bundle and index.html file generated with the build command. These can be found in "/dist" (the contents can just be merged onto your web server).
+Use the minified bundle from `npm run build` (output in `/dist`).
 
-* To modify the outputted index.html file, edit the template file "index.ejs" and rebuild.
+## Scene Editing
+
+Editing `.scene` files requires [Phaser Editor](https://phasereditor2d.com/).
+
+## Credits
+
+Built on [yukon](https://github.com/wizguin/yukon) by wizguin. CPJourney features reverse-engineered from the deobfuscated CPJourney client.
 
 ## Disclaimer
 
 This project is intended for personal use only.
-
-This project is a work in progress, please report any issues you find [here](https://github.com/wizguin/yukon/issues).
