@@ -29,6 +29,10 @@ export default class ClientController {
         this.slots = ['color', 'head', 'face', 'neck', 'body', 'hand', 'feet', 'flag', 'photo', 'award']
         this.inventory = this.initInventory()
 
+        // Stamps
+        this.stamps = (attributes.stamps || []).map(s => parseInt(s))
+        this.stampsByGroup = this.initStampLookup()
+
         this.sortPostcards()
 
         // Reference to ClientPenguin object
@@ -405,6 +409,32 @@ export default class ClientController {
 
     startWalkingPet(petId) {
         this.network.send('pet_start_walk', { id: petId })
+    }
+
+    initStampLookup() {
+        let lookup = {}
+        if (!this.crumbs.stamps) return lookup
+
+        for (let group of this.crumbs.stamps) {
+            for (let stamp of group.stamps || []) {
+                lookup[stamp.stamp_id] = stamp
+                stamp.group_id = group.group_id
+            }
+        }
+        return lookup
+    }
+
+    getStamp(id) {
+        return this.stampsByGroup[id] || null
+    }
+
+    hasStamp(id) {
+        return this.stamps.includes(id)
+    }
+
+    stampEarned(id, silent = false) {
+        if (this.hasStamp(id)) return
+        this.network.send('collect_stamp', { stamp: id })
     }
 
 }

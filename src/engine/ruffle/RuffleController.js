@@ -14,7 +14,10 @@ const keys = [
     'isMyPlayerMember',
     'sendGameOver',
     'sendJoinLastRoom',
-    'buyInventory'
+    'buyInventory',
+    'stampEarnedCpj',
+    'stampEarnedAltLoader',
+    'stampIsOwnedByMe'
 ]
 
 export default class RuffleController extends BaseScene {
@@ -106,6 +109,18 @@ export default class RuffleController extends BaseScene {
                 this.stopMusic()
 
                 this.container.visible = true
+            },
+
+            stampEarnedCpj: ([id]) => {
+                this.client.stampEarned(parseInt(id))
+            },
+
+            stampEarnedAltLoader: ([id]) => {
+                this.client.stampEarned(parseInt(id))
+            },
+
+            stampIsOwnedByMe: ([id]) => {
+                return this.client.hasStamp(parseInt(id))
             },
 
             startGameMusic: () => {
