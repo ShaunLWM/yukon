@@ -1,4 +1,5 @@
 import PenguinSpriteFactory from './PenguinSpriteFactory'
+import WalkingPuffleLoader from './WalkingPuffleLoader'
 
 
 export default class PenguinLoader {
@@ -19,6 +20,10 @@ export default class PenguinLoader {
         this.addPenguin(penguin)
         this.addShadow(penguin)
         this.addInput(penguin)
+
+        if (penguin.walking && penguin.walkingPuffleType != null) {
+            this.addPuffle(penguin, penguin.walkingPuffleType)
+        }
 
         penguin.playFrame(penguin.frame)
     }
@@ -65,6 +70,42 @@ export default class PenguinLoader {
 
     onPenguinClick(id, username) {
         this.world.interface.showCard(id, username)
+    }
+
+    addPuffle(penguin, typeId) {
+        if (!(typeId in this.world.crumbs.puffles)) return
+
+        const colorName = this.world.crumbs.puffles[typeId].name
+        const loader = new WalkingPuffleLoader(penguin.room)
+
+        loader.loadPuffle(penguin, colorName, (key) => {
+            if (!penguin.active) return
+
+            penguin.pufflesprite = PenguinSpriteFactory.create(penguin, key, 3)
+            penguin.hasPuffle = true
+            penguin.puffleColor = colorName
+            penguin.walkingPuffleType = typeId
+
+            if (penguin.textures.exists('puffles_shared')) {
+                penguin.pufflespecialsprite = PenguinSpriteFactory.create(penguin, 'puffles_shared', 2)
+            }
+
+            penguin.playFrame(penguin.frame)
+        })
+    }
+
+    removePuffle(penguin) {
+        if (penguin.pufflesprite) {
+            penguin.pufflesprite.destroy()
+            penguin.pufflesprite = null
+        }
+        if (penguin.pufflespecialsprite) {
+            penguin.pufflespecialsprite.destroy()
+            penguin.pufflespecialsprite = null
+        }
+        penguin.hasPuffle = false
+        penguin.puffleColor = null
+        penguin.walkingPuffleType = null
     }
 
 }

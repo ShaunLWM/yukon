@@ -19,7 +19,8 @@ export default class Pet extends Plugin {
             'pet_frame': this.petFrame,
             'update_pets': this.updatePets,
             'pet_start_walk': this.petStartWalk,
-            'pet_stop_walk': this.petStopWalk
+            'pet_stop_walk': this.petStopWalk,
+            'puffle_dig': this.puffleDig
         }
     }
 
@@ -118,15 +119,62 @@ export default class Pet extends Plugin {
     }
 
     petStartWalk(args) {
+        // Igloo context
         if (this.petAvailable(args.petId)) {
             this.pets[args.petId].startWalk()
+        }
+
+        // Room context - add puffle sprite to penguin
+        if (args.userId && args.walkingPuffleType != null && this.world.room) {
+            const penguin = this.world.room.penguins[args.userId]
+            if (penguin) {
+                penguin.walking = args.petId
+                penguin.penguinLoader.addPuffle(penguin, args.walkingPuffleType)
+            }
         }
     }
 
     petStopWalk(args) {
+        // Igloo context
         if (this.petAvailable(args.petId)) {
             this.pets[args.petId].stopWalk()
         }
+
+        // Room context - remove puffle sprite from penguin
+        if (args.userId && this.world.room) {
+            const penguin = this.world.room.penguins[args.userId]
+            if (penguin) {
+                penguin.walking = 0
+                penguin.penguinLoader.removePuffle(penguin)
+                penguin.playFrame(penguin.frame)
+            }
+        }
+    }
+
+    puffleDig(args) {
+        if (!args.reward || !args.rewardType) return
+
+        const penguin = this.world.client.penguin
+        if (!penguin || !penguin.hasPuffle) return
+
+        const digGroundFrame = this.world.crumbs.puffles[penguin.walkingPuffleType]?.digGroundFrame
+
+        penguin.sendPuffleFrame(75, () => {}, (anim, frameData) => {
+            if (digGroundFrame && frameData.textureFrame === `75_${digGroundFrame}`) {
+                let specialFrame = 0
+                switch (args.rewardType) {
+                    case 1: specialFrame = 90; break
+                    case 2: specialFrame = 85; break
+                    case 3: specialFrame = 80; break
+                }
+                if (specialFrame) {
+                    penguin.sendSpecialPuffleFrame(specialFrame)
+                }
+            }
+        })
+
+        this.world.client.coins = args.coins
+        this.interface.refreshPlayerCard()
     }
 
 }
