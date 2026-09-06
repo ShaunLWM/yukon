@@ -13,16 +13,10 @@
 - [x] Player card stamp count and stampbook button
 - [x] Stampbook cover persistence (stampbookInfo + coverStamps in DB)
 - [x] Engine fixes (pathfinding, reconnection, ice sliding, loading spinner)
-
-## In Progress
-
-- [ ] Port remaining CPJourney rooms (some rooms may still be missing or incomplete)
-
-## Planned
-
-- [ ] Port additional minigames (Pizzatron, Bean Counters, Puffle Launch, etc.)
-- [ ] Puffles system (adoption, walking, care, puffle furniture interaction)
-- [ ] Ruffle Flash game integration (SWF games running via Ruffle emulator)
+- [x] 48 room scenes ported from CPJourney
+- [x] Ruffle Flash emulator integration (RuffleController, CDN loading, base class wiring)
+- [x] SWF minigames hooked up via Ruffle (data-driven from games.json crumbs)
+- [x] Puffles system (igloo pets, adoption, pet card, walking puffle in rooms, digging for coins)
 - [ ] Party/event system (room decorations, event-specific items, party rooms)
 - [ ] UI enhancements (newspaper, penguin transformations, mascot encounters)
 - [ ] Igloo editing improvements
