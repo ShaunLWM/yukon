@@ -77,6 +77,14 @@ export default class Main extends BaseScene {
         this.mail;
         /** @type {Mailbook} */
         this.mailbook;
+        /** @type {Phaser.GameObjects.Container} */
+        this.stampPopup;
+        /** @type {Phaser.GameObjects.Container} */
+        this.stampContainer;
+        /** @type {Phaser.GameObjects.Text} */
+        this.stampPopupText;
+        /** @type {Phaser.GameObjects.Image} */
+        this.stampCategoryIcon;
         /** @type {Array<Settings|Moderator|PlayerCard|PetCard|Buddy|Waddle|Phone>} */
         this.hideOnSleep;
 
@@ -161,6 +169,50 @@ export default class Main extends BaseScene {
         popupText.setOrigin(0.5, 0.5);
         popupText.setStyle({ "align": "center", "color": "#000000", "fixedWidth":380,"fontFamily": "Arial", "fontSize": "24px" });
         onlinePopup.add(popupText);
+
+        // stampPopup - CPJ StampPrompt
+        const stampPopup = this.add.container(760, 480);
+        stampPopup.visible = false;
+
+        const stampContainer = this.add.container(0, -278);
+        stampPopup.add(stampContainer);
+
+        const stampPopupBg = this.add.image(342, -354, "main", "stamps/stampbg");
+        stampContainer.add(stampPopupBg);
+
+        const stampEarnedLabel = this.add.text(244, -321, "", {});
+        stampEarnedLabel.text = "Stamp Earned!";
+        stampEarnedLabel.setStyle({
+            fixedWidth: 400,
+            fixedHeight: 100,
+            fontFamily: "CCComiccrazy, Arial",
+            fontSize: "24px",
+            fontStyle: "italic",
+            "shadow.offsetX": 4,
+            "shadow.offsetY": 4,
+            "shadow.blur": 5,
+            "shadow.fill": true
+        });
+        stampContainer.add(stampEarnedLabel);
+
+        const stampPopupText = this.add.text(244, -282, "", {});
+        stampPopupText.text = "";
+        stampPopupText.setStyle({
+            fixedWidth: 400,
+            fixedHeight: 100,
+            fontFamily: "CCComiccrazy, Arial",
+            fontSize: "24px",
+            fontStyle: "italic",
+            "shadow.offsetX": 4,
+            "shadow.offsetY": 4,
+            "shadow.blur": 5,
+            "shadow.fill": true
+        });
+        stampContainer.add(stampPopupText);
+
+        const stampCategoryIcon = this.add.image(148, -352, "main", "stamps/cat30001");
+        stampCategoryIcon.setOrigin(0.5, 0);
+        stampContainer.add(stampCategoryIcon);
 
         // chatLog
         const chatLog = new ChatLog(this, 760, 12);
@@ -384,6 +436,10 @@ export default class Main extends BaseScene {
         this.settings = settings;
         this.mail = mail;
         this.mailbook = mailbook;
+        this.stampPopup = stampPopup;
+        this.stampContainer = stampContainer;
+        this.stampPopupText = stampPopupText;
+        this.stampCategoryIcon = stampCategoryIcon;
         this.hideOnSleep = hideOnSleep;
 
         this.events.emit("scene-awake");
@@ -414,6 +470,11 @@ export default class Main extends BaseScene {
         // Hints
 
         this.hideOnSleep.push(this.interface.hint)
+
+        // Stamp notification queue
+
+        this.stampQueue = []
+        this.stampShowing = false
 
         // Buddy requests
 
@@ -516,6 +577,11 @@ export default class Main extends BaseScene {
 
         this.chatInput.clearText()
 
+        if (text === '!teststamp') {
+            this.showStampEarned('Test Stamp', 3, 2)
+            return
+        }
+
         this.interface.showTextBalloon(this.world.client.id, text)
         this.network.send('send_message', { message: text })
     }
@@ -589,6 +655,53 @@ export default class Main extends BaseScene {
         this.time.addEvent({
             delay: 10000,
             callback: () => this.onlinePopup.visible = false
+        })
+    }
+
+    showStampEarned(name, category, rank) {
+        this.stampQueue.push({ text: name, category: category || 3, rank: rank || 1 })
+        if (!this.stampShowing) this.showNextStamp()
+    }
+
+    showNextStamp() {
+        if (this.stampQueue.length === 0) {
+            this.stampShowing = false
+            return
+        }
+
+        this.stampShowing = true
+        let stamp = this.stampQueue.shift()
+
+        this.stampPopupText.text = stamp.text
+        let r = stamp.rank <= 0 ? 1 : stamp.rank > 4 ? 4 : stamp.rank
+        this.stampCategoryIcon.setTexture("main", "stamps/cat" + stamp.category + "000" + r)
+        this.stampPopup.visible = true
+
+        this.soundManager.play('stampEarned')
+
+        this.tweens.add({
+            targets: this.stampContainer,
+            y: { from: -278, to: -112 },
+            duration: 568,
+            ease: Phaser.Math.Easing.Expo.InOut,
+            onComplete: () => {
+                this.time.addEvent({
+                    delay: 1500,
+                    callback: () => {
+                        this.tweens.add({
+                            targets: this.stampContainer,
+                            y: { from: -112, to: -278 },
+                            duration: 568,
+                            ease: Phaser.Math.Easing.Expo.InOut,
+                            onComplete: () => {
+                                this.stampPopup.visible = false
+                                this.stampShowing = false
+                                this.showNextStamp()
+                            }
+                        })
+                    }
+                })
+            }
         })
     }
 
