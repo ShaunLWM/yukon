@@ -21,6 +21,12 @@ export default class Penguin extends BaseContainer {
 
         this.bodySprite
         this.penguinSprite
+        this.pufflesprite = null
+        this.pufflespecialsprite = null
+        this.hasPuffle = false
+        this.puffleColor = null
+        this.puffleHidden = false
+        this.puffleDigging = false
 
         PathEngine.setStartPos(this)
 
@@ -70,6 +76,8 @@ export default class Penguin extends BaseContainer {
             return child.type == 'Sprite'
                 && child != this.bodySprite
                 && child != this.penguinSprite
+                && child != this.pufflesprite
+                && child != this.pufflespecialsprite
         })
     }
 
@@ -95,6 +103,8 @@ export default class Penguin extends BaseContainer {
      */
     onDestroy() {
         delete this.body
+        delete this.pufflesprite
+        delete this.pufflespecialsprite
     }
 
     load() {
@@ -238,6 +248,11 @@ export default class Penguin extends BaseContainer {
 
             this.checkAttachSound(frame, id, sprite, anim)
         }
+
+        if (this.pufflesprite) {
+            const puffleFrame = isSecretFrame ? 26 : frame
+            this.createAnim(`${this.pufflesprite.texture.key}_${puffleFrame}`, this.pufflesprite.texture.key, puffleFrame, '')
+        }
     }
 
     createAnim(key, textureKey, frame, prefix = '', checkItem = false) {
@@ -250,6 +265,14 @@ export default class Penguin extends BaseContainer {
         }
 
         let animation = this.crumbs.penguin[frame]
+
+        if (textureKey === 'puffles_shared') {
+            animation = this.crumbs.puffleanims.shared[frame]
+        }
+
+        if (!animation) {
+            return null
+        }
 
         if (checkItem && animation.items) {
             animation = this.checkAnimItems(animation, textureKey)
@@ -334,6 +357,11 @@ export default class Penguin extends BaseContainer {
             const key = `${sprite.texture.key}_${frame}`
 
             this.playAnim(sprite, key)
+        }
+
+        if (this.pufflesprite && !this.puffleHidden && !this.puffleDigging) {
+            const puffleFrame = frame >= 31 ? 26 : frame
+            this.playAnim(this.pufflesprite, `${this.pufflesprite.texture.key}_${puffleFrame}`)
         }
     }
 
@@ -477,6 +505,64 @@ export default class Penguin extends BaseContainer {
 
     playItemSound(key) {
         this.soundManager.play(`sounds/items/${key}`)
+    }
+
+    /*========== Puffle Animations ==========*/
+
+    sendPuffleFrame(frame, onComplete, onUpdate) {
+        if (!this.pufflesprite || this.puffleHidden || this.puffleDigging) return
+
+        const key = `${this.pufflesprite.texture.key}_${frame}`
+        if (frame === 75) this.puffleDigging = true
+
+        const colorAnims = this.crumbs.puffleanims[this.puffleColor]
+        const animConfig = colorAnims ? colorAnims[frame] : null
+        if (!animConfig) return
+
+        this.createAnim(key, this.pufflesprite.texture.key, frame, '')
+        this.remove(this.pufflesprite)
+        this.pufflesprite.x = this.x
+        this.pufflesprite.y = this.y
+        this.pufflesprite.depth = this.depth
+        this.playAnim(this.pufflesprite, key)
+
+        if (onUpdate) {
+            this.pufflesprite.on('animationupdate', onUpdate)
+        }
+
+        this.pufflesprite.once('animationcomplete', () => {
+            if (onUpdate) this.pufflesprite.off('animationupdate', onUpdate)
+            if (onComplete) onComplete()
+            if (frame === 75) this.puffleDigging = false
+            this.pufflesprite.x = 0
+            this.pufflesprite.y = 0
+            this.add(this.pufflesprite)
+        })
+    }
+
+    sendSpecialPuffleFrame(frame, onComplete) {
+        if (!this.pufflespecialsprite || !this.pufflesprite) return
+
+        const key = `puffles_shared_${frame}`
+
+        setTimeout(() => {
+            if (!this.pufflespecialsprite) return
+
+            this.createAnim(key, this.pufflespecialsprite.texture.key, frame)
+            this.playAnim(this.pufflespecialsprite, key)
+            this.remove(this.pufflespecialsprite)
+            this.pufflespecialsprite.x = this.pufflesprite.x
+            this.pufflespecialsprite.y = this.pufflesprite.y
+            this.pufflespecialsprite.depth = this.pufflesprite.depth
+
+            this.pufflespecialsprite.once('animationcomplete', () => {
+                if (onComplete) onComplete()
+                this.pufflespecialsprite.setFrame('1_1')
+                this.add(this.pufflespecialsprite)
+                this.pufflespecialsprite.x = 0
+                this.pufflespecialsprite.y = 0
+            })
+        }, 1000)
     }
 
     /*========== Tweening ==========*/
