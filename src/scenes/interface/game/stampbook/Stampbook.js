@@ -775,7 +775,7 @@ export default class Stampbook extends BaseDynamicWidget {
                 this.loadStampImage(item.id, img, null)
             }
         } else {
-            const key = `clothing/icon/120/${item.id}`
+            const key = `clothing/icon/240/${item.id}`
             if (this.scene.textures.exists(key)) {
                 img.setTexture(key)
                 img.visible = true
