@@ -27,6 +27,8 @@ export default class PlayerCard extends BaseWidget {
         this.buttons;
         /** @type {Phaser.GameObjects.Text} */
         this.coins;
+        /** @type {Phaser.GameObjects.Text} */
+        this.stampCount;
         /** @type {Phaser.GameObjects.Container} */
         this.stats;
         /** @type {Phaser.GameObjects.Text} */
@@ -73,16 +75,37 @@ export default class PlayerCard extends BaseWidget {
         stats.visible = false;
         this.add(stats);
 
-        // card_coin
-        const card_coin = scene.add.image(177, 0, "main", "card-coin");
+        // coins row (top)
+        const card_coin = scene.add.image(-160.5, -50, "main", "card-coin");
+        card_coin.setScale(0.9);
+        card_coin.setOrigin(0, 0);
         stats.add(card_coin);
 
-        // coins
-        const coins = scene.add.text(0, 0, "", {});
-        coins.setOrigin(0.5, 0.5);
+        const coins = scene.add.text(39, -37, "", {});
+        coins.setOrigin(0.5, 0);
         coins.text = "Your Coins: 000000";
-        coins.setStyle({ "align": "right", "color": "#000000ff", "fixedWidth":300,"fontFamily": "Arial", "fontSize": "24px" });
+        coins.setStyle({ "color": "#000000ff", "fixedWidth":300,"fontFamily": "Arial", "fontSize": "24px" });
         stats.add(coins);
+
+        // stamps row (bottom) - clickable button like CPJ
+        const stampButton = scene.add.image(-146, 23, "main", "blue-button");
+        stats.add(stampButton);
+
+        const stampIcon = scene.add.image(-163.5, 3.5, "main", "stamps-icon");
+        stampIcon.setOrigin(0, 0);
+        stats.add(stampIcon);
+
+        const stampCount = scene.add.text(39, 9, "", {});
+        stampCount.setOrigin(0.5, 0);
+        stampCount.text = "Your Stamps: 0/0";
+        stampCount.setStyle({ "color": "#000000ff", "fixedWidth":300,"fontFamily": "Arial", "fontSize": "24px" });
+        stats.add(stampCount);
+
+        // stamp button component
+        const stampButtonButton = new Button(stampButton);
+        stampButtonButton.spriteName = "blue-button";
+        stampButtonButton.callback = () => this.openStampbook();
+        stampButtonButton.activeFrame = true;
 
         // username
         const username = scene.add.text(0, -238, "", {});
@@ -158,6 +181,7 @@ export default class PlayerCard extends BaseWidget {
         this.paperDoll = paperDoll;
         this.buttons = buttons;
         this.coins = coins;
+        this.stampCount = stampCount;
         this.stats = stats;
         this.username = username;
         this.inventorySort = inventorySort;
@@ -252,6 +276,16 @@ export default class PlayerCard extends BaseWidget {
 
     setCoins(coins) {
         this.coins.text = `Your Coins: ${coins}`
+
+        const client = this.world.client
+        const earned = client.stamps?.length || 0
+        const total = Object.keys(client.stampsByGroup || {}).length
+        this.stampCount.text = `Your Stamps: ${earned}/${total}`
+    }
+
+    openStampbook() {
+        this.close()
+        this.interface.loadWidget('Stampbook')
     }
 
     updateInventory() {
