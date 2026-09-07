@@ -26,7 +26,7 @@ export default class ClientController {
         this.lastSledId
 
         // Item inventory
-        this.slots = ['color', 'head', 'face', 'neck', 'body', 'hand', 'feet', 'flag', 'photo', 'award']
+        this.slots = ['color', 'head', 'face', 'neck', 'body', 'hand', 'feet', 'flag', 'photo', 'award', 'transforms']
         this.inventory = this.initInventory()
 
         // Stamps
@@ -123,6 +123,7 @@ export default class ClientController {
             let type = this.crumbs.items[item].type
             let slot = this.slots[type - 1]
 
+            if (!slot) continue
             inventory[slot].push(item)
         }
 
@@ -227,6 +228,18 @@ export default class ClientController {
 
         this.interface.showEmoteBalloon(this.id, emote)
         this.network.send('send_emote', { emote: emote })
+    }
+
+    sendTransform(transformId) {
+        if (transformId < 0) return
+
+        this.penguin.transformation(transformId)
+
+        if (transformId == 0) {
+            this.network.send('revert_transform')
+        } else {
+            this.network.send('transform_player', { transform: transformId })
+        }
     }
 
     sendSafe(safe) {

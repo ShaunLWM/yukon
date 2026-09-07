@@ -3,6 +3,7 @@ import BaseContainer from '@scenes/base/BaseContainer'
 import PathEngine from './pathfinding/PathEngine'
 import PenguinItems from './PenguinItems'
 import PenguinSpriteFactory from '../../loaders/PenguinSpriteFactory'
+import TransformLoader from '../../loaders/TransformLoader'
 
 import adjustRedemptionItem from './frames/adjustRedemptionItem'
 
@@ -18,9 +19,12 @@ export default class Penguin extends BaseContainer {
 
         this.items = new PenguinItems(this)
         this.clothingLoader = this.world.clothingLoader
+        this.transformLoader = new TransformLoader(this)
 
         this.bodySprite
         this.penguinSprite
+        this.transformSprite
+        this.transformTintedSprite
         this.pufflesprite = null
         this.pufflespecialsprite = null
         this.hasPuffle = false
@@ -70,12 +74,22 @@ export default class Penguin extends BaseContainer {
         return this.items.equipped
     }
 
+    get isTransformed() {
+        return this.transform !== 0 && this.transform !== undefined
+    }
+
+    get transformCrumb() {
+        return this.crumbs.transformations[this.transform]
+    }
+
     get equippedSprites() {
         return this.list.filter(child => {
 
             return child.type == 'Sprite'
                 && child != this.bodySprite
                 && child != this.penguinSprite
+                && child != this.transformSprite
+                && child != this.transformTintedSprite
                 && child != this.pufflesprite
                 && child != this.pufflespecialsprite
         })
@@ -105,11 +119,62 @@ export default class Penguin extends BaseContainer {
         delete this.body
         delete this.pufflesprite
         delete this.pufflespecialsprite
+        delete this.transformSprite
+        delete this.transformTintedSprite
+    }
+
+    transformation(transformId) {
+        if (this.isTransformed && this.transformSprite) {
+            this.transformSprite.destroy()
+            this.transformSprite = null
+        }
+        if (this.transformTintedSprite) {
+            this.transformTintedSprite.destroy()
+            this.transformTintedSprite = null
+        }
+
+        this.transform = transformId
+
+        this.bodySprite.visible = !this.isTransformed
+        this.penguinSprite.visible = !this.isTransformed
+
+        for (const sprite of this.equippedSprites) {
+            sprite.visible = !this.isTransformed
+        }
+
+        if (this.isTransformed) {
+            this.transformLoader.loadTransform(this.transform)
+            this.loadTransformAudio(this.transform)
+        }
+
+        if (!this.isTransformed) {
+            this.playFrame(this.frame)
+        }
+    }
+
+    loadTransformAudio(transformId) {
+        const crumb = this.crumbs.transformations[transformId]
+        if (!crumb?.sounds) return
+
+        for (const frameKey of Object.keys(crumb.frames)) {
+            if (crumb.frames[frameKey].sounds) {
+                for (const s of crumb.frames[frameKey].sounds) {
+                    this.room.soundManager?.loadSfx(`penguin/transforms/sounds/${s.sound}`)
+                }
+            }
+        }
     }
 
     load() {
         this.penguinLoader.loadPenguin(this)
         this.loadItems()
+
+        if (this.isTransformed) {
+            this.bodySprite.visible = false
+            this.penguinSprite.visible = false
+            this.transformLoader.loadTransform(this.transform)
+            this.loadTransformAudio(this.transform)
+        }
 
         this.room.add.existing(this)
     }
@@ -159,6 +224,10 @@ export default class Penguin extends BaseContainer {
         // depth + 1 to ensure items are loaded on top of penguin body
         equipped.sprite = PenguinSpriteFactory.create(this, key, equipped.depth + 1)
 
+        if (this.isTransformed) {
+            equipped.sprite.visible = false
+        }
+
         this.sort('depth')
         this.playFrame(this.frame)
     }
@@ -183,6 +252,12 @@ export default class Penguin extends BaseContainer {
 
         if (slot == 'color' && this.bodySprite) {
             this.bodySprite.tint = this.world.getColor(itemId)
+            if (this.isTransformed && this.transformCrumb.tinted && this.transformSprite) {
+                this.transformSprite.tint = this.world.getColor(itemId)
+            }
+            if (this.isTransformed && this.transformCrumb.tinted_sprite && this.transformTintedSprite) {
+                this.transformTintedSprite.tint = this.world.getColor(itemId)
+            }
         }
 
         // Load item sprite
@@ -219,7 +294,7 @@ export default class Penguin extends BaseContainer {
         }
 
         // Get correct frame id
-        const frame = ([25, 26].includes(_frame))
+        const frame = ([25, 26].includes(_frame) && !this.isTransformed)
             ? this.getSecretFrame(_frame)
             : _frame
 
@@ -227,6 +302,7 @@ export default class Penguin extends BaseContainer {
 
         this.playAnims(frame)
 
+        this.theFrame = _frame
         // Frames that aren't set get set to 1
         this.frame = (set) ? _frame : 1
     }
@@ -238,6 +314,13 @@ export default class Penguin extends BaseContainer {
 
         this.createAnim(`penguin_body_${frame}`, penguinTexture, frame, 'body/')
         this.createAnim(`penguin_${frame}`, penguinTexture, frame, 'penguin/')
+
+        if (this.isTransformed && this.transformSprite) {
+            this.createAnim(`${this.transformSprite.texture.key}_${frame}`, this.transformSprite.texture.key, frame, '', false, true)
+            if (this.transformTintedSprite) {
+                this.createAnim(`${this.transformTintedSprite.texture.key}/color_${frame}`, this.transformTintedSprite.texture.key, frame, 'color/', false, true)
+            }
+        }
 
         for (const { id, sprite } of Object.values(this.items.equipped)) {
             if (!id || !sprite) {
@@ -255,7 +338,7 @@ export default class Penguin extends BaseContainer {
         }
     }
 
-    createAnim(key, textureKey, frame, prefix = '', checkItem = false) {
+    createAnim(key, textureKey, frame, prefix = '', checkItem = false, isTransform = false) {
         if (this.anims.exists(key)) {
             return this.anims.get(key)
         }
@@ -264,7 +347,13 @@ export default class Penguin extends BaseContainer {
             return null
         }
 
-        let animation = this.crumbs.penguin[frame]
+        let animation
+
+        if (isTransform && this.transformCrumb?.frames?.[frame]) {
+            animation = this.transformCrumb.frames[frame]
+        } else {
+            animation = this.crumbs.penguin[frame]
+        }
 
         if (textureKey === 'puffles_shared') {
             animation = this.crumbs.puffleanims.shared[frame]
@@ -350,6 +439,16 @@ export default class Penguin extends BaseContainer {
     }
 
     playAnims(frame) {
+        if (this.isTransformed) {
+            if (this.transformSprite) {
+                this.playAnim(this.transformSprite, `${this.transformSprite.texture.key}_${frame}`)
+            }
+            if (this.transformTintedSprite) {
+                this.playAnim(this.transformTintedSprite, `${this.transformTintedSprite.texture.key}/color_${frame}`)
+            }
+            return
+        }
+
         this.playAnim(this.bodySprite, `penguin_body_${frame}`)
         this.playAnim(this.penguinSprite, `penguin_${frame}`)
 
@@ -513,14 +612,16 @@ export default class Penguin extends BaseContainer {
         if (!this.pufflesprite || this.puffleHidden || this.puffleDigging) return
 
         const key = `${this.pufflesprite.texture.key}_${frame}`
-        if (frame === 75) this.puffleDigging = true
 
         const colorAnims = this.crumbs.puffleanims[this.puffleColor]
         const animConfig = colorAnims ? colorAnims[frame] : null
         if (!animConfig) return
 
+        if (frame === 75) this.puffleDigging = true
+
         this.createAnim(key, this.pufflesprite.texture.key, frame, '')
         this.remove(this.pufflesprite)
+        this.room.add.existing(this.pufflesprite)
         this.pufflesprite.x = this.x
         this.pufflesprite.y = this.y
         this.pufflesprite.depth = this.depth
@@ -534,6 +635,7 @@ export default class Penguin extends BaseContainer {
             if (onUpdate) this.pufflesprite.off('animationupdate', onUpdate)
             if (onComplete) onComplete()
             if (frame === 75) this.puffleDigging = false
+            this.room.children.remove(this.pufflesprite)
             this.pufflesprite.x = 0
             this.pufflesprite.y = 0
             this.add(this.pufflesprite)
@@ -551,12 +653,14 @@ export default class Penguin extends BaseContainer {
             this.createAnim(key, this.pufflespecialsprite.texture.key, frame)
             this.playAnim(this.pufflespecialsprite, key)
             this.remove(this.pufflespecialsprite)
+            this.room.add.existing(this.pufflespecialsprite)
             this.pufflespecialsprite.x = this.pufflesprite.x
             this.pufflespecialsprite.y = this.pufflesprite.y
             this.pufflespecialsprite.depth = this.pufflesprite.depth
 
             this.pufflespecialsprite.once('animationcomplete', () => {
                 if (onComplete) onComplete()
+                this.room.children.remove(this.pufflespecialsprite)
                 this.pufflespecialsprite.setFrame('1_1')
                 this.add(this.pufflespecialsprite)
                 this.pufflespecialsprite.x = 0
