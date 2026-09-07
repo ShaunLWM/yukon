@@ -33,6 +33,9 @@ export default class ClientController {
         this.stamps = (attributes.stamps || []).map(s => parseInt(s))
         this.stampsByGroup = this.initStampLookup()
 
+        // Favorite items
+        this.favoriteItems = new Set((attributes.favoriteItems || []).map(i => parseInt(i)))
+
         this.sortPostcards()
 
         // Reference to ClientPenguin object
@@ -422,6 +425,19 @@ export default class ClientController {
 
     startWalkingPet(petId) {
         this.network.send('pet_start_walk', { id: petId })
+    }
+
+    isFavoriteItem(itemId) {
+        return this.favoriteItems.has(parseInt(itemId))
+    }
+
+    setFavoriteItem(itemId, favorite) {
+        itemId = parseInt(itemId)
+        if (favorite) {
+            this.favoriteItems.add(itemId)
+        } else {
+            this.favoriteItems.delete(itemId)
+        }
     }
 
     initStampLookup() {

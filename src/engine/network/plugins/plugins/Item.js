@@ -7,7 +7,8 @@ export default class Item extends Plugin {
         super(network)
         this.events = {
             'update_player': this.updatePlayer,
-            'add_item': this.addItem
+            'add_item': this.addItem,
+            'favorite_item': this.favoriteItem
         }
     }
 
@@ -21,6 +22,14 @@ export default class Item extends Plugin {
         }
 
         this.world.room.penguins[args.id].update(args.item, args.slot)
+    }
+
+    favoriteItem(args) {
+        this.client.setFavoriteItem(args.item, args.favorite)
+        const playerCard = this.interface.main.playerCard
+        if (playerCard.visible && playerCard.id === this.client.id) {
+            playerCard.updateInventory()
+        }
     }
 
     addItem(args) {
