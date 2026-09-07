@@ -242,6 +242,38 @@ export default class Inventory extends BaseContainer {
 
         this.inventory_bg.setInteractive({ pixelPerfect: true })
 
+        // Favorite star buttons per slot (matches CPJ layout)
+        this.favButtons = []
+        const favPositions = [
+            [49, -1], [181, -1], [313, -1],
+            [49, 131], [181, 131], [313, 131],
+            [49, 263], [181, 263], [313, 263],
+            [49, 395], [181, 395], [313, 395]
+        ]
+        for (let i = 0; i < 12; i++) {
+            const [fx, fy] = favPositions[i]
+            const favContainer = scene.add.container(fx, fy)
+            favContainer.setScale(0.8)
+            container.add(favContainer)
+
+            const favBg = scene.add.sprite(0, 2, "layer_icon", "layer_icon")
+            favContainer.add(favBg)
+
+            const favStar = scene.add.image(0, 2, "main", "badge/star")
+            favContainer.add(favStar)
+
+            favContainer.visible = false
+            favContainer.setDepth(100)
+
+            const favBtn = new Button(favBg)
+            favBtn.spriteName = "layer_icon"
+            favBtn.callback = () => this.onFavBtn(i)
+            favBtn.activeFrame = true
+            favBtn.pixelPerfect = true
+
+            this.favButtons.push({ container: favContainer, star: favStar })
+        }
+
         // Search bar (matches CPJ layout)
         const searchContainer = scene.add.container(196, -15)
         container.add(searchContainer)
@@ -319,8 +351,11 @@ export default class Inventory extends BaseContainer {
         let inventory = this.world.client.inventory
 
         if (this.filter) {
-            // If filter is other then inventory results in concat of flags, photos, awards and transforms
-            inventory = (this.filter == 'other') ? inventory.flag.concat(inventory.photo, inventory.award, inventory.transforms) : inventory[this.filter]
+            inventory = (this.filter == 'other')
+                ? inventory.flag.concat(inventory.photo, inventory.award, inventory.transforms)
+                : (this.filter == 'favorites')
+                    ? Object.values(inventory).flat().filter(id => this.world.client.isFavoriteItem(id))
+                    : inventory[this.filter]
         }
 
         let items = Object.values(inventory).flat()
@@ -331,6 +366,10 @@ export default class Inventory extends BaseContainer {
                 return crumb && crumb.name.toLowerCase().includes(this.filterText)
             })
         }
+
+        // Sort favorites to top
+        const client = this.world.client
+        items.sort((a, b) => Number(client.isFavoriteItem(b)) - Number(client.isFavoriteItem(a)))
 
         return items
     }
@@ -344,6 +383,24 @@ export default class Inventory extends BaseContainer {
 
         let page = this.inventory.slice((this.page - 1) * this.pageSize, this.page * this.pageSize)
         this.inventoryLoader.loadPage(page)
+        this.updateFavStars(page)
+    }
+
+    updateFavStars(page) {
+        const client = this.world.client
+        for (let i = 0; i < 12; i++) {
+            const fav = this.favButtons[i]
+            fav.container.visible = !!page[i]
+            if (page[i]) {
+                if (client.isFavoriteItem(page[i])) {
+                    fav.star.clearTint()
+                    fav.star.setAlpha(1)
+                } else {
+                    fav.star.setTint(0x888888)
+                    fav.star.setAlpha(0.7)
+                }
+            }
+        }
     }
 
     prevPage() {
@@ -409,6 +466,12 @@ export default class Inventory extends BaseContainer {
                 }
                 break
         }
+    }
+
+    onFavBtn(slotId) {
+        const item = this.slots[slotId].item
+        if (!item || !item.id || !item.active) return
+        this.network.send('favorite_item', { item: item.id })
     }
 
     clearSearch() {

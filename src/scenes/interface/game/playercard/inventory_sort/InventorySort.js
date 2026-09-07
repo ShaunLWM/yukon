@@ -32,6 +32,17 @@ export default class InventorySort extends FloatingMenu {
         close.fillAlpha = 0.5;
         this.add(close);
 
+        // favorites
+        const favorites = scene.add.image(0, -6, "main", "list/small");
+        this.add(favorites);
+
+        // favorites_text
+        const favorites_text = scene.add.text(0, -6, "", {});
+        favorites_text.setOrigin(0.5, 0.5);
+        favorites_text.text = "Favorites";
+        favorites_text.setStyle({ "align": "center", "color": "#000000ff", "fixedWidth":268,"fontFamily": "Arial", "fontSize": "24px" });
+        this.add(favorites_text);
+
         // all
         const all = scene.add.image(0, -70, "main", "list/small");
         this.add(all);
@@ -179,6 +190,13 @@ export default class InventorySort extends FloatingMenu {
         transforms_text.text = "Transformations";
         transforms_text.setStyle({ "align": "center", "color": "#000000ff", "fixedWidth":268,"fontFamily": "Arial", "fontSize": "24px" });
         other_container.add(transforms_text);
+
+        // favorites (components)
+        const favoritesButton = new Button(favorites);
+        favoritesButton.spriteName = "list/small";
+        favoritesButton.hoverCallback = () => other_container.visible = false;
+        favoritesButton.callback = () => this.filterInventory('Favorites', 'favorites');
+        favoritesButton.activeFrame = false;
 
         // all (components)
         const allButton = new Button(all);
