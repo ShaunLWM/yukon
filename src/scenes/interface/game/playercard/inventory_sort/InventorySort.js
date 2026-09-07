@@ -169,6 +169,17 @@ export default class InventorySort extends FloatingMenu {
         backgrounds_text.setStyle({ "align": "center", "color": "#000000ff", "fixedWidth":268,"fontFamily": "Arial", "fontSize": "24px" });
         other_container.add(backgrounds_text);
 
+        // inventory_list_item_12
+        const inventory_list_item_12 = scene.add.image(0, 192, "main", "list/small");
+        other_container.add(inventory_list_item_12);
+
+        // transforms_text
+        const transforms_text = scene.add.text(0, 192, "", {});
+        transforms_text.setOrigin(0.5, 0.5);
+        transforms_text.text = "Transformations";
+        transforms_text.setStyle({ "align": "center", "color": "#000000ff", "fixedWidth":268,"fontFamily": "Arial", "fontSize": "24px" });
+        other_container.add(transforms_text);
+
         // all (components)
         const allButton = new Button(all);
         allButton.spriteName = "list/small";
@@ -249,6 +260,12 @@ export default class InventorySort extends FloatingMenu {
         inventory_list_item_11Button.spriteName = "list/small";
         inventory_list_item_11Button.callback = () => this.filterInventory('Backgrounds', 'photo');
         inventory_list_item_11Button.activeFrame = false;
+
+        // inventory_list_item_12 (components)
+        const inventory_list_item_12Button = new Button(inventory_list_item_12);
+        inventory_list_item_12Button.spriteName = "list/small";
+        inventory_list_item_12Button.callback = () => this.filterInventory('Transformations', 'transforms');
+        inventory_list_item_12Button.activeFrame = false;
 
         this.safe = safe;
         this.close = close;

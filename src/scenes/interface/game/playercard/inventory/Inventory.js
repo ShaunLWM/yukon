@@ -251,8 +251,8 @@ export default class Inventory extends BaseContainer {
         let inventory = this.world.client.inventory
 
         if (this.filter) {
-            // If filter is other then inventory results in concat of flags, photos and awards
-            inventory = (this.filter == 'other') ? inventory.flag.concat(inventory.photo, inventory.award) : inventory[this.filter]
+            // If filter is other then inventory results in concat of flags, photos, awards and transforms
+            inventory = (this.filter == 'other') ? inventory.flag.concat(inventory.photo, inventory.award, inventory.transforms) : inventory[this.filter]
         }
 
         return Object.values(inventory).flat()
