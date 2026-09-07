@@ -315,7 +315,18 @@ export default class Inventory extends BaseContainer {
                 break
 
             default:
-                this.network.send('update_player', { item: item.id })
+                const crumb = this.crumbs.items[item.id]
+                if (crumb && crumb.type === 11) {
+                    const client = this.world.client
+                    const transformId = client.penguin.transform === crumb.transform ? 0 : crumb.transform
+                    client.sendTransform(transformId)
+                    const playerCard = this.interface.main.playerCard
+                    if (playerCard.visible && playerCard.id === client.id) {
+                        playerCard.updatePlayer(client.penguin)
+                    }
+                } else {
+                    this.network.send('update_player', { item: item.id })
+                }
                 break
         }
     }

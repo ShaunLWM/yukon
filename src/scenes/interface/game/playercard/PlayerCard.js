@@ -10,6 +10,7 @@ import InventorySort from "./inventory_sort/InventorySort";
 import Inventory from "./inventory/Inventory";
 import Animation from "../../../components/Animation";
 /* START-USER-IMPORTS */
+import TransformPaperLoader from '@engine/loaders/TransformPaperLoader'
 /* END-USER-IMPORTS */
 
 export default class PlayerCard extends BaseWidget {
@@ -191,6 +192,14 @@ export default class PlayerCard extends BaseWidget {
 
         /* START-USER-CTR-CODE */
 
+        // Transform paper container — insert right after paperDoll so UI elements render above it
+        this.transformPaper = scene.add.container(0, 0)
+        this.transformPaper.visible = false
+        this.transformPaper.paper = null
+        this.addAt(this.transformPaper, this.getIndex(this.paperDoll) + 1)
+
+        this.transformPaperLoader = new TransformPaperLoader(scene, this.transformPaper, () => this.revertTransform())
+
         // Active player id
         this.id = null
 
@@ -250,7 +259,10 @@ export default class PlayerCard extends BaseWidget {
             isClient
         })
 
-        this.loadDoll(player.items?.flat || player, isClient)
+        const dollData = player.items?.flat || player
+        dollData.transform = player.transform
+        dollData.color = dollData.color || player.color
+        this.loadDoll(dollData, isClient)
 
         this.updateBadge(joinTime)
 
@@ -293,13 +305,36 @@ export default class PlayerCard extends BaseWidget {
     }
 
     loadDoll(items, isClient) {
-        this.paperDoll.visible = true
-        this.paperDoll.loadDoll(items, isClient)
+        const transformId = items.transform
+        const crumb = transformId > 0 ? this.crumbs.transformations[transformId] : null
+        if (!transformId || transformId <= 0 || (crumb && crumb.dont_hide_doll)) {
+            this.paperDoll.visible = true
+            this.transformPaper.visible = false
+            this.paperDoll.loadDoll(items, isClient)
+        }
+
+        if (transformId > 0 && crumb && !crumb.no_paper) {
+            if (!crumb.dont_hide_doll) {
+                this.paperDoll.visible = false
+            }
+            this.transformPaper.visible = true
+            this.transformPaperLoader.loadItem(transformId, isClient, crumb.paper_colors, items.color)
+            this.stopSpinner()
+        }
+    }
+
+    revertTransform() {
+        this.world.client.sendTransform(0)
     }
 
     resetDoll() {
         this.paperDoll.visible = false
         this.paperDoll.removeItems()
+        this.transformPaper.visible = false
+        if (this.transformPaper.paper) {
+            this.transformPaper.paper.destroy()
+            this.transformPaper.paper = null
+        }
     }
 
     updateButtons() {
