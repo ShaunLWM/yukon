@@ -236,10 +236,78 @@ export default class Inventory extends BaseContainer {
         this.page = 1
         this.pageSize = 12
         this.filter = null
+        this.filterText = ''
 
         this.inventoryLoader = new InventoryLoader(scene, this)
 
         this.inventory_bg.setInteractive({ pixelPerfect: true })
+
+        // Search bar (matches CPJ layout)
+        const searchContainer = scene.add.container(196, -15)
+        container.add(searchContainer)
+
+        const searchBg = scene.add.image(-66, -38, "main", "search-bg")
+        searchContainer.add(searchBg)
+
+        // Magnifying glass icon (Phaser primitives)
+        const glassCircle = scene.add.ellipse(-186, -37, 20, 20)
+        glassCircle.fillColor = 0x989918
+        glassCircle.isStroked = true
+        glassCircle.strokeColor = 0x989918
+        glassCircle.lineWidth = 3
+        searchContainer.add(glassCircle)
+
+        const glassHandle = scene.add.rectangle(-196, -26, 10, 4)
+        glassHandle.angle = -45
+        glassHandle.isFilled = true
+        glassHandle.fillColor = 0x989918
+        glassHandle.strokeColor = 0x989918
+        glassHandle.lineWidth = 2
+        searchContainer.add(glassHandle)
+
+        // DOM input overlay
+        const input = document.createElement('input')
+        input.type = 'text'
+        input.placeholder = 'Search'
+        input.spellcheck = false
+        input.autocomplete = 'off'
+
+        this.searchInput = scene.add.dom(-54, -38, input, {
+            width: '200px',
+            height: '36px',
+            fontSize: '22px',
+            fontFamily: 'Arial',
+            color: '#000',
+            backgroundColor: 'transparent',
+            border: 'none',
+            padding: '0 8px',
+            outline: 'none',
+            pointerEvents: 'auto'
+        })
+        this.searchInput.visible = false
+        searchContainer.add(this.searchInput)
+
+        // Clear button (click to reset search)
+        const clearHit = scene.add.ellipse(-189, -34, 128, 128)
+        clearHit.scaleX = 0.285
+        clearHit.scaleY = 0.271
+        searchContainer.add(clearHit)
+        clearHit.setInteractive({ cursor: 'pointer' })
+        clearHit.on('pointerup', () => this.clearSearch())
+
+        this.searchContainer = searchContainer
+
+        input.addEventListener('focus', () => {
+            scene.game.input.keyboard.enabled = false
+        })
+        input.addEventListener('blur', () => {
+            scene.game.input.keyboard.enabled = true
+        })
+        input.addEventListener('input', () => {
+            this.filterText = input.value.toLowerCase()
+            this.page = 1
+            this.showPage()
+        })
 
         /* END-USER-CTR-CODE */
     }
@@ -255,7 +323,16 @@ export default class Inventory extends BaseContainer {
             inventory = (this.filter == 'other') ? inventory.flag.concat(inventory.photo, inventory.award, inventory.transforms) : inventory[this.filter]
         }
 
-        return Object.values(inventory).flat()
+        let items = Object.values(inventory).flat()
+
+        if (this.filterText) {
+            items = items.filter(id => {
+                const crumb = this.crumbs.items[id]
+                return crumb && crumb.name.toLowerCase().includes(this.filterText)
+            })
+        }
+
+        return items
     }
 
     get maxPage() {
@@ -294,9 +371,12 @@ export default class Inventory extends BaseContainer {
         } else {
             this.parentContainer.sendToBack(this)
             this.x += 495
+            this.searchInput.node.blur()
         }
 
         this.container.visible = !this.container.visible
+        this.searchInput.visible = this.container.visible
+        this.searchInput.node.style.visibility = this.container.visible ? 'visible' : 'hidden'
         this.arrow.toggleFlipY()
     }
 
@@ -331,7 +411,23 @@ export default class Inventory extends BaseContainer {
         }
     }
 
+    clearSearch() {
+        this.filterText = ''
+        if (this.searchInput) {
+            this.searchInput.node.value = ''
+            this.searchInput.node.blur()
+            this.searchInput.visible = false
+            this.searchInput.node.style.visibility = 'hidden'
+        }
+        if (this.container.visible) {
+            this.page = 1
+            this.showPage()
+        }
+    }
+
     reset() {
+        this.clearSearch()
+
         for (const slot of this.slots) {
             if (slot.item) {
                 slot.item.destroy()
