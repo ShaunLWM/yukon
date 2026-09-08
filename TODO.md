@@ -24,3 +24,29 @@
 - [x] Postcard sending from rooms (player card mail button)
 - [ ] Cross-server buddy features (buddy_find_server, buddy_online_server, buddy_offline_server)
 - [ ] Buddy favorites + buddy search
+
+## CPJ Features to Port (from GitHub audit)
+
+### Quick Wins
+- [ ] Outfit Saver — save/load up to 12 outfit presets (OutfitLoader plugin + UI widget)
+- [ ] Unlock/Redemption Codes — redeem codes for items/coins with expiry (UnlockCodes plugin)
+- [ ] Info Plugin — server info messages + streamer mode (~20 lines)
+- [ ] Popup Interactions — track which dialogs a user has seen (first-time tutorials)
+- [ ] Igloo Likes — rate other players' igloos (social counter + DB table)
+
+### Medium Effort
+- [ ] Mining System — idle coin farming in mine/cave rooms with AFK detection
+- [ ] Penguins Work — job system (pizza delivery, coffee serving) with stamp progression
+- [ ] Enhanced Moderation — mutes, reports, username verification, invisibility, warn, broadcast
+- [ ] Mod Panel — admin panel: user search, edit player, add/remove items, teleport, ban history, alt detection
+- [ ] Scavenger Hunts — item collection hunts driven by crumbs config
+
+### Big Lifts
+- [ ] Dance Contest — multiplayer dance game with server-side song queue, 6 tracks, 4 difficulties
+- [ ] Party/Quest System — party events, quests, gem rewards, concert system (multiple plugins + widgets)
+
+### Extra DB Models (needed for above)
+- IglooLikes, LocationInventories, MusicInventories, FlooringInventories, Mascots (encounter tracking)
+
+### Skipped (not relevant for offline clone)
+- ServerJumping, Voyager/Tower (CPJ-original), PlayerSubmissions (online community), LiveEvent (mod-only)
