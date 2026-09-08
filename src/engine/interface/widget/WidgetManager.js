@@ -131,9 +131,7 @@ export default class WidgetManager extends BaseLayer {
             this.add(widget)
         }
 
-        if (config && widget.show) {
-            widget.show(config)
-        }
+        widget.show(config)
 
         this.events.emit(`create_widget_${key.toLowerCase()}`)
     }
