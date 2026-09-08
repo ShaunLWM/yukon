@@ -11,7 +11,9 @@ export default class Igloo extends Plugin {
             'update_flooring': this.updateFlooring,
             'update_music': this.updateMusic,
             'get_igloos': this.getIgloos,
-            'get_igloo_open': this.getIglooOpen
+            'get_igloo_open': this.getIglooOpen,
+            'get_igloo_likes': this.getIglooLikes,
+            'igloo_liked': this.iglooLiked
         }
     }
 
@@ -87,6 +89,14 @@ export default class Igloo extends Plugin {
         if (args.open) {
             this.interface.main.playerCard.buttons.enableButton('igloo')
         }
+    }
+
+    getIglooLikes(args) {
+        this.interface.main.setIglooLikes(args.likes, args.liked)
+    }
+
+    iglooLiked(args) {
+        this.interface.main.setIglooLiked()
     }
 
 }

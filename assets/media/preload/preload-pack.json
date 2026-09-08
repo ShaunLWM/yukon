@@ -60,6 +60,12 @@
             },
             {
                 "type": "multiatlas",
+                "url": "assets/media/interface/menus/igloolikes/igloolikes.json",
+                "path": "assets/media/interface/menus/igloolikes/",
+                "key": "igloolikes"
+            },
+            {
+                "type": "multiatlas",
                 "url": "assets/media/penguin/penguin.json",
                 "path": "assets/media/penguin/",
                 "key": "penguin"

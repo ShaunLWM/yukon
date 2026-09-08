@@ -28,18 +28,23 @@ export default class Join extends Plugin {
     }
 
     joinRoom(args) {
+        this.interface.main.hideIglooLikes()
         this.interface.showLoading(this.getString(`load_${this.crumbs.rooms[args.room].key}`), true)
 
         this.world.joinRoom(args.room, args.users)
     }
 
     joinIgloo(args) {
+        this.interface.main.resetIglooLikes()
+        this.interface.main.showIglooLikes()
         this.interface.showLoading(this.getString('load_igloo'), true)
 
         this.world.joinIgloo(args)
+        this.network.send('get_igloo_likes')
     }
 
     joinGameRoom(args) {
+        this.interface.main.hideIglooLikes()
         this.interface.showLoading(this.getString(`load_${this.crumbs.games[args.game].key}`))
 
         this.world.joinGameRoom(args.game)

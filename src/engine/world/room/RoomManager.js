@@ -22,7 +22,9 @@ export default class RoomManager {
     }
 
     joinGameRoom(gameId) {
-        const { key, path, music } = this.crumbs.games[gameId]
+        let { key, path, music } = this.crumbs.games[gameId]
+
+        path ||= key + '/bootstrap.swf'
 
         if (path.endsWith('.swf')) {
             this.addFlashGame(path, music)
