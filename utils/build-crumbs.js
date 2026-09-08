@@ -26,6 +26,7 @@ const crumbFiles = [
     'mascot_postcards',
     'missions',
     'music',
+    'newspaper_pages',
     'newspapers',
     'penguin',
     'pets',

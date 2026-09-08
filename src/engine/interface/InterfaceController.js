@@ -165,6 +165,10 @@ export default class InterfaceController extends BaseScene {
         this.widgets.loadWidget(key, floatingLayer)
     }
 
+    loadNewspaper(issueIndex) {
+        this.widgets.loadNewspaper(issueIndex)
+    }
+
     removeWidget(widget) {
         this.widgets.removeWidget(widget)
     }
