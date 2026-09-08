@@ -317,6 +317,7 @@ export default class Inventory extends BaseContainer {
             pointerEvents: 'auto'
         })
         this.searchInput.visible = false
+        this.searchInput.node.style.visibility = 'hidden'
         searchContainer.add(this.searchInput)
 
         // Clear button (click to reset search)
@@ -339,6 +340,12 @@ export default class Inventory extends BaseContainer {
             this.filterText = input.value.toLowerCase()
             this.page = 1
             this.showPage()
+        })
+
+        this.searchInputVisible = false
+        scene.events.on('postupdate', this.syncSearchInputVisibility, this)
+        this.once('destroy', () => {
+            scene.events.off('postupdate', this.syncSearchInputVisibility, this)
         })
 
         /* END-USER-CTR-CODE */
@@ -424,17 +431,35 @@ export default class Inventory extends BaseContainer {
             this.parentContainer.bringToTop(this)
             this.parentContainer.inventorySort.closeMenu()
             this.x -= 495
-
         } else {
             this.parentContainer.sendToBack(this)
             this.x += 495
-            this.searchInput.node.blur()
         }
 
         this.container.visible = !this.container.visible
-        this.searchInput.visible = this.container.visible
-        this.searchInput.node.style.visibility = this.container.visible ? 'visible' : 'hidden'
         this.arrow.toggleFlipY()
+        this.syncSearchInputVisibility()
+    }
+
+    syncSearchInputVisibility() {
+        let shouldShow = true
+        let node = this
+        while (node) {
+            if (node.visible === false || node.active === false) {
+                shouldShow = false
+                break
+            }
+            node = node.parentContainer
+        }
+        if (this.searchInput.visible !== shouldShow || this.searchInputVisible !== shouldShow) {
+            this.searchInputVisible = shouldShow
+            this.searchInput.visible = shouldShow
+            this.searchInput.node.style.visibility = shouldShow ? 'visible' : 'hidden'
+            if (!shouldShow) {
+                this.searchInput.node.blur()
+                this.scene.game.input.keyboard.enabled = true
+            }
+        }
     }
 
     onSlotClick(slotId) {
@@ -479,8 +504,6 @@ export default class Inventory extends BaseContainer {
         if (this.searchInput) {
             this.searchInput.node.value = ''
             this.searchInput.node.blur()
-            this.searchInput.visible = false
-            this.searchInput.node.style.visibility = 'hidden'
         }
         if (this.container.visible) {
             this.page = 1
