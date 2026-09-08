@@ -1,3 +1,4 @@
+import BroadcastPrompt from '@scenes/interface/prompts/BroadcastPrompt'
 import CoinPrompt from '@scenes/interface/prompts/CoinPrompt'
 import ErrorPrompt from './ErrorPrompt'
 import ItemPrompt from '@scenes/interface/prompts/ItemPrompt'
@@ -27,6 +28,7 @@ export default class PromptController {
         this.loading = this.createPrompt(LoadingPrompt)
         this.window = this.createPrompt(WindowPrompt)
 
+        this.broadcast = this.createPrompt(BroadcastPrompt)
         this.mailError = this.createPrompt(MailErrorPrompt)
         this.mailSuccess = this.createPrompt(MailSuccessPrompt)
     }
@@ -88,6 +90,14 @@ export default class PromptController {
             this.network.send('update_flooring', { flooring: floor })
             this.interface.prompt.window.close()
         })
+    }
+
+    showBroadcast(message, mode) {
+        this.broadcast.show(message, mode)
+    }
+
+    showInfo(text, buttonText = 'Okay', callback = () => this.window.close()) {
+        this.window.show(text, 'single', callback)
     }
 
     showWindow(text, buttonLayout = 'single', callback = () => this.window.close(), noCallback = () => this.window.close()) {
