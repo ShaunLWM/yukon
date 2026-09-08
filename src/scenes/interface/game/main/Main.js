@@ -85,6 +85,8 @@ export default class Main extends BaseScene {
         this.stampPopupText;
         /** @type {Phaser.GameObjects.Image} */
         this.stampCategoryIcon;
+        /** @type {Phaser.GameObjects.Container} */
+        this.iglooLikes;
         /** @type {Array<Settings|Moderator|PlayerCard|PetCard|Buddy|Waddle|Phone>} */
         this.hideOnSleep;
 
@@ -437,10 +439,34 @@ export default class Main extends BaseScene {
         this.settings = settings;
         this.mail = mail;
         this.mailbook = mailbook;
+        // iglooLikes
+        const iglooLikes = this.add.container(760, 50);
+        iglooLikes.visible = false;
+
+        const like_button = this.add.image(0, 0, "igloolikes", "like-button");
+        iglooLikes.add(like_button);
+
+        const like_button_text = this.add.text(-40, -12, "Like", {});
+        like_button_text.setStyle({ "color": "#ffffff", "fontFamily": "Burbank Small", "fontSize": "24px", "fontStyle": "bold" });
+        iglooLikes.add(like_button_text);
+
+        const like_button_amount_text = this.add.text(50, -12, "0", {});
+        like_button_amount_text.setStyle({ "color": "#ffffff", "fontFamily": "Burbank Small", "fontSize": "24px", "fontStyle": "bold" });
+        iglooLikes.add(like_button_amount_text);
+
+        // like_button (components)
+        const like_buttonButton = new Button(like_button);
+        like_buttonButton.spriteName = "like-button";
+        like_buttonButton.callback = () => this.onLikeIgloo();
+
         this.stampPopup = stampPopup;
         this.stampContainer = stampContainer;
         this.stampPopupText = stampPopupText;
         this.stampCategoryIcon = stampCategoryIcon;
+        this.iglooLikes = iglooLikes;
+        this.like_button = like_button;
+        this.like_button_text = like_button_text;
+        this.like_button_amount_text = like_button_amount_text;
         this.hideOnSleep = hideOnSleep;
 
         this.events.emit("scene-awake");
@@ -762,6 +788,46 @@ export default class Main extends BaseScene {
         const issueCount = this.crumbs.newspapers.length
         if (issueCount > 0) {
             this.interface.loadNewspaper(issueCount - 1)
+        }
+    }
+
+    onLikeIgloo() {
+        if (this.like_button_text.text === 'Like') {
+            this.network.send('like_igloo')
+        }
+    }
+
+    setIglooLikes(count, liked) {
+        this.like_button_amount_text.setText(count.toString())
+        if (liked) {
+            this.setIglooLiked()
+        }
+    }
+
+    setIglooLiked() {
+        if (this.like_button) {
+            this.like_button.__Button.lockFrame = true
+            this.like_button_text.setText('Liked')
+        }
+    }
+
+    resetIglooLikes() {
+        if (this.like_button) {
+            this.like_button.__Button.lockFrame = false
+            this.like_button_text.setText('Like')
+            this.like_button_amount_text.setText('0')
+        }
+    }
+
+    showIglooLikes() {
+        if (this.iglooLikes) {
+            this.iglooLikes.visible = true
+        }
+    }
+
+    hideIglooLikes() {
+        if (this.iglooLikes) {
+            this.iglooLikes.visible = false
         }
     }
 
