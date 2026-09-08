@@ -84,6 +84,10 @@ export default class PackFileLoader extends BaseLoader {
                 case 'multiatlas':
                     exists = this.textureExists(file.key)
                     break
+
+                case 'image':
+                    exists = this.textureExists(file.key)
+                    break
             }
 
             if (!exists) {

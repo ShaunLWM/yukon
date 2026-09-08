@@ -406,6 +406,7 @@ export default class Main extends BaseScene {
         // news_button (components)
         const news_buttonButton = new Button(news_button);
         news_buttonButton.spriteName = "news-button";
+        news_buttonButton.callback = () => this.onNewspaperClick();
         news_buttonButton.activeFrame = false;
 
         // mod_button (components)
@@ -739,6 +740,13 @@ export default class Main extends BaseScene {
 
     onMapClick() {
         this.interface.loadWidget('Map')
+    }
+
+    onNewspaperClick() {
+        const issueCount = this.crumbs.newspapers.length
+        if (issueCount > 0) {
+            this.interface.loadNewspaper(issueCount - 1)
+        }
     }
 
     /* END-USER-CODE */

@@ -40,14 +40,14 @@ export default class WidgetManager extends BaseLayer {
         }
     }
 
-    async loadWidget(key, floatingLayer) {
-        if (!(this.keyExists(key)) || this.keyActive(key)) {
-            return
-        }
+    async loadWidget(key, floatingLayer, config = null) {
+        if (!config && !this.keyExists(key)) return
+        if (this.keyActive(key)) return
 
         this.lastLoadingKey = key
 
-        const { path, preload } = this.crumbs.widgets[key]
+        const widgetDef = config || this.crumbs.widgets[key]
+        const { path, preload } = widgetDef
 
         this.showLoading(this.getString(key))
 
@@ -57,7 +57,7 @@ export default class WidgetManager extends BaseLayer {
             return
         }
 
-        const callback = () => this.onWidgetLoaded(key, widgetClass.default, floatingLayer)
+        const callback = () => this.onWidgetLoaded(key, widgetClass.default, floatingLayer, config)
 
         if (!preload) {
             callback()
@@ -65,6 +65,22 @@ export default class WidgetManager extends BaseLayer {
         }
 
         this.packLoader.loadPack(preload.key, preload.url, () => callback())
+    }
+
+    async loadNewspaper(issueIndex) {
+        if (issueIndex < 0 || issueIndex >= this.crumbs.newspapers.length) return
+
+        const issueNum = issueIndex + 1
+        const config = {
+            path: 'interface/game/newspaper/Newspaper',
+            preload: {
+                key: `issue${issueNum}-pack`,
+                url: `assets/media/interface/game/newspaper/issue${issueNum}/issue${issueNum}-pack.json`
+            },
+            issueNum: issueNum
+        }
+
+        return await this.loadWidget('Newspaper', null, config)
     }
 
     async loadWidgetClass(path) {
@@ -85,7 +101,7 @@ export default class WidgetManager extends BaseLayer {
         }
     }
 
-    onWidgetLoaded(key, widgetClass, floatingLayer) {
+    onWidgetLoaded(key, widgetClass, floatingLayer, config = null) {
         const createWidget = this.isLoadingVisible && key === this.lastLoadingKey
 
         // Floating widgets skip createWidget check
@@ -97,10 +113,10 @@ export default class WidgetManager extends BaseLayer {
             this.closeLoading()
         }
 
-        this.createWidget(key, widgetClass, floatingLayer)
+        this.createWidget(key, widgetClass, floatingLayer, config)
     }
 
-    createWidget(key, widgetClass, floatingLayer) {
+    createWidget(key, widgetClass, floatingLayer, config = null) {
         const scene = floatingLayer
             ? floatingLayer.scene
             : this.scene
@@ -113,6 +129,10 @@ export default class WidgetManager extends BaseLayer {
             widget.floatingLayer = floatingLayer
         } else {
             this.add(widget)
+        }
+
+        if (config && widget.show) {
+            widget.show(config)
         }
 
         this.events.emit(`create_widget_${key.toLowerCase()}`)
