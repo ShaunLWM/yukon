@@ -11,6 +11,8 @@ import Inventory from "./inventory/Inventory";
 import Animation from "../../../components/Animation";
 /* START-USER-IMPORTS */
 import TransformPaperLoader from '@engine/loaders/TransformPaperLoader'
+import Outfitsaver from '../outfitsaver/Outfitsaver'
+import SimpleButton from '../../../components/SimpleButton'
 /* END-USER-IMPORTS */
 
 export default class PlayerCard extends BaseWidget {
@@ -43,6 +45,14 @@ export default class PlayerCard extends BaseWidget {
         /** @type {Phaser.GameObjects.Container} */
         this.badge;
 
+
+        // outfitsaver wrapper — must be first child so it renders behind card
+        const outfitWrapper = scene.add.container(-245, -123)
+        this.add(outfitWrapper)
+
+        const outfitsaver = new Outfitsaver(scene, 865, 105)
+        outfitsaver.visible = false
+        outfitWrapper.add(outfitsaver)
 
         // card_photo
         const card_photo = scene.add.image(0, 0, "main", "card-photo");
@@ -133,6 +143,22 @@ export default class PlayerCard extends BaseWidget {
         inventory.visible = false;
         this.add(inventory);
 
+        // outfit arrow toggle container
+        const outfitarrowContainer = scene.add.container(-255, -164)
+        outfitarrowContainer.visible = false
+        this.add(outfitarrowContainer)
+
+        const outfitarrow = scene.add.image(497, 261, 'main', 'tab')
+        outfitarrow.angle = -90
+        outfitarrowContainer.add(outfitarrow)
+
+        const outfitarrowIcon = scene.add.image(490, 258, 'main', 'tab-arrow')
+        outfitarrowIcon.angle = -90
+        outfitarrowContainer.add(outfitarrowIcon)
+
+        const outfitarrowBtn = new SimpleButton(outfitarrow)
+        outfitarrowBtn.callback = () => this.toggleOutfitSaver()
+
         // badge
         const badge = scene.add.container(-153, -240);
         this.add(badge);
@@ -187,6 +213,8 @@ export default class PlayerCard extends BaseWidget {
         this.username = username;
         this.inventorySort = inventorySort;
         this.inventory = inventory;
+        this.outfitsaver = outfitsaver;
+        this.outfitarrowContainer = outfitarrowContainer;
         this.stripes = stripes;
         this.badge = badge;
 
@@ -273,7 +301,9 @@ export default class PlayerCard extends BaseWidget {
         this.setUsername(username)
         this.setCoins(coins)
 
-        this.inventory.visible = isClient
+        this.outfitsaver.visible = this.outfitsaver.visible && isClient
+        this.inventory.visible = isClient && !this.outfitsaver.visible
+        this.outfitarrowContainer.visible = isClient && !this.outfitsaver.visible
         this.stats.visible = isClient
         this.buttons.visible = !isClient
 
@@ -302,6 +332,17 @@ export default class PlayerCard extends BaseWidget {
 
     updateInventory() {
         this.inventory.showPage()
+    }
+
+    toggleOutfitSaver() {
+        if (this.outfitsaver.visible) {
+            this.outfitsaver.visible = false
+            this.outfitarrowContainer.visible = true
+            return
+        }
+        this.inventory.visible = false
+        this.outfitsaver.visible = true
+        this.outfitarrowContainer.visible = false
     }
 
     loadDoll(items, isClient) {
@@ -407,6 +448,10 @@ export default class PlayerCard extends BaseWidget {
         this.updateBadge()
 
         this.inventory.reset()
+
+        this.outfitsaver.visible = false
+        this.outfitsaver.clearSelection()
+        this.outfitarrowContainer.visible = false
 
         this.stopSpinner()
     }
