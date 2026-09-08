@@ -38,6 +38,8 @@ export default class ClientController {
 
         this.sortPostcards()
 
+        this.buddyRequests = attributes.buddyRequests || []
+
         // Reference to ClientPenguin object
         this.penguin
 
