@@ -30,8 +30,8 @@
 ### Quick Wins
 - [x] Outfit Saver — save/load up to 12 outfit presets (OutfitLoader plugin + UI widget)
 - [x] Unlock/Redemption Codes — redeem codes for items/coins with expiry (UnlockCodes plugin)
-- [ ] Info Plugin — server info messages + streamer mode (~20 lines)
-- [ ] Popup Interactions — track which dialogs a user has seen (first-time tutorials)
+- [x] Info Plugin — server info messages + streamer mode (~20 lines)
+- [x] Popup Interactions — track which dialogs a user has seen (first-time tutorials)
 - [ ] Igloo Likes — rate other players' igloos (social counter + DB table)
 
 ### Medium Effort
