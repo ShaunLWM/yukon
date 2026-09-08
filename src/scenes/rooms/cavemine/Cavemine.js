@@ -175,6 +175,29 @@ export default class Cavemine extends RoomScene {
         this.coffee.play('coffee');
     }
 
+    showCoinRewardToPlayer(penguin, coins) {
+        if (this.tweenCoin) this.tweenCoin.stop()
+        let y = penguin.y - 50
+        this.coin_container.setPosition(penguin.x, y)
+        this.coin_container.setDepth(1002)
+        this.coin_container.setAlpha(1)
+        this.coin_container.visible = true
+        this.coin_text.text = '' + coins
+        this.tweenCoin = this.tweens.add({
+            targets: [this.coin_container],
+            y: y - 70,
+            alpha: 0,
+            ease: 'Linear',
+            duration: 1500,
+            onComplete: () => {
+                this.coin_container.visible = false
+                this.coin_container.setAlpha(1)
+            }
+        })
+        this.coin_sprite.play('coin')
+        this.interface.refreshPlayerCard()
+    }
+
     /* START-USER-CODE */
     /* END-USER-CODE */
 }

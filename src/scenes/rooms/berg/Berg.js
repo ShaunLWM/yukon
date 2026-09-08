@@ -73,10 +73,27 @@ export default class Berg extends RoomScene {
     onAquaClick() {
     }
 
-    showCoinRewardToPlayer(arg1, arg2) {
-        this.coin.visible=true;
-        this.tweens.add({'targets':[this.coin],'y':{'from':this.coin.y,'to':this.coin.y-70},'ease':'Linear','duration':1000,'onComplete':()=>this.coin.visible=false});
-        this.interface.refreshPlayerCard();
+    showCoinRewardToPlayer(penguin, coins) {
+        if (this.tweenCoin) this.tweenCoin.stop()
+        let y = penguin.y - 50
+        this.coin.setPosition(penguin.x, y)
+        this.coin.setDepth(1002)
+        this.coin.setAlpha(1)
+        this.coin.visible = true
+        this.coin_text.text = '' + coins
+        this.tweenCoin = this.tweens.add({
+            targets: [this.coin],
+            y: y - 70,
+            alpha: 0,
+            ease: 'Linear',
+            duration: 1500,
+            onComplete: () => {
+                this.coin.visible = false
+                this.coin.setAlpha(1)
+            }
+        })
+        this.coin_sprite.play('coin')
+        this.interface.refreshPlayerCard()
     }
 
     /* START-USER-CODE */

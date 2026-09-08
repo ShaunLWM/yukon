@@ -488,6 +488,10 @@ export default class Inventory extends BaseContainer {
                     }
                 } else {
                     this.network.send('update_player', { item: item.id })
+                    let roomId = this.world.room?.id
+                    if (roomId === 813 || roomId === 805) {
+                        this.network.send('mine')
+                    }
                 }
                 break
         }
