@@ -36,6 +36,9 @@ export default class ClientController {
         // Favorite items
         this.favoriteItems = new Set((attributes.favoriteItems || []).map(i => parseInt(i)))
 
+        // Interactions (popup tracking)
+        this.interactions = attributes.interactions || []
+
         this.sortPostcards()
 
         this.buddyRequests = attributes.buddyRequests || []
@@ -466,6 +469,19 @@ export default class ClientController {
     stampEarned(id, silent = false) {
         if (this.hasStamp(id)) return
         this.network.send('collect_stamp', { stamp: id })
+    }
+
+    setInteractionAsSeen(interaction) {
+        if (this.interactions) {
+            this.interactions.push(interaction)
+            this.network.send('set_interaction', { interaction: interaction })
+        }
+    }
+
+    hasViewedInteraction(interaction) {
+        if (this.interactions) {
+            return this.interactions.includes(interaction)
+        }
     }
 
 }
