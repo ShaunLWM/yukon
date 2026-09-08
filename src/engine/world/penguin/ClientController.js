@@ -206,6 +206,13 @@ export default class ClientController {
 
         this.penguin.playFrame(frame, set)
         this.network.send('send_frame', { set: set, frame: frame })
+
+        if (frame === 26 && !this.penguin.isTransformed) {
+            let roomId = this.world.room.id
+            if (roomId === 813 || roomId === 805) {
+                this.network.send('mine')
+            }
+        }
     }
 
     sendSit(pointer) {
