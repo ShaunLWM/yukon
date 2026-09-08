@@ -477,8 +477,19 @@ export default class Main extends BaseScene {
         this.stampQueue = []
         this.stampShowing = false
 
-        // Buddy requests
+        // Buddy request notification count
+        this.requestCountText = this.add.text(306, 54, '', {})
+        this.requestCountText.setOrigin(0.5, 0.5)
+        this.requestCountText.setStyle({
+            align: 'center',
+            fixedWidth: 40,
+            fontFamily: 'Burbank Small',
+            fontSize: '24px',
+            fontStyle: 'bold'
+        })
+        this.requestCountText.depth = this.request_button.depth + 1
 
+        // Legacy queue for accept confirmations
         this.requests = []
 
         // Secret agent
@@ -600,50 +611,56 @@ export default class Main extends BaseScene {
     }
 
     onRequestClick() {
+        // Check for accept confirmations first
         let request = this.requests.shift()
-        if (this.requests.length < 1) this.request_button.visible = false
-        if (!request) return
-
-        if (request.requester) {
-            // Show buddy accept prompt
+        if (request?.requester) {
             this.showAccept(request)
-        } else {
-            // Show buddy request prompt
-            this.showRequest(request)
+            return
         }
+
+        // Open buddy list to Friend Requests tab
+        this.buddy.switchList('buddyRequests', 'Friend Requests')
+        this.buddy.show()
     }
 
     showAccept(request) {
         let text = `${request.username} is now your buddy!`
-
         this.interface.prompt.showWindow(text, 'single')
     }
 
-    showRequest(request) {
-        let text = `${request.username} has asked to be your buddy.\nDo you accept?`
+    addRequest(request) {
+        if (request?.requester) {
+            this.requests.push(request)
+        }
 
-        this.interface.prompt.showWindow(text, 'dual', () => {
-            this.network.send('buddy_accept', { id: request.id })
-            this.interface.prompt.window.visible = false
+        let unseen = this.world.client.buddyRequests.filter(r => r.seen != 1)
+        if (!this.buddy.visible && unseen.length > 0) {
+            let text = `You have ${unseen.length} new friend request${unseen.length > 1 ? 's' : ''}`
+            this.showPopup(text)
+        }
 
-        }, () => {
-            this.network.send('buddy_reject', { id: request.id })
-            this.interface.prompt.window.visible = false
-        })
+        this.checkBuddies()
     }
 
-    addRequest(request) {
-        // Prevent duplicate requests
-        if (this.requests.some(item => item.id == request.id && !item.requester)) return
+    checkBuddies() {
+        let unseen = this.world.client.buddyRequests.filter(r => r.seen != 1)
+        let total = this.world.client.buddyRequests.length
 
-        this.requests.push(request)
-
-        this.request_button.visible = true
-        this.bounce(this.request_button)
+        if (total < 1) {
+            this.request_button.visible = false
+            this.requestCountText.visible = false
+        } else {
+            this.request_button.visible = true
+            this.requestCountText.visible = true
+            this.requestCountText.text = total
+        }
     }
 
     showOnlinePopup(username) {
-        let text = `${username} is online`
+        this.showPopup(`${username} is online`)
+    }
+
+    showPopup(text) {
         let texture = (text.length > 18) ? 'buddy-online-large' : 'buddy-online'
 
         this.popupText.text = text
@@ -652,7 +669,6 @@ export default class Main extends BaseScene {
         this.onlinePopup.visible = true
         this.bounce(this.onlinePopup, 20)
 
-        // Hide popup after 10 seconds
         this.time.addEvent({
             delay: 10000,
             callback: () => this.onlinePopup.visible = false

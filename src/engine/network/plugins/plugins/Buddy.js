@@ -8,6 +8,7 @@ export default class Buddy extends Plugin {
         this.events = {
             'buddy_request': this.buddyRequest,
             'buddy_accept': this.buddyAccept,
+            'buddy_reject': this.buddyReject,
             'buddy_remove': this.buddyRemove,
             'buddy_find': this.buddyFind,
             'buddy_online': this.buddyOnline,
@@ -16,10 +17,14 @@ export default class Buddy extends Plugin {
     }
 
     buddyRequest(args) {
-        this.interface.main.addRequest(args)
+        args.seen = 0
+        this.world.client.buddyRequests.push(args)
+        this.interface.buddyRequest()
     }
 
     buddyAccept(args) {
+        this.world.client.buddyRequests = this.world.client.buddyRequests.filter(r => r.id != args.id)
+
         if (args.requester) {
             this.interface.main.addRequest(args)
         }
@@ -31,13 +36,29 @@ export default class Buddy extends Plugin {
 
         if (args.online) {
             this.interface.main.showOnlinePopup(buddy.username)
+
+            let roomPenguin = this.world.room.penguins[buddy.id]
+            if (roomPenguin) {
+                this.world.client.penguin.penguinLoader.addBuddyRing(roomPenguin)
+            }
         }
     }
 
-    buddyRemove(args) {
-        // Filter buddy out of list
-        this.world.client.buddies = this.world.client.buddies.filter(obj => obj.id != args.id)
+    buddyReject(args) {
+        this.world.client.buddyRequests = this.world.client.buddyRequests.filter(r => r.id != args.id)
         this.interface.updateBuddies()
+    }
+
+    buddyRemove(args) {
+        this.world.client.buddies = this.world.client.buddies.filter(obj => obj.id != args.id)
+        this.world.client.buddyRequests = this.world.client.buddyRequests.filter(r => r.id != args.id)
+        this.interface.updateBuddies()
+
+        let roomPenguin = this.world.room.penguins[args.id]
+        if (roomPenguin) {
+            this.world.client.penguin.penguinLoader.addRing(roomPenguin, true)
+            this.world.client.penguin.penguinLoader.removeBuddyRing(roomPenguin)
+        }
     }
 
     buddyFind(args) {

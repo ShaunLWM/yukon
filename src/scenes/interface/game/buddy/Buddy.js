@@ -94,28 +94,36 @@ export default class Buddy extends BaseWidget {
         this.add(buddy_item);
 
         // buddy_button
-        const buddy_button = scene.add.image(-60, 255, "main", "blue-button");
+        const buddy_button = scene.add.image(-90, 255, "main", "blue-button");
         this.add(buddy_button);
 
         // profile_button
-        const profile_button = scene.add.image(0, 255, "main", "blue-button");
+        const profile_button = scene.add.image(-30, 255, "main", "blue-button");
         this.add(profile_button);
 
         // igloo_button
-        const igloo_button = scene.add.image(60, 255, "main", "blue-button");
+        const igloo_button = scene.add.image(30, 255, "main", "blue-button");
         this.add(igloo_button);
 
+        // requests_button
+        const requests_button = scene.add.image(90, 255, "main", "blue-button");
+        this.add(requests_button);
+
         // buddies_icon_disabled
-        const buddies_icon_disabled = scene.add.image(-60, 253, "main", "buddies-icon");
+        const buddies_icon_disabled = scene.add.image(-90, 253, "main", "buddies-icon");
         this.add(buddies_icon_disabled);
 
         // help_icon_disabled
-        const help_icon_disabled = scene.add.image(0, 253, "main", "online-icon");
+        const help_icon_disabled = scene.add.image(-30, 253, "main", "online-icon");
         this.add(help_icon_disabled);
 
         // igloo_icon_disabled
-        const igloo_icon_disabled = scene.add.image(60, 253, "main", "ignore-icon");
+        const igloo_icon_disabled = scene.add.image(30, 253, "main", "ignore-icon");
         this.add(igloo_icon_disabled);
+
+        // requests_icon
+        const requests_icon = scene.add.image(90, 253, "main", "mail-icon");
+        this.add(requests_icon);
 
         // total
         const total = scene.add.text(-132, 273, "", {});
@@ -165,6 +173,11 @@ export default class Buddy extends BaseWidget {
         igloo_buttonButton.callback = () => this.switchList('ignores', 'Ignore List');
         const igloo_buttonShowHint = new ShowHint(igloo_button);
         igloo_buttonShowHint.text = "ignore_hint";
+
+        // requests_button (components)
+        const requests_buttonButton = new Button(requests_button);
+        requests_buttonButton.spriteName = "blue-button";
+        requests_buttonButton.callback = () => this.switchList('buddyRequests', 'Friend Requests');
 
         this.text = text;
         this.total = total;
@@ -233,6 +246,12 @@ export default class Buddy extends BaseWidget {
         })
     }
 
+    get buddyRequests() {
+        return this.world.client.buddyRequests.sort((a, b) => {
+            return a.username.toLowerCase().localeCompare(b.username.toLowerCase())
+        })
+    }
+
     show() {
         super.show()
 
@@ -261,6 +280,7 @@ export default class Buddy extends BaseWidget {
         } else {
             this.total.visible = false
         }
+
 
     }
 

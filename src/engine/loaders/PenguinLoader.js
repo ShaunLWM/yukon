@@ -18,6 +18,11 @@ export default class PenguinLoader {
 
     loadPenguin(penguin) {
         this.addPenguin(penguin)
+
+        if (this.isBuddy(penguin)) {
+            this.addBuddyRing(penguin)
+        }
+
         this.addShadow(penguin)
         this.addInput(penguin)
 
@@ -26,6 +31,10 @@ export default class PenguinLoader {
         }
 
         penguin.playFrame(penguin.frame)
+    }
+
+    isBuddy(penguin) {
+        return !!this.world.client?.buddies.find(b => b.id == penguin.id)
     }
 
     addPenguin(penguin) {
@@ -39,10 +48,29 @@ export default class PenguinLoader {
         penguin.addAt(shadow, 0)
     }
 
-    addRing(penguin) {
-        let ring = penguin.room.add.image(0, 0, 'penguin_base', 'ring')
+    addRing(penguin, destroy = false) {
+        if (penguin.ring) {
+            penguin.remove(penguin.ring, 0)
+        }
+        if (!destroy) {
+            penguin.ring = penguin.room.add.image(0, 0, 'penguin_base', 'ring')
+            penguin.addAt(penguin.ring, 0)
+        }
+    }
 
-        penguin.addAt(ring, 0)
+    addBuddyRing(penguin) {
+        if (penguin.ring) {
+            penguin.remove(penguin.ring, 0)
+        }
+        penguin.ring = penguin.room.add.image(0, 0, 'penguin_base', 'buddy_ring')
+        penguin.addAt(penguin.ring, 0)
+    }
+
+    removeBuddyRing(penguin) {
+        if (penguin.ring) {
+            penguin.ring.destroy()
+            penguin.ring = null
+        }
     }
 
     addName(penguin) {

@@ -18,7 +18,9 @@
 - [x] SWF minigames hooked up via Ruffle (data-driven from games.json crumbs)
 - [x] Puffles system (igloo pets, adoption, pet card, walking puffle in rooms, digging for coins)
 - [ ] Party/event system (room decorations, event-specific items, party rooms)
-- [ ] UI enhancements (newspaper, penguin transformations, mascot encounters)
+- [x] UI enhancements (newspaper viewer, archives filing cabinet, penguin transformations, inventory search)
 - [ ] Igloo editing improvements
-- [ ] Buddy list online status indicators
-- [ ] Postcard sending from rooms
+- [x] Buddy list online status indicators + buddy rings on penguins
+- [x] Postcard sending from rooms (player card mail button)
+- [ ] Cross-server buddy features (buddy_find_server, buddy_online_server, buddy_offline_server)
+- [ ] Buddy favorites + buddy search
