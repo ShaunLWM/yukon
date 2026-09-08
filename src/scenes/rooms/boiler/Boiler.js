@@ -163,7 +163,7 @@ export default class Boiler extends RoomScene {
     }
 
     onArchives() {
-        this.interface.loadWidget('Archives');
+        this.interface.loadWidget('Archives')
     }
 
     flush() {
