@@ -6,7 +6,8 @@ export default class Error extends Plugin {
     constructor(network) {
         super(network)
         this.events = {
-            'error': this.error
+            'error': this.error,
+            'unlock_error': this.unlockError
         }
 
         // Todo: use error ids instead
@@ -19,6 +20,13 @@ export default class Error extends Plugin {
         if (args.error in this.customHandlers) {
             return this.customHandlers[args.error]()
         }
+
+        this.interface.prompt.showError(args.error)
+    }
+
+    unlockError(args) {
+        let widget = this.interface.widgets.getWidget('UnlockCodes')
+        if (widget) widget.showInput()
 
         this.interface.prompt.showError(args.error)
     }

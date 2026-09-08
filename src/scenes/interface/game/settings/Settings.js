@@ -22,20 +22,20 @@ export default class Settings extends BaseContainer {
         this.add(block);
 
         // rectangle
-        const rectangle = scene.add.rectangle(0, -22, 708, 600);
+        const rectangle = scene.add.rectangle(0, -5, 708, 660);
         rectangle.isFilled = true;
         rectangle.fillColor = 164045;
         this.add(rectangle);
 
         // buddies
-        const buddies = scene.add.text(69, 173, "", {});
+        const buddies = scene.add.text(69, 225, "", {});
         buddies.setOrigin(0.5, 0.5);
         buddies.text = "88/100 Buddies";
         buddies.setStyle({ "color": "#000000ff", "fixedWidth":300,"fontFamily": "Arial Narrow", "fontSize": "32px" });
         this.add(buddies);
 
         // icon
-        const icon = scene.add.image(-132, 171, "main", "buddy/icon-online");
+        const icon = scene.add.image(-132, 223, "main", "buddy/icon-online");
         this.add(icon);
 
         // button
@@ -101,6 +101,22 @@ export default class Settings extends BaseContainer {
         const buttonButton = new Button(button);
         buttonButton.spriteName = "help-button";
 
+        // unlock codes button
+        const unlockBtn = scene.add.image(0, 131, "main", "help-button");
+        this.add(unlockBtn);
+
+        const unlockText = scene.add.text(21, 130, "", {});
+        unlockText.setOrigin(0.5, 0.5);
+        unlockText.text = "Unlock Codes";
+        unlockText.setStyle({ "align": "center", "color": "#ffffffff", "fixedWidth":562,"fontFamily": "Arial Narrow", "fontSize": "40px", "fontStyle": "bold" });
+        this.add(unlockText);
+
+        // unlock button (components)
+        const unlockBtnButton = new Button(unlockBtn);
+        unlockBtnButton.spriteName = "help-button";
+        unlockBtnButton.callback = () => this.openUnlockCodes();
+        unlockBtnButton.activeFrame = true;
+
         // checkbox (components)
         const checkboxSimpleButton = new SimpleButton(checkbox);
         checkboxSimpleButton.callback = () => this.onMuteClick();
@@ -129,6 +145,11 @@ export default class Settings extends BaseContainer {
 
 
     /* START-USER-CODE */
+
+    openUnlockCodes() {
+        this.visible = false
+        this.interface.loadWidget('UnlockCodes')
+    }
 
     onMuteClick() {
         this.toggle(this.checkbox)

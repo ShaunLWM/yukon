@@ -28,7 +28,7 @@
 ## CPJ Features to Port (from GitHub audit)
 
 ### Quick Wins
-- [ ] Outfit Saver — save/load up to 12 outfit presets (OutfitLoader plugin + UI widget)
+- [x] Outfit Saver — save/load up to 12 outfit presets (OutfitLoader plugin + UI widget)
 - [ ] Unlock/Redemption Codes — redeem codes for items/coins with expiry (UnlockCodes plugin)
 - [ ] Info Plugin — server info messages + streamer mode (~20 lines)
 - [ ] Popup Interactions — track which dialogs a user has seen (first-time tutorials)
