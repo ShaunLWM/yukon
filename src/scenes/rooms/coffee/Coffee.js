@@ -1,4 +1,5 @@
 import RoomScene from '../RoomScene'
+import Work from '@engine/world/room/Work'
 
 import { Animation, Button, MoveTo, ShowHint, SimpleButton } from '@components/components'
 
@@ -173,6 +174,21 @@ export default class Coffee extends RoomScene {
         this.block=[this.mainBlock];
         this.cooldown_timer.setDepth(1005);
         this.arrowTween=this.tweens.add({'targets':this.counter_arrow,'y':1030,'duration':400,'yoyo':true,'repeat':-1,'ease':'Sine.easeInOut'});
+
+        this.work = new Work(this, {
+            penguinItem: this.penguin_coffee,
+            shopItem: this.shop_coffee,
+            pickupItem: this.shop_coffee,
+            arrow: this.coffee_arrow,
+            coin: this.coin,
+            coinText: this.coin_text,
+            animKeys: this.coffeeAnimKeys,
+            counterPos: { x: 805, y: 635 },
+            itemOffsetY: -80,
+            doneSound: 'job_coffee_done'
+        });
+
+        this.network.send('start_work');
     }
 
     stop() {

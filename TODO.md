@@ -42,8 +42,8 @@ Some games have bootstraps but may need sub-SWFs sniffed during gameplay:
 - [ ] Igloo editing improvements
 - [ ] Cross-server buddy features (buddy_find_server, buddy_online_server, buddy_offline_server)
 - [ ] Buddy favorites + buddy search
-- [ ] Mining System — idle coin farming in mine/cave rooms with AFK detection
-- [ ] Penguins Work — job system (pizza delivery, coffee serving) with stamp progression
+- [x] Mining System — idle coin farming in Cave Mine and Iceberg rooms
+- [x] Penguins Work — job system (pizza delivery, coffee serving)
 - [ ] Enhanced Moderation — mutes, reports, username verification, invisibility, warn, broadcast
 - [ ] Mod Panel — admin panel: user search, edit player, add/remove items, teleport, ban history, alt detection
 - [ ] Scavenger Hunts — item collection hunts driven by crumbs config
