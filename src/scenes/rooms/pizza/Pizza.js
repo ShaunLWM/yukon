@@ -1,4 +1,5 @@
 import RoomScene from '../RoomScene'
+import Work from '@engine/world/room/Work'
 
 import { Animation, Button, MoveTo, ShowHint, SimpleButton } from '@components/components'
 
@@ -182,6 +183,20 @@ export default class Pizza extends RoomScene {
         super.create();
         this.cooldown_timer.setDepth(1005);
         this.arrowTween=this.tweens.add({'targets':this.counter_arrow,'y':1230,'duration':400,'yoyo':true,'repeat':-1,'ease':'Sine.easeInOut'});
+
+        this.work = new Work(this, {
+            penguinItem: this.penguin_pizza,
+            shopItem: this.parlor_pizza,
+            pickupItem: this.parlor_pizza,
+            arrow: this.parlor_arrow,
+            coin: this.coin,
+            coinText: this.coin_text,
+            animKeys: this.pizzaAnimKeys,
+            counterPos: { x: 592, y: 356 },
+            doneSound: 'job_pizza_done'
+        });
+
+        this.network.send('start_work');
     }
 
     stop() {
