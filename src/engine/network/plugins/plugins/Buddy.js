@@ -12,7 +12,9 @@ export default class Buddy extends Plugin {
             'buddy_remove': this.buddyRemove,
             'buddy_find': this.buddyFind,
             'buddy_online': this.buddyOnline,
-            'buddy_offline': this.buddyOffline
+            'buddy_offline': this.buddyOffline,
+            'buddy_favorite': this.buddyFavorite,
+            'buddy_search': this.buddySearch
         }
     }
 
@@ -88,6 +90,21 @@ export default class Buddy extends Plugin {
         if (buddy) {
             buddy.online = false
             this.interface.updateBuddies()
+        }
+    }
+
+    buddyFavorite(args) {
+        let buddy = this.world.client.buddies.find(obj => obj.id == args.id)
+        if (buddy) {
+            buddy.favorite = args.favorite
+            this.interface.updateBuddies()
+        }
+    }
+
+    buddySearch(args) {
+        let buddyWidget = this.interface.main.buddy
+        if (buddyWidget) {
+            buddyWidget.showSearchResult(args.penguin)
         }
     }
 

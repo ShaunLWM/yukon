@@ -30,6 +30,16 @@ export default class BuddyItem extends BaseContainer {
         username.setStyle({ "fixedWidth":270,"fontFamily": "Arial", "fontSize": "24px" });
         this.add(username);
 
+        // favorite star
+        const favoriteStar = scene.add.image(155, 0, "main", "badge/star");
+        favoriteStar.setScale(0.6);
+        favoriteStar.visible = false;
+        favoriteStar.setInteractive({ cursor: 'pointer' });
+        favoriteStar.on('pointerdown', () => this.onFavoriteClick());
+        this.add(favoriteStar);
+
+        this.favoriteStar = favoriteStar;
+
         // requestBtns container (matches CPJ: x=102, y=0)
         const requestBtns = scene.add.container(102, 0);
         requestBtns.visible = false;
@@ -71,6 +81,7 @@ export default class BuddyItem extends BaseContainer {
         /* START-USER-CTR-CODE */
 
         this.id
+        this.favorite = false
 
         /* END-USER-CTR-CODE */
     }
@@ -85,14 +96,18 @@ export default class BuddyItem extends BaseContainer {
 
         this.id = buddy.id
         this.username.text = buddy.username
+        this.favorite = !!buddy.favorite
 
         let relationship = this.world.getRelationship(buddy.id)
         let texture = `buddy/icon-${relationship}`
 
         this.icon.setTexture('main', texture)
 
+        let isBuddies = this.parentContainer.listType == 'buddies'
         let isRequests = this.parentContainer.listType == 'buddyRequests'
         this.requestBtns.visible = isRequests
+        this.favoriteStar.visible = isBuddies
+        this.favoriteStar.setAlpha(this.favorite ? 1 : 0.3)
 
         if (isRequests) {
             this.buddy_item.disableInteractive()
@@ -108,10 +123,17 @@ export default class BuddyItem extends BaseContainer {
     clearItem() {
         this.id = null
         this.username.text = ''
+        this.favorite = false
 
         this.icon.setTexture('main', 'buddy/icon-offline')
         this.requestBtns.visible = false
+        this.favoriteStar.visible = false
         this.buddy_item.setInteractive({ cursor: 'pointer' })
+    }
+
+    onFavoriteClick() {
+        if (!this.id) return
+        this.network.send('buddy_favorite', { id: this.id })
     }
 
     onClick() {
