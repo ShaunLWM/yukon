@@ -131,6 +131,70 @@ export default class Buddy extends BaseWidget {
         total.setStyle({ "color": "#003366", "fixedWidth":100,"fixedHeight":64,"fontFamily": "Arial Narrow", "fontSize": "24px" });
         this.add(total);
 
+        // search container
+        const searchContainer = scene.add.container(0, -208);
+        searchContainer.visible = false;
+        this.add(searchContainer);
+
+        const searchBg = scene.add.rectangle(0, 0, 320, 36, 0x003366, 0.3);
+        searchBg.setStrokeStyle(1, 0x003366);
+        searchContainer.add(searchBg);
+
+        const searchText = scene.add.text(0, 0, "Search by username...", {});
+        searchText.setOrigin(0.5, 0.5);
+        searchText.setStyle({ "color": "#999999", "fontFamily": "Arial", "fontSize": "18px" });
+        searchContainer.add(searchText);
+
+        this.searchContainer = searchContainer;
+        this.searchText = searchText;
+
+        // search result container
+        const searchResult = scene.add.container(0, 0);
+        searchResult.visible = false;
+        this.add(searchResult);
+
+        const searchResultBg = scene.add.rectangle(0, 0, 360, 460, 0x000000, 0.7);
+        searchResult.add(searchResultBg);
+
+        const searchResultName = scene.add.text(0, -80, "", {});
+        searchResultName.setOrigin(0.5, 0.5);
+        searchResultName.setStyle({ "align": "center", "fontFamily": "Arial", "fontSize": "28px", "fontStyle": "bold" });
+        searchResult.add(searchResultName);
+
+        const searchResultStatus = scene.add.text(0, -40, "", {});
+        searchResultStatus.setOrigin(0.5, 0.5);
+        searchResultStatus.setStyle({ "align": "center", "color": "#aaaaaa", "fontFamily": "Arial", "fontSize": "20px" });
+        searchResult.add(searchResultStatus);
+
+        const searchAddBtn = scene.add.image(0, 20, "main", "blue-button");
+        searchResult.add(searchAddBtn);
+        const searchAddText = scene.add.text(0, 18, "Add Friend", {});
+        searchAddText.setOrigin(0.5, 0.5);
+        searchAddText.setStyle({ "fontFamily": "Arial", "fontSize": "16px" });
+        searchResult.add(searchAddText);
+
+        const searchCloseBtn = scene.add.image(0, 70, "main", "grey-button");
+        searchResult.add(searchCloseBtn);
+        const searchCloseText = scene.add.text(0, 68, "Close", {});
+        searchCloseText.setOrigin(0.5, 0.5);
+        searchCloseText.setStyle({ "fontFamily": "Arial", "fontSize": "16px" });
+        searchResult.add(searchCloseText);
+
+        const searchAddBtnButton = new Button(searchAddBtn);
+        searchAddBtnButton.spriteName = "blue-button";
+        searchAddBtnButton.callback = () => this.onSearchAdd();
+
+        const searchCloseBtnButton = new Button(searchCloseBtn);
+        searchCloseBtnButton.spriteName = "grey-button";
+        searchCloseBtnButton.callback = () => { searchResult.visible = false; };
+
+        this.searchResult = searchResult;
+        this.searchResultName = searchResultName;
+        this.searchResultStatus = searchResultStatus;
+        this.searchAddBtn = searchAddBtn;
+        this.searchAddText = searchAddText;
+        this.searchResultId = null;
+
         // lists
         const items = [buddy_item, buddy_item_1, buddy_item_2, buddy_item_3, buddy_item_4, buddy_item_5, buddy_item_6, buddy_item_7];
 
@@ -189,6 +253,12 @@ export default class Buddy extends BaseWidget {
         this.page = 1
         this.pageSize = 8
 
+        this.searchContainer.setInteractive(
+            new Phaser.Geom.Rectangle(-160, -18, 320, 36),
+            Phaser.Geom.Rectangle.Contains
+        )
+        this.searchContainer.on('pointerdown', () => this.onSearchClick())
+
         this.showPage()
 
         /* END-USER-CTR-CODE */
@@ -205,15 +275,18 @@ export default class Buddy extends BaseWidget {
         return Math.ceil(this.penguins.length / this.pageSize)
     }
 
-    /**
-     * Gets the client buddies array, sorted first by online status, and then alphabetically.
-     *
-     * @readonly
-     */
     get buddies() {
         return this.world.client.buddies.sort((a, b) => {
-            return -(a.online - b.online) // Reverse: true before false
-            || a.username.toLowerCase().localeCompare(b.username.toLowerCase())
+            a.favorite ||= false
+            b.favorite ||= false
+            a.online ||= false
+            b.online ||= false
+
+            let score = p => p.online ? (p.favorite ? 4 : 3) : (p.favorite ? 1 : 0)
+            let sa = score(a)
+            let sb = score(b)
+            if (sa !== sb) return sb - sa
+            return a.username.toLowerCase().localeCompare(b.username.toLowerCase())
         })
     }
 
@@ -255,6 +328,8 @@ export default class Buddy extends BaseWidget {
     show() {
         super.show()
 
+        this.searchContainer.visible = (this.listType === 'buddies')
+        this.searchResult.visible = false
         this.showPage()
     }
 
@@ -304,7 +379,50 @@ export default class Buddy extends BaseWidget {
         this.page = 1
         this.text.text = text
         this.listType = type
+        this.searchResult.visible = false
+        this.searchContainer.visible = (type === 'buddies')
         this.showPage()
+    }
+
+    onSearchClick() {
+        let search = prompt('Search for a penguin by username:')
+        if (!search || search.trim().length < 3) return
+
+        this.network.send('buddy_search', { search: search.trim() })
+    }
+
+    showSearchResult(penguin) {
+        if (!penguin) {
+            this.searchResult.visible = true
+            this.searchResultName.text = 'Not Found'
+            this.searchResultStatus.text = 'No penguin with that username.'
+            this.searchAddBtn.visible = false
+            this.searchAddText.visible = false
+            this.searchResultId = null
+            return
+        }
+
+        this.searchResult.visible = true
+        this.searchResultName.text = penguin.username
+        this.searchResultId = penguin.id
+
+        if (penguin.isBuddy) {
+            this.searchResultStatus.text = 'Already your friend!'
+            this.searchAddBtn.visible = false
+            this.searchAddText.visible = false
+        } else {
+            this.searchResultStatus.text = 'Send a friend request?'
+            this.searchAddBtn.visible = true
+            this.searchAddText.visible = true
+        }
+    }
+
+    onSearchAdd() {
+        if (!this.searchResultId) return
+        this.network.send('buddy_request', { id: this.searchResultId })
+        this.searchResultStatus.text = 'Request sent!'
+        this.searchAddBtn.visible = false
+        this.searchAddText.visible = false
     }
 
     /* END-USER-CODE */

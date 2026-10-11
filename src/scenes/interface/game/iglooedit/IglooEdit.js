@@ -276,6 +276,18 @@ export default class IglooEdit extends BaseScene {
 
         closeArea.setInteractive(poly, Phaser.Geom.Polygon.Contains)
         closeArea.on('pointerover', () => this.furniture.visible = false)
+
+        this.autoSaveTimer = this.time.addEvent({
+            delay: 10000,
+            callback: () => {
+                if (!this.defaultControls.visible) {
+                    this.autoSaveIgloo()
+                }
+            },
+            loop: true
+        })
+
+        this.lastFurnitureData = null
     }
 
     onSleep() {
@@ -355,22 +367,34 @@ export default class IglooEdit extends BaseScene {
         this.gridView.startGrid(filter)
     }
 
+    get furnitureData() {
+        return this.world.room.furnitureSprites.map(f => ({
+            furnitureId: f.id,
+            x: f.x,
+            y: f.y,
+            rotation: parseInt(f.currentFrame[0]),
+            frame: parseInt(f.currentFrame[1]),
+            depth: f.depth
+        }))
+    }
+
     saveIgloo() {
         if (this.world.room.selected) {
             this.world.room.selected.drop()
         }
 
-        let furniture = this.world.room.furnitureSprites.map(f => {
-            return {
-                furnitureId: f.id,
-                x: f.x,
-                y: f.y,
-                rotation: parseInt(f.currentFrame[0]),
-                frame: parseInt(f.currentFrame[1])
-            }
-        })
+        this.lastFurnitureData = JSON.stringify(this.furnitureData)
+        this.network.send('update_furniture', { furniture: this.furnitureData })
+    }
 
-        this.network.send('update_furniture', { furniture: furniture })
+    autoSaveIgloo() {
+        let data = this.furnitureData
+        let dataStr = JSON.stringify(data)
+
+        if (this.lastFurnitureData && this.lastFurnitureData === dataStr) return
+
+        this.lastFurnitureData = dataStr
+        this.network.send('update_furniture', { furniture: data })
     }
 
     setControlsInteractive(interactive) {

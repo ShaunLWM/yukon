@@ -26,87 +26,111 @@ export default class Map extends BaseDynamicWidget {
 
         // bg
         const bg = scene.add.image(0, -35, "map", "bg");
-        bg.setOrigin(0.5, 0.5007429420505201);
+        bg.setOrigin(0.5, 0.5);
         this.add(bg);
 
-        // dojo
-        const dojo = scene.add.image(69, -310, "map", "dojo");
-        dojo.setOrigin(0.5038759689922481, 0.5056179775280899);
-        this.add(dojo);
+        // island layers (back to front)
+        const island1 = scene.add.image(-12, -30, "map", "island1");
+        this.add(island1);
+        const island2 = scene.add.image(-12, -30, "map", "island2");
+        this.add(island2);
+        const island3 = scene.add.image(-12, -200, "map", "island3");
+        this.add(island3);
+        const island4 = scene.add.image(360, -180, "map", "island4");
+        this.add(island4);
+        const island5 = scene.add.image(300, -210, "map", "island5");
+        this.add(island5);
+        const island6 = scene.add.image(-420, -140, "map", "island6");
+        this.add(island6);
+        const island7 = scene.add.image(-80, -260, "map", "island7");
+        this.add(island7);
 
-        // mountains
-        const mountains = scene.add.image(29, -276, "map", "mountains");
-        this.add(mountains);
+        // waterfall animation
+        const waterfall = scene.add.sprite(-260, -210, "map", "waterfall0001");
+        this.add(waterfall);
 
-        // island
-        const island = scene.add.image(-12, -30, "map", "island");
-        island.setOrigin(0.5005417118093174, 0.5);
-        this.add(island);
+        // dock animation
+        const dock = scene.add.sprite(-370, 114, "map", "dock0001");
+        dock.setOrigin(0.5, 0.5);
+        this.add(dock);
 
-        // mtn
-        const mtn = scene.add.image(-232, -256, "map", "mtn");
+        // campfire animation
+        const campfire = scene.add.sprite(310, -140, "map", "campfire0001");
+        this.add(campfire);
+
+        // decorative layers
+        const welcomeTrees = scene.add.image(-220, -160, "map", "welcome-trees");
+        this.add(welcomeTrees);
+        const rinkTrees = scene.add.image(52, -130, "map", "rink-trees");
+        this.add(rinkTrees);
+        const covestairs = scene.add.image(370, -135, "map", "covestairs");
+        this.add(covestairs);
+        const logs = scene.add.image(318, -128, "map", "logs");
+        this.add(logs);
+
+        // mtn with ski lift
+        const mtn = scene.add.image(-232, -256, "map", "mtn/mtn");
         this.add(mtn);
 
         // village
         const village = scene.add.image(-181, -179, "map", "village");
-        village.setOrigin(0.503030303030303, 0.5041322314049587);
+        village.setOrigin(0.5, 0.5);
         this.add(village);
+
+        // welcome (ski village area)
+        const welcome = scene.add.image(-190, -168, "map", "welcome");
+        this.add(welcome);
 
         // beach
         const beach = scene.add.image(-390, -94, "map", "beach");
         this.add(beach);
 
-        // dock
-        const dock = scene.add.image(-370, 114, "map", "dock");
-        dock.setOrigin(0.5, 0.5037037037037037);
-        this.add(dock);
-
         // town
-        const town = scene.add.image(-128, 22, "map", "town");
+        const town = scene.add.image(-128, 22, "map", "town/town");
         this.add(town);
 
         // forts
-        const forts = scene.add.image(78, 30, "map", "forts");
-        forts.setOrigin(0.5045045045045045, 0.5045871559633027);
+        const forts = scene.add.image(78, 30, "map", "forts/forts");
+        forts.setOrigin(0.5, 0.5);
         this.add(forts);
 
-        // igloo
-        const igloo = scene.add.image(201, 141, "map", "igloo");
+        // igloos
+        const igloo = scene.add.image(201, 100, "map", "igloos");
         this.add(igloo);
 
         // plaza
         const plaza = scene.add.image(264, 22, "map", "plaza");
-        plaza.setOrigin(0.5, 0.5038167938931297);
+        plaza.setOrigin(0.5, 0.5);
         this.add(plaza);
 
         // rink
-        const rink = scene.add.image(52, -98, "map", "rink");
-        rink.setOrigin(0.5023041474654378, 0.5);
+        const rink = scene.add.image(52, -98, "map", "rinkVariations/hockey/button");
+        rink.setOrigin(0.5, 0.5);
         this.add(rink);
 
         // forest
         const forest = scene.add.image(291, -84, "map", "forest");
-        forest.setOrigin(0.5027027027027027, 0.5057471264367817);
+        forest.setOrigin(0.5, 0.5);
         this.add(forest);
 
         // cove
         const cove = scene.add.image(334, -169, "map", "cove");
-        cove.setOrigin(0.5, 0.5058823529411764);
+        cove.setOrigin(0.5, 0.5);
         this.add(cove);
 
-        // mine
-        const mine = scene.add.image(168, -214, "map", "mine");
-        mine.setOrigin(0.5042016806722689, 0.5);
+        // courtyard (dojo area)
+        const courtyard = scene.add.image(69, -310, "map", "courtyard");
+        courtyard.setOrigin(0.5, 0.5);
+        this.add(courtyard);
+
+        // mine shack
+        const mine = scene.add.image(168, -214, "map", "shack");
+        mine.setOrigin(0.5, 0.5);
         this.add(mine);
 
-        // berg
-        const berg = scene.add.image(402, -210, "map", "berg");
+        // berg animation
+        const berg = scene.add.sprite(402, -210, "map", "berg0001");
         this.add(berg);
-
-        // note
-        const note = scene.add.image(419, 242, "map", "note");
-        note.setOrigin(0.5017667844522968, 0.5);
-        this.add(note);
 
         // grey_button
         const grey_button = scene.add.image(483, -333, "main", "grey-button");
@@ -127,17 +151,17 @@ export default class Map extends BaseDynamicWidget {
         // bg (components)
         new Interactive(bg);
 
-        // dojo (components)
-        const dojoButton = new Button(dojo);
-        dojoButton.spriteName = "dojo";
-        dojoButton.callback = () => this.onRoomClick(321);
-        dojoButton.activeFrame = false;
-        const dojoShowHint = new ShowHint(dojo);
-        dojoShowHint.text = "dojoext_hint";
+        // courtyard (components) - dojo courtyard
+        const courtyardButton = new Button(courtyard);
+        courtyardButton.spriteName = "courtyard";
+        courtyardButton.callback = () => this.onRoomClick(321);
+        courtyardButton.activeFrame = false;
+        const courtyardShowHint = new ShowHint(courtyard);
+        courtyardShowHint.text = "dojoext_hint";
 
         // mtn (components)
         const mtnButton = new Button(mtn);
-        mtnButton.spriteName = "mtn";
+        mtnButton.spriteName = "mtn/mtn";
         mtnButton.callback = () => this.onRoomClick(230);
         mtnButton.activeFrame = false;
         const mtnShowHint = new ShowHint(mtn);
@@ -151,6 +175,12 @@ export default class Map extends BaseDynamicWidget {
         const villageShowHint = new ShowHint(village);
         villageShowHint.text = "village_hint";
 
+        // welcome (components)
+        const welcomeButton = new Button(welcome);
+        welcomeButton.spriteName = "welcome";
+        welcomeButton.callback = () => this.onRoomClick(200);
+        welcomeButton.activeFrame = false;
+
         // beach (components)
         const beachButton = new Button(beach);
         beachButton.spriteName = "beach";
@@ -161,7 +191,7 @@ export default class Map extends BaseDynamicWidget {
 
         // dock (components)
         const dockButton = new Button(dock);
-        dockButton.spriteName = "dock";
+        dockButton.spriteName = "dock0001";
         dockButton.callback = () => this.onRoomClick(800);
         dockButton.activeFrame = false;
         const dockShowHint = new ShowHint(dock);
@@ -169,7 +199,7 @@ export default class Map extends BaseDynamicWidget {
 
         // town (components)
         const townButton = new Button(town);
-        townButton.spriteName = "town";
+        townButton.spriteName = "town/town";
         townButton.callback = () => this.onRoomClick(100);
         townButton.activeFrame = false;
         const townShowHint = new ShowHint(town);
@@ -177,7 +207,7 @@ export default class Map extends BaseDynamicWidget {
 
         // forts (components)
         const fortsButton = new Button(forts);
-        fortsButton.spriteName = "forts";
+        fortsButton.spriteName = "forts/forts";
         fortsButton.callback = () => this.onRoomClick(801);
         fortsButton.activeFrame = false;
         const fortsShowHint = new ShowHint(forts);
@@ -185,7 +215,7 @@ export default class Map extends BaseDynamicWidget {
 
         // igloo (components)
         const iglooButton = new Button(igloo);
-        iglooButton.spriteName = "igloo";
+        iglooButton.spriteName = "igloos";
         iglooButton.callback = () => this.iglooMap.show();
         iglooButton.activeFrame = false;
         const iglooShowHint = new ShowHint(igloo);
@@ -201,7 +231,7 @@ export default class Map extends BaseDynamicWidget {
 
         // rink (components)
         const rinkButton = new Button(rink);
-        rinkButton.spriteName = "rink";
+        rinkButton.spriteName = "rinkVariations/hockey/button";
         rinkButton.callback = () => this.onRoomClick(802);
         rinkButton.activeFrame = false;
         const rinkShowHint = new ShowHint(rink);
@@ -225,7 +255,7 @@ export default class Map extends BaseDynamicWidget {
 
         // mine (components)
         const mineButton = new Button(mine);
-        mineButton.spriteName = "mine";
+        mineButton.spriteName = "shack";
         mineButton.callback = () => this.onRoomClick(807);
         mineButton.activeFrame = false;
         const mineShowHint = new ShowHint(mine);
@@ -233,12 +263,9 @@ export default class Map extends BaseDynamicWidget {
 
         // berg (components)
         const bergButton = new Button(berg);
-        bergButton.spriteName = "berg";
+        bergButton.spriteName = "berg0001";
         bergButton.callback = () => this.onRoomClick(805);
         bergButton.activeFrame = false;
-
-        // note (components)
-        new Interactive(note);
 
         // grey_button (components)
         const grey_buttonButton = new Button(grey_button);
@@ -246,16 +273,60 @@ export default class Map extends BaseDynamicWidget {
         grey_buttonButton.callback = () => this.close();
 
         this.iglooMap = iglooMap;
+        this.dock = dock;
+        this.berg = berg;
+        this.waterfall = waterfall;
+        this.campfire = campfire;
 
         /* START-USER-CTR-CODE */
+
+        this.createAnimations(scene);
+
         /* END-USER-CTR-CODE */
     }
 
 
     /* START-USER-CODE */
 
+    createAnimations(scene) {
+        let tex = scene.textures.get('map');
+
+        this.createFrameAnim(scene, tex, 'map_dock', 'dock', 96, 24);
+        this.createFrameAnim(scene, tex, 'map_berg', 'berg', 75, 12);
+        this.createFrameAnim(scene, tex, 'map_waterfall', 'waterfall', 30, 18);
+        this.createFrameAnim(scene, tex, 'map_campfire', 'campfire', 12, 12);
+
+        this.dock.play('map_dock');
+        this.berg.play('map_berg');
+        this.waterfall.play('map_waterfall');
+        this.campfire.play('map_campfire');
+    }
+
+    createFrameAnim(scene, tex, key, prefix, count, frameRate) {
+        if (scene.anims.exists(key)) return;
+
+        let frames = [];
+        for (let i = 1; i <= count; i++) {
+            let name = prefix + String(i).padStart(4, '0');
+            if (tex.has(name)) {
+                frames.push({ key: 'map', frame: name });
+            }
+        }
+
+        if (frames.length > 0) {
+            scene.anims.create({
+                key: key,
+                frames: frames,
+                frameRate: frameRate,
+                repeat: -1
+            });
+        }
+    }
+
     onRoomClick(id) {
         const room = this.crumbs.rooms[id]
+
+        if (!room) return
 
         if (this.world.room.key === room.key) {
             return

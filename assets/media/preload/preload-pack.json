@@ -107,6 +107,11 @@
                 "url": [
                     "assets/media/sounds/stampEarned.mp3"
                 ]
+            },
+            {
+                "url": "assets/media/interface/game/loginprompt/holiday/arrow.png",
+                "type": "image",
+                "key": "arrow"
             }
         ]
     },
