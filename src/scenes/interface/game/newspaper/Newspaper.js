@@ -37,6 +37,10 @@ export default class Newspaper extends BaseDynamicWidget {
         this.pageContainers = []
     }
 
+    get heldSprite() {
+        return '1_1'
+    }
+
     show(config) {
         const issueNum = typeof config === 'object' ? config.issueNum : config
         if (!issueNum) return
@@ -88,6 +92,8 @@ export default class Newspaper extends BaseDynamicWidget {
         }
 
         this.buildNav()
+
+        super.show()
     }
 
     getPageFrames(atlasKey) {

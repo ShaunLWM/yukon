@@ -328,6 +328,9 @@ export default class IglooEdit extends BaseScene {
     }
 
     onEditClick() {
+        // Others see the igloo blueprint while this penguin decorates
+        this.network.send('open_sprite', { sprite: '1_4' })
+
         this.interface.hideInterface(false)
         this.world.room.showEditBg()
         this.world.room.hideEntities()
@@ -336,6 +339,8 @@ export default class IglooEdit extends BaseScene {
     }
 
     onSaveClick() {
+        this.network.send('close_sprite')
+
         this.saveIgloo()
         this.interface.showInterface()
         this.world.room.hideEditBg()

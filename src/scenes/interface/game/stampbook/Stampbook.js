@@ -6,6 +6,10 @@ import Interactive from "../../../components/Interactive"
 
 export default class Stampbook extends BaseDynamicWidget {
 
+    get heldSprite() {
+        return '1_3'
+    }
+
     constructor(scene, x, y) {
         super(scene, x ?? 760, y ?? 480)
 

@@ -10,6 +10,10 @@ import IglooMap from "./igloo_map/IglooMap";
 
 export default class Map extends BaseDynamicWidget {
 
+    get heldSprite() {
+        return '1_2'
+    }
+
     constructor(scene, x, y) {
         super(scene, x ?? 760, y ?? 480);
 
