@@ -439,6 +439,11 @@ export default class Penguin extends BaseContainer {
     }
 
     playAnims(frame) {
+        // Holding an open sprite (map, newspaper etc.) keeps the penguin still
+        if (this.openSprite && frame > 1) {
+            return
+        }
+
         if (this.isTransformed) {
             if (this.transformSprite) {
                 this.playAnim(this.transformSprite, `${this.transformSprite.texture.key}_${frame}`)
@@ -718,6 +723,11 @@ export default class Penguin extends BaseContainer {
         if (this.afterMove) {
             this.afterMove()
             this.afterMove = null
+        }
+
+        // A frame sent mid-walk replaces a deferred open_sprite in afterMove
+        if (this.openSprite && !this.heldSprite) {
+            this.penguinLoader.openSprite(this, this.openSprite)
         }
     }
 

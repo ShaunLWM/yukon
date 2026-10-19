@@ -78,6 +78,12 @@
             },
             {
                 "type": "multiatlas",
+                "url": "assets/media/penguin/other_sprites.json",
+                "path": "assets/media/penguin/",
+                "key": "other_sprites"
+            },
+            {
+                "type": "multiatlas",
                 "url": "assets/media/interface/windows/prompt/prompt.json",
                 "path": "assets/media/interface/windows/prompt/",
                 "key": "prompt"

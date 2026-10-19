@@ -2,6 +2,9 @@ import PenguinSpriteFactory from './PenguinSpriteFactory'
 import WalkingPuffleLoader from './WalkingPuffleLoader'
 
 
+// Sorts above the body, items and puffle inside the penguin container
+const heldSpriteDepth = 100
+
 export default class PenguinLoader {
 
     constructor(world) {
@@ -30,7 +33,58 @@ export default class PenguinLoader {
             this.addPuffle(penguin, penguin.walkingPuffleType)
         }
 
+        // Already holding a map, newspaper etc. when this client joined. The
+        // client's own penguin never shows one: its widgets are on screen
+        if (penguin.openSprite && penguin.id !== this.world.client?.id) {
+            this.openSprite(penguin, penguin.openSprite)
+        } else {
+            penguin.openSprite = null
+        }
+
         penguin.playFrame(penguin.frame)
+    }
+
+    /**
+     * Shows a penguin holding a sprite from the other_sprites atlas, such as the
+     * map or newspaper, while its player has that open. It stands still on
+     * frame 1 until the sprite is closed.
+     *
+     * @param {Penguin} penguin - Penguin object
+     * @param {string} sprite - Frame in the other_sprites atlas
+     */
+    openSprite(penguin, sprite) {
+        this.closeSprite(penguin, false)
+
+        penguin.openSprite = sprite
+
+        if (penguin.textures.get('other_sprites').has(sprite)) {
+            penguin.heldSprite = penguin.room.add.image(0, 0, 'other_sprites', sprite)
+
+            // Above every item slot, as clothing loading re-sorts by depth
+            penguin.heldSprite.depth = heldSpriteDepth
+            penguin.add(penguin.heldSprite)
+            penguin.sort('depth')
+        }
+
+        penguin.playFrame(1)
+    }
+
+    closeSprite(penguin, playFrame = true) {
+        if (penguin.heldSprite) {
+            penguin.heldSprite.destroy()
+            penguin.heldSprite = null
+        }
+
+        if (!penguin.openSprite) {
+            return
+        }
+
+        penguin.openSprite = null
+
+        // Frames received while holding were recorded but not shown
+        if (playFrame) {
+            penguin.playFrame(penguin.frame)
+        }
     }
 
     isBuddy(penguin) {
@@ -117,6 +171,9 @@ export default class PenguinLoader {
             if (penguin.textures.exists('puffles_shared')) {
                 penguin.pufflespecialsprite = PenguinSpriteFactory.create(penguin, 'puffles_shared', 2)
             }
+
+            // Loads after the items may have sorted, e.g. under a held sprite
+            penguin.sort('depth')
 
             penguin.playFrame(penguin.frame)
         })
